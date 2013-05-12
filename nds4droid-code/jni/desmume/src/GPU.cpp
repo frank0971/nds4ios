@@ -318,9 +318,9 @@ FORCEINLINE u16 GPU::blend(u16 colA, u16 colB)
 
 void GPU_setMasterBrightness (GPU *gpu, u16 val)
 {
-	if(!nds.isInVblank()) {
+	/*if(!nds.isInVblank()) {
 		PROGINFO("Changing master brightness outside of vblank\n");
-	}
+	}*/
  	gpu->MasterBrightFactor = (val & 0x1F);
 	gpu->MasterBrightMode	= (val>>14);
 	//printf("MASTER BRIGHTNESS %d to %d at %d\n",gpu->core,gpu->MasterBrightFactor,nds.VCount);
@@ -498,7 +498,7 @@ void GPU_addBack(GPU * gpu, u8 num)
 template<int WIN_NUM>
 FORCEINLINE u8 GPU::withinRect(u16 x) const
 {
-	assert(x<256); //only way to be >256 is in debug views, and mosaic shouldnt be enabled for those
+	//assert(x<256); //only way to be >256 is in debug views, and mosaic shouldnt be enabled for those
 	return curr_win[WIN_NUM][x];
 }
 
@@ -793,7 +793,7 @@ FORCEINLINE void GPU::___setFinalColorBck(u16 color, const u32 x, const int opaq
 	//under ordinary circumstances, nobody should pass in something >=256
 	//but in fact, someone is going to try. specifically, that is the map viewer debug tools
 	//which try to render the enter BG. in cases where that is large, it could be up to 1024 wide.
-	assert(debug || x<256);
+	//assert(debug || x<256);
 
 	int x_int;
 
@@ -1041,8 +1041,8 @@ template<bool MOSAIC> INLINE void renderline_textBG(GPU * gpu, u16 XBG, u16 YBG,
 /*****************************************************************************/
 //			BACKGROUND RENDERING -ROTOSCALE-
 /*****************************************************************************/
+template<bool MOSAIC> FORCEINLINE void rot_tiled_8bit_entry(GPU * gpu, const s32 auxX, const s32 auxY, const int lg, const u32 map, const u32 tile, u8 * pal, const int i) {
 
-template<bool MOSAIC> FORCEINLINE void rot_tiled_8bit_entry(GPU * gpu, s32 auxX, s32 auxY, int lg, u32 map, u32 tile, u8 * pal, int i) {
 	u8 palette_entry;
 	u16 tileindex, x, y, color;
 
@@ -1056,7 +1056,7 @@ template<bool MOSAIC> FORCEINLINE void rot_tiled_8bit_entry(GPU * gpu, s32 auxX,
 	gpu->__setFinalColorBck<MOSAIC,false>(color,i,palette_entry);
 }
 
-template<bool MOSAIC, bool extPal> FORCEINLINE void rot_tiled_16bit_entry(GPU * gpu, s32 auxX, s32 auxY, int lg, u32 map, u32 tile, u8 * pal, int i) {
+template<bool MOSAIC, bool extPal> FORCEINLINE void rot_tiled_16bit_entry(GPU * gpu, const s32 auxX, const s32 auxY, const int lg, const u32 map, const u32 tile, u8 * pal, int i) {
 	void* const map_addr = MMU_gpu_map(map + (((auxX>>3) + (auxY>>3) * (lg>>3))<<1));
 	
 	TILEENTRY tileentry;
@@ -1070,7 +1070,7 @@ template<bool MOSAIC, bool extPal> FORCEINLINE void rot_tiled_16bit_entry(GPU * 
 	gpu->__setFinalColorBck<MOSAIC,false>(color, i, palette_entry);
 }
 
-template<bool MOSAIC> FORCEINLINE void rot_256_map(GPU * gpu, s32 auxX, s32 auxY, int lg, u32 map, u32 tile, u8 * pal, int i) {
+template<bool MOSAIC> FORCEINLINE void rot_256_map(GPU * gpu, const s32 auxX, const s32 auxY, const int lg, const u32 map, const u32 tile, u8 * pal, const int i) {
 	u8 palette_entry;
 	u16 color;
 
@@ -1081,17 +1081,17 @@ template<bool MOSAIC> FORCEINLINE void rot_256_map(GPU * gpu, s32 auxX, s32 auxY
 	gpu->__setFinalColorBck<MOSAIC,false>(color, i, palette_entry);
 }
 
-template<bool MOSAIC> FORCEINLINE void rot_BMP_map(GPU * gpu, s32 auxX, s32 auxY, int lg, u32 map, u32 tile, u8 * pal, int i) {
+template<bool MOSAIC> FORCEINLINE void rot_BMP_map(GPU * gpu, const s32 auxX, const s32 auxY, const int lg, const u32 map, const u32 tile, u8 * pal, const int i) {
 	u16 color;
 	void* adr = MMU_gpu_map((map) + ((auxX + auxY * lg) << 1));
 	color = T1ReadWord(adr, 0);
 	gpu->__setFinalColorBck<MOSAIC,false>(color, i, color&0x8000);
 }
 
-typedef void (*rot_fun)(GPU * gpu, s32 auxX, s32 auxY, int lg, u32 map, u32 tile, u8 * pal, int i);
+typedef void (*rot_fun)(GPU * gpu, const s32 auxX, const s32 auxY, const int lg, const u32 map, const u32 tile, u8 * pal, const int i);
 
 template<rot_fun fun, bool WRAP>
-FORCEINLINE void rot_scale_op(GPU * gpu, s32 X, s32 Y, s16 PA, s16 PB, s16 PC, s16 PD, u16 LG, s32 wh, s32 ht, u32 map, u32 tile, u8 * pal)
+FORCEINLINE void rot_scale_op(GPU * gpu, const s32 X, const s32 Y, const s16 PA, const s16 PB, const s16 PC, const s16 PD, const u16 LG, const s32 wh, const s32 ht, const u32 map, const u32 tile, u8 * pal)
 {
 	ROTOCOORD x, y;
 	x.val = X;
@@ -1214,12 +1214,14 @@ static void lineNull(GPU * gpu)
 
 template<bool MOSAIC> void lineText(GPU * gpu)
 {
+#if 0
 	if(gpu->debug)
 	{
 		const s32 wh = gpu->BGSize[gpu->currBgNum][0];
 		renderline_textBG<MOSAIC>(gpu, 0, gpu->currLine, wh);
 	}
 	else
+#endif
 	{
 		const u16 vofs = gpu->getVOFS(gpu->currBgNum);
 		const u16 hofs = gpu->getHOFS(gpu->currBgNum);
@@ -1236,12 +1238,14 @@ template<bool MOSAIC> void lineRot(GPU * gpu)
 		parms = &(gpu->dispx_st)->dispx_BG3PARMS;		
 	}
 
+#if 0
 	if(gpu->debug)
 	{
 		s32 wh = gpu->BGSize[gpu->currBgNum][0];
 		rotBG2<MOSAIC>(gpu, 0, (s16)gpu->currLine*256, 256,0, 0,-77, wh);
 	}
 	else
+#endif
 	{
 		 rotBG2<MOSAIC>(gpu, 
 				  parms->BGxX,
@@ -1265,12 +1269,14 @@ template<bool MOSAIC> void lineExtRot(GPU * gpu)
 		parms = &(gpu->dispx_st)->dispx_BG3PARMS;		
 	}
 
+#if 0
 	if(gpu->debug)
 	{
 		s32 wh = gpu->BGSize[gpu->currBgNum][0];
 		extRotBG2<MOSAIC>(gpu, 0, (s16)gpu->currLine*256, 256,0, 0,-77, wh);
 	}
 	else
+#endif
 	{
 		extRotBG2<MOSAIC>(gpu,
               parms->BGxX,
@@ -2069,7 +2075,7 @@ static void GPU_RenderLine_layer(NDS_Screen * screen, u16 l)
 	memset(sprWin, 0, 256);
 	
 	// init pixels priorities
-	assert(NB_PRIORITIES==4);
+	//assert(NB_PRIORITIES==4);
 	gpu->itemsForPriority[0].nbPixelsX = 0;
 	gpu->itemsForPriority[1].nbPixelsX = 0;
 	gpu->itemsForPriority[2].nbPixelsX = 0;

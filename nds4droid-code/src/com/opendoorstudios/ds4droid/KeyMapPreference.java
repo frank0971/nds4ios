@@ -209,21 +209,39 @@ public class KeyMapPreference extends DialogPreference implements OnKeyListener 
         names.append(KeyEvent.KEYCODE_PAGE_DOWN, "PAGE_DOWN");
         names.append(KeyEvent.KEYCODE_PICTSYMBOLS, "PICTSYMBOLS");
         names.append(KeyEvent.KEYCODE_SWITCH_CHARSET, "SWITCH_CHARSET");
-        names.append(KeyEvent.KEYCODE_BUTTON_A, "BUTTON_A");
-        names.append(KeyEvent.KEYCODE_BUTTON_B, "BUTTON_B");
-        names.append(KeyEvent.KEYCODE_BUTTON_C, "BUTTON_C");
-        names.append(KeyEvent.KEYCODE_BUTTON_X, "BUTTON_X");
-        names.append(KeyEvent.KEYCODE_BUTTON_Y, "BUTTON_Y");
-        names.append(KeyEvent.KEYCODE_BUTTON_Z, "BUTTON_Z");
-        names.append(KeyEvent.KEYCODE_BUTTON_L1, "BUTTON_L1");
-        names.append(KeyEvent.KEYCODE_BUTTON_R1, "BUTTON_R1");
-        names.append(KeyEvent.KEYCODE_BUTTON_L2, "BUTTON_L2");
-        names.append(KeyEvent.KEYCODE_BUTTON_R2, "BUTTON_R2");
-        names.append(KeyEvent.KEYCODE_BUTTON_THUMBL, "BUTTON_THUMBL");
-        names.append(KeyEvent.KEYCODE_BUTTON_THUMBR, "BUTTON_THUMBR");
+        
+        if(!MainActivity.IS_OUYA) {
+	        names.append(KeyEvent.KEYCODE_BUTTON_A, "BUTTON_A");
+	        names.append(KeyEvent.KEYCODE_BUTTON_B, "BUTTON_B");
+	        names.append(KeyEvent.KEYCODE_BUTTON_X, "BUTTON_X");
+	        names.append(KeyEvent.KEYCODE_BUTTON_Y, "BUTTON_Y");
+	        names.append(KeyEvent.KEYCODE_BUTTON_L1, "BUTTON_L1");
+	        names.append(KeyEvent.KEYCODE_BUTTON_R1, "BUTTON_R1");
+	        names.append(KeyEvent.KEYCODE_BUTTON_L2, "BUTTON_L2");
+	        names.append(KeyEvent.KEYCODE_BUTTON_R2, "BUTTON_R2");
+	        names.append(KeyEvent.KEYCODE_BUTTON_THUMBL, "BUTTON_THUMBL");
+	        names.append(KeyEvent.KEYCODE_BUTTON_THUMBR, "BUTTON_THUMBR");
+        }
+        else {
+        	//The OUYA interface guidelines wants us to call the buttons by these names
+        	names.append(KeyEvent.KEYCODE_BUTTON_A, "O");
+	        names.append(KeyEvent.KEYCODE_BUTTON_B, "A");
+	        names.append(KeyEvent.KEYCODE_BUTTON_X, "U");
+	        names.append(KeyEvent.KEYCODE_BUTTON_Y, "Y");
+	        names.append(KeyEvent.KEYCODE_BUTTON_L1, "L1");
+	        names.append(KeyEvent.KEYCODE_BUTTON_R1, "R1");
+	        names.append(KeyEvent.KEYCODE_BUTTON_L2, "L2");
+	        names.append(KeyEvent.KEYCODE_BUTTON_R2, "R2");
+	        names.append(KeyEvent.KEYCODE_BUTTON_THUMBL, "L3");
+	        names.append(KeyEvent.KEYCODE_BUTTON_THUMBR, "R3");
+        }
+        
         names.append(KeyEvent.KEYCODE_BUTTON_START, "BUTTON_START");
         names.append(KeyEvent.KEYCODE_BUTTON_SELECT, "BUTTON_SELECT");
         names.append(KeyEvent.KEYCODE_BUTTON_MODE, "BUTTON_MODE");
+        names.append(KeyEvent.KEYCODE_BUTTON_Z, "BUTTON_Z");
+        names.append(KeyEvent.KEYCODE_BUTTON_C, "BUTTON_C");
+	    names.append(188, "KEYCODE_BUTTON_1"); //KEYCODE_BUTTON_1
     }
 
 

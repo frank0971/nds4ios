@@ -1,6 +1,6 @@
 /*
 	Copyright (C) 2006 yopyop
-	Copyright (C) 2008-2012 DeSmuME team
+	Copyright (C) 2008-2013 DeSmuME team
 
 	This file is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -184,6 +184,7 @@ struct NDSSystem
 	u16 adc_touchX;
 	u16 adc_touchY;
 	s32 adc_jitterctr;
+	BOOL stylusJitter;
 
 	//the DSI returns calibrated touch coords from its TSC (?), so we need to save these separately
 	u16 scr_touchX;
@@ -494,7 +495,7 @@ bool nds_loadstate(EMUFILE* is, int size);
 int NDS_WriteBMP(const char *filename);
 
 void NDS_Sleep();
-void NDS_ToggleCardEject();
+void NDS_TriggerCardEjectIRQ();
 
 void NDS_SkipNextFrame();
 #define NDS_SkipFrame(s) if(s) NDS_SkipNext2DFrame();
@@ -527,6 +528,8 @@ extern struct TCommonSettings {
 		, GFX3D_Texture(true)
 		, GFX3D_LineHack(true)
 		, GFX3D_Zelda_Shadow_Depth_Hack(0)
+		, GFX3D_Renderer_Multisample(false)
+		, jit_max_block_size(10)
 		, UseExtBIOS(false)
 		, SWIFromBIOS(false)
 		, PatchSWI3(false)
@@ -546,6 +549,7 @@ extern struct TCommonSettings {
 		, spu_advanced(false)
 		, StylusPressure(50)
 		, ConsoleType(NDS_CONSOLE_TYPE_FAT)
+		, StylusJitter(false)
 	{
 		strcpy(ARM9BIOS, "biosnds9.bin");
 		strcpy(ARM7BIOS, "biosnds7.bin");
@@ -562,6 +566,10 @@ extern struct TCommonSettings {
 		for(int g=0;g<2;g++)
 			for(int x=0;x<5;x++)
 				dispLayers[g][x]=true;
+
+		//zero 06-sep-2012 - shouldnt be defaulting this to true for now, since the jit is buggy. 
+		//id rather have people discover a bonus speedhack than discover new bugs in a new version
+		CpuMode = 0;
 	}
 	bool GFX3D_HighResolutionInterpolateColor;
 	bool GFX3D_EdgeMark;
@@ -569,7 +577,7 @@ extern struct TCommonSettings {
 	bool GFX3D_Texture;
 	bool GFX3D_LineHack;
 	int  GFX3D_Zelda_Shadow_Depth_Hack;
-
+	bool GFX3D_Renderer_Multisample;
 	bool UseExtBIOS;
 	char ARM9BIOS[256];
 	char ARM7BIOS[256];
@@ -592,10 +600,14 @@ extern struct TCommonSettings {
 	bool rigorous_timing;
 
 	int StylusPressure;
+	bool StylusJitter;
 
 	bool dispLayers[2][5];
 	
 	FAST_ALIGN bool advanced_timing;
+
+	int CpuMode;
+	u32	jit_max_block_size;
 	
 	struct _Wifi {
 		int mode;

@@ -19,6 +19,9 @@ along with the this software.  If not, see <http://www.gnu.org/licenses/>.
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map.Entry;
 
 import com.opendoorstudios.ds4droid.MainActivity.NDSView;
 
@@ -42,7 +45,8 @@ class Controls {
 	boolean landscape;
 	int currentAlpha = -1;
 	Rect screen;
-	float aspectRatio;
+	int screenWidth = 0, screenHeight = 0;
+	int xBlack = 0, yBlack = 0;
 	
 	Controls(NDSView view) {
 		this.view = view;
@@ -54,31 +58,48 @@ class Controls {
 	
 	Button touchButton;
 	
-	final SparseIntArray keyMappings = new SparseIntArray();
+	final SparseArray<int[]> keyMappings = new SparseArray<int[]>();
 	
 	public static final int[] KEYS_WITH_MAPPINGS = new int[] { Button.BUTTON_UP, Button.BUTTON_DOWN, Button.BUTTON_LEFT, Button.BUTTON_RIGHT,
 			Button.BUTTON_A, Button.BUTTON_B, Button.BUTTON_X, Button.BUTTON_Y, Button.BUTTON_START, Button.BUTTON_SELECT,
-			Button.BUTTON_TOUCH, Button.BUTTON_L, Button.BUTTON_R };
+			Button.BUTTON_TOUCH, Button.BUTTON_L, Button.BUTTON_R, Button.BUTTON_OPTIONS };
 	
 	void loadMappings(Context context) {
 		keyMappings.clear();
 		
+		final HashMap<Integer, LinkedList<Integer>> buildKey = new HashMap<Integer, LinkedList<Integer>>();
+		
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		for(int id : KEYS_WITH_MAPPINGS) {
 			int map = prefs.getInt("Controls.KeyMap." + Button.getButtonName(id), 0);
-			if(map != 0)
-				keyMappings.put(map, id);
+			if(map != 0) {
+				if(!buildKey.containsKey(map))
+					buildKey.put(map, new LinkedList<Integer>());
+				buildKey.get(map).add(id);
+			}	
 		}
+		
+		//iterating over hashmaps is like 10x more complicated than it needs to be
+		final Iterator<Entry<Integer, LinkedList<Integer>>> it = buildKey.entrySet().iterator();
+		while(it.hasNext()) {
+			final Entry<Integer, LinkedList<Integer>> entry = it.next();
+			final int[] thisKeysMappings = new int[entry.getValue().size()];
+			int counter = 0;
+			for(Integer mapping : entry.getValue()) 
+				thisKeysMappings[counter++] = mapping.intValue();
+			keyMappings.put(entry.getKey(), thisKeysMappings);
+		}
+
 	}
 	
-	void loadControls(Context context, int screenWidth, int screenHeight, boolean is565, boolean landscape) {
+	void loadControls(Context context, int screenWidth, int screenHeight, int xBlack, int yBlack, boolean is565, boolean landscape) {
 		
-		screen = new Rect(0, 0, screenWidth, screenHeight);
+		screen = new Rect(0, 0, this.screenWidth = screenWidth, this.screenHeight = screenHeight);
 		
-		xscale = (float)screen.width() / (landscape ? 512.0f : 256.0f);
-		yscale = (float)screen.height() / (landscape ? 192.0f : 384.0f);
-		
-		aspectRatio = (float)screen.width() / (float)screen.height();
+		this.xBlack = xBlack;
+		this.yBlack = yBlack;
+		xscale = (float)(screen.width() - (xBlack * 2)) / (landscape ? 512.0f : 256.0f);
+		yscale = (float)(screen.height() - (yBlack*2)) / (landscape ? 192.0f : 384.0f);
 		
 		for(int i = 0 ; i < buttonStates.length ; ++i)
 			buttonStates[i] = 0;
@@ -179,6 +200,12 @@ class Controls {
 		case MotionEvent.ACTION_MOVE:
 			float x = event.getX();
 			float y = event.getY();
+			if( x < xBlack || x > screenWidth - xBlack)
+				return true;
+			if( y < yBlack || y > screenHeight - yBlack)
+				return true;
+			x -= xBlack;
+			y -= yBlack;
 			x /= xscale;
 			y /= yscale;
 			//convert to bottom touch screen coordinates
@@ -295,23 +322,28 @@ class Controls {
 	}
 	
 	boolean onKeyDown(int keyCode, KeyEvent event) {
-		int button = keyMappings.get(keyCode, -1);
-		if(button == -1)
+		final int[] mappings = keyMappings.get(keyCode, null);
+		if(mappings == null)
 			return false;
-		if(button >=0 && button < buttonStates.length)
-			buttonStates[button] = 1;
+		for(int button : mappings) {
+			if(button >=0 && button < buttonStates.length)
+				buttonStates[button] = 1;
+		}
 		sendStates();
 		return true;
 	}
 	
 	boolean onKeyUp(int keyCode, KeyEvent event) {
-		int button = keyMappings.get(keyCode, -1);
-		if(button == -1)
+		final int[] mappings = keyMappings.get(keyCode, null);
+		if(mappings == null)
 			return false;
-		if(button >=0 && button < buttonStates.length)
-			buttonStates[button] = 0;
-		else if(button == Button.BUTTON_TOUCH) {
-			DeSmuME.touchScreenMode = !DeSmuME.touchScreenMode;
+		for(int button : mappings) {
+			if(button >=0 && button < buttonStates.length)
+				buttonStates[button] = 0;
+			else if(button == Button.BUTTON_TOUCH)
+				DeSmuME.touchScreenMode = !DeSmuME.touchScreenMode;
+			else if(button == Button.BUTTON_OPTIONS)
+				view.showMenu();
 		}
 		sendStates();
 		return true;
@@ -319,7 +351,8 @@ class Controls {
 	
 	void sendStates() {
 		DeSmuME.setButtons(buttonStates[Button.BUTTON_L], buttonStates[Button.BUTTON_R], buttonStates[Button.BUTTON_UP], buttonStates[Button.BUTTON_DOWN], buttonStates[Button.BUTTON_LEFT], buttonStates[Button.BUTTON_RIGHT], 
-				buttonStates[Button.BUTTON_A], buttonStates[Button.BUTTON_B], buttonStates[Button.BUTTON_X], buttonStates[Button.BUTTON_Y], buttonStates[Button.BUTTON_START], buttonStates[Button.BUTTON_SELECT]);
+				buttonStates[Button.BUTTON_A], buttonStates[Button.BUTTON_B], buttonStates[Button.BUTTON_X], buttonStates[Button.BUTTON_Y], 
+				buttonStates[Button.BUTTON_START], buttonStates[Button.BUTTON_SELECT], DeSmuME.lidOpen ? 1 : 0);
 
 	}
 	

@@ -39,7 +39,16 @@ extern "C" {
 }
 #endif
 
-
+#ifdef GFX3D_USE_FLOAT
+struct MatrixStack
+{
+	MatrixStack(int size, int type);
+	float	*matrix;
+	s32		position;
+	s32		size;
+	u8		type;
+};
+#else
 struct MatrixStack
 {
 	MatrixStack(int size, int type);
@@ -48,6 +57,7 @@ struct MatrixStack
 	s32		size;
 	u8		type;
 };
+#endif
 
 void	MatrixInit				(float *matrix);
 void	MatrixInit				(s32 *matrix);
@@ -58,18 +68,32 @@ void	MatrixInit				(s32 *matrix);
 
 float	MatrixGetMultipliedIndex	(int index, float *matrix, float *rightMatrix);
 s32	MatrixGetMultipliedIndex	(int index, s32 *matrix, s32 *rightMatrix);
+void	MatrixSet				(float *matrix, int x, int y, float value);
 void	MatrixSet				(s32 *matrix, int x, int y, s32 value);
+void	MatrixCopy				(float * matrixDST, const float * matrixSRC);
 void	MatrixCopy				(s32 * matrixDST, const s32 * matrixSRC);
-int		MatrixCompare				(const s32 * matrixDST, const float * matrixSRC);
+int		MatrixCompare				(const float * matrixDST, const float * matrixSRC);
+int		MatrixCompare				(const s32 * matrixDST, const s32 * matrixSRC);
+void	MatrixIdentity			(float *matrix);
 void	MatrixIdentity			(s32 *matrix);
+void	MatrixTranspose				(float *matrix);
+void	MatrixTranspose				(s32 *matrix);
 
 void	MatrixStackInit				(MatrixStack *stack);
 void	MatrixStackSetMaxSize		(MatrixStack *stack, int size);
+#ifdef GFX3D_USE_FLOAT
+void	MatrixStackPushMatrix		(MatrixStack *stack, const float *ptr);
+void	MatrixStackPopMatrix		(float *mtxCurr, MatrixStack *stack, int size);
+float*	MatrixStackGetPos			(MatrixStack *stack, int pos);
+float*	MatrixStackGet				(MatrixStack *stack);
+void	MatrixStackLoadMatrix		(MatrixStack *stack, int pos, const float *ptr);
+#else
 void	MatrixStackPushMatrix		(MatrixStack *stack, const s32 *ptr);
 void	MatrixStackPopMatrix		(s32 *mtxCurr, MatrixStack *stack, int size);
 s32*	MatrixStackGetPos			(MatrixStack *stack, int pos);
 s32*	MatrixStackGet				(MatrixStack *stack);
 void	MatrixStackLoadMatrix		(MatrixStack *stack, int pos, const s32 *ptr);
+#endif
 
 void Vector2Copy(float *dst, const float *src);
 void Vector2Add(float *dst, const float *src);

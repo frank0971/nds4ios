@@ -37,6 +37,8 @@ struct DebugStatistics
 		u32 arm[4096];
 	} instructionHits[2]; //one for each cpu
 
+	u32 blockCompileCounters[2];
+
 	s32 sequencerExecutionCounters[32];
 
 	void print();
@@ -77,6 +79,8 @@ public:
 	static void log(unsigned int channel, const char * file, unsigned int line, std::ostream& os);
 	static void log(unsigned int channel, const char * file, unsigned int line, unsigned int flag);
 	static void log(unsigned int channel, const char * file, unsigned int line, void (*callback)(const Logger& logger, const char * message));
+
+	static void setCallbackAll(void (*cback)(const Logger& logger, const char * message));
 };
 
 #if defined(DEBUG) || defined(GPUDEBUG) || defined(DIVDEBUG) || defined(SQRTDEBUG) || defined(DMADEBUG) || defined(DEVELOPER)

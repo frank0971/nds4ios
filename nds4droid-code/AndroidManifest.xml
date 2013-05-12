@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.opendoorstudios.ds4droid"
-    android:versionCode="13"
-    android:versionName="13" >
+    android:versionCode="32"
+    android:versionName="32" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -17,18 +17,19 @@
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
         android:configChanges="keyboardHidden|orientation"
         android:debuggable="false"
-        android:name="ds4droidApplication">
+        android:name="ds4droidApplication"
+        android:hardwareAccelerated="true">
         
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="tv.ouya.intent.category.GAME" />
             </intent-filter>
         </activity>
-        
+
         <activity android:name=".FileDialog">
             <intent-filter>
                 <action android:name="android.intent.action.PICK"/>
@@ -45,6 +46,8 @@
         <activity android:name=".KeyMapSettings"/>
         
         <activity android:name=".Cheats"/>
+        
+        <activity android:name=".About" />
         
     </application>
 

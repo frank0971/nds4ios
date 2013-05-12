@@ -33,6 +33,7 @@ extern const u8	logo_data[156];
 	#include <windows.h>
 
 
+
 	#define CLASSNAME "DeSmuME"
 
 	extern HINSTANCE hAppInst;

@@ -78,5 +78,11 @@
 			android:dialogTitle="@string/Touch"
 			android:summary="@string/KeymapValuePreface"
 			android:persistent="true" />
+   	<com.opendoorstudios.ds4droid.KeyMapPreference
+			android:key="Controls.KeyMap.Options"
+			android:title="@string/Options"
+			android:dialogTitle="@string/Options"
+			android:summary="@string/KeymapValuePreface"
+			android:persistent="true" />
     
 </PreferenceScreen>

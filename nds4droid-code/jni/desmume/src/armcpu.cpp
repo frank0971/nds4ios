@@ -21,78 +21,42 @@
 #include <assert.h>
 #include <algorithm>
 #include "types.h"
-#include "arm_instructions.h"
-#include "thumb_instructions.h"
+#include "instructions.h"
 #include "cp15.h"
 #include "bios.h"
 #include "debug.h"
 #include "Disassembler.h"
 #include "NDSSystem.h"
 #include "MMU_timing.h"
+#include "armcpu_exec_inline.h"
 #ifdef HAVE_LUA
 #include "lua-engine.h"
 #endif
 
-template<u32> static u32 armcpu_prefetch();
+#ifdef HAVE_JIT
+#include "arm_jit.h"
+#include "ArmThreadedInterpreter.h"
 
-FORCEINLINE u32 armcpu_prefetch(armcpu_t *armcpu) { 
-	if(armcpu->proc_ID==0) return armcpu_prefetch<0>();
-	else return armcpu_prefetch<1>();
+#ifdef HAVE_CJIT
+#include "ArmCJit.h"
+#endif
+
+#endif
+
+#ifdef USE_EXOPHASEJIT
+#include "dynarec/dynarec_linker.h"
+u32 is_exophasejit = false;
+#endif
+
+template<u32> static void armcpu_prefetch();
+
+FORCEINLINE void armcpu_prefetch(armcpu_t *armcpu) { 
+	if(armcpu->proc_ID==0) armcpu_prefetch<0>();
+	else armcpu_prefetch<1>();
 }
 
-const unsigned char arm_cond_table[16*16] = {
-    /* N=0, Z=0, C=0, V=0 */
-    0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,
-    0x00,0xFF,0xFF,0x00,0xFF,0x00,0xFF,0x20,
-    /* N=0, Z=0, C=0, V=1 */
-    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x00,
-    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
-    /* N=0, Z=0, C=1, V=0 */
-    0x00,0xFF,0xFF,0x00,0x00,0xFF,0x00,0xFF,
-    0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x20,
-    /* N=0, Z=0, C=1, V=1 */
-    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x00,
-    0xFF,0x00,0x00,0xFF,0x00,0xFF,0xFF,0x20,
-    /* N=0, Z=1, C=0, V=0 */
-    0xFF,0x00,0x00,0xFF,0x00,0xFF,0x00,0xFF,
-    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x20,
-    /* N=0, Z=1, C=0, V=1 */
-    0xFF,0x00,0x00,0xFF,0x00,0xFF,0xFF,0x00,
-    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
-    /* N=0, Z=1, C=1, V=0 */
-    0xFF,0x00,0xFF,0x00,0x00,0xFF,0x00,0xFF,
-    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x20,
-    /* N=0, Z=1, C=1, V=1 */
-    0xFF,0x00,0xFF,0x00,0x00,0xFF,0xFF,0x00,
-    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
-    /* N=1, Z=0, C=0, V=0 */
-    0x00,0xFF,0x00,0xFF,0xFF,0x00,0x00,0xFF,
-    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
-    /* N=1, Z=0, C=0, V=1 */
-    0x00,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0x00,
-    0x00,0xFF,0xFF,0x00,0xFF,0x00,0xFF,0x20,
-    /* N=1, Z=0, C=1, V=0 */
-    0x00,0xFF,0xFF,0x00,0xFF,0x00,0x00,0xFF,
-    0xFF,0x00,0x00,0xFF,0x00,0xFF,0xFF,0x20,
-    /* N=1, Z=0, C=1, V=1 */
-    0x00,0xFF,0xFF,0x00,0xFF,0x00,0xFF,0x00,
-    0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x20,
-    /* N=1, Z=1, C=0, V=0 */
-    0xFF,0x00,0x00,0xFF,0xFF,0x00,0x00,0xFF,
-    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
-    /* N=1, Z=1, C=0, V=1 */
-    0xFF,0x00,0x00,0xFF,0xFF,0x00,0xFF,0x00,
-    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x20,
-    /* N=1, Z=1, C=1, V=0 */
-    0xFF,0x00,0xFF,0x00,0xFF,0x00,0x00,0xFF,
-    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
-    /* N=1, Z=1, C=1, V=1 */
-    0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,
-    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x20,
-};
-
-armcpu_t NDS_ARM7;
-armcpu_t NDS_ARM9;
+CACHE_ALIGN armcpu_t NDS_ARM7;
+CACHE_ALIGN armcpu_t NDS_ARM9;
 
 #define SWAP(a, b, c) do      \
 	              {       \
@@ -214,24 +178,33 @@ void armcpu_t::changeCPSR()
 	NDS_Reschedule();
 }
 
+#ifdef USE_EXOPHASEJIT
+extern "C" void dynarec_init();
+#endif
+
 void armcpu_init(armcpu_t *armcpu, u32 adr)
 {
-	armcpu->LDTBit = (armcpu->proc_ID==0); //arm9 is ARMv5 style. this should be renamed, or more likely, all references to this should poll a function to return an architecture level enum
+#if defined(_M_X64) || defined(__x86_64__)
+	memcpy(&armcpu->cond_table[0], &arm_cond_table[0], sizeof(arm_cond_table));
+#endif
+	
+	armcpu->LDTBit = (armcpu->proc_ID==0); //Si ARM9 utiliser le syte v5 pour le load
 	armcpu->intVector = 0xFFFF0000 * (armcpu->proc_ID==0);
 	armcpu->waitIRQ = FALSE;
 	armcpu->halt_IE_and_IF = FALSE;
 	armcpu->intrWaitARM_state = 0;
+	
+	#ifdef USE_EXOPHASEJIT
+	armcpu->R = armcpu->reg;
+	#endif
+
 
 //#ifdef GDB_STUB
 //    armcpu->irq_flag = 0;
 //#endif
 
 	for(int i = 0; i < 16; ++i)
-	{
 		armcpu->R[i] = 0;
-		if(armcpu->coproc[i]) free(armcpu->coproc[i]);
-		armcpu->coproc[i] = NULL;
-	}
 	
 	armcpu->CPSR.val = armcpu->SPSR.val = SYS;
 	
@@ -253,13 +226,14 @@ void armcpu_init(armcpu_t *armcpu, u32 adr)
 
 	armcpu->next_instruction = adr;
 	
-	// only ARM9 have co-processor
-	if (armcpu->proc_ID==0)
-		armcpu->coproc[15] = (armcp_t*)armcp15_new(armcpu);
-
 //#ifndef GDB_STUB
 	armcpu_prefetch(armcpu);
 //#endif
+
+#ifdef USE_EXOPHASEJIT
+	if(armcpu->proc_ID == 0)
+		dynarec_init();
+#endif
 }
 
 u32 armcpu_switchMode(armcpu_t *armcpu, u8 mode)
@@ -361,8 +335,9 @@ u32 armcpu_switchMode(armcpu_t *armcpu, u8 mode)
 				armcpu->SPSR = armcpu->SPSR_und;
 				break;
 				
-				default :
-					break;
+			default :
+				printf("switchMode: WRONG mode %02X\n",mode);
+				break;
 	}
 	
 	armcpu->CPSR.bits.mode = mode & 0x1F;
@@ -370,80 +345,23 @@ u32 armcpu_switchMode(armcpu_t *armcpu, u8 mode)
 	return oldmode;
 }
 
+void armcpu_changeCPSR(armcpu_t *armcpu)
+{
+	armcpu->changeCPSR();
+}
+
 u32 armcpu_Wait4IRQ(armcpu_t *cpu)
 {
 	cpu->waitIRQ = TRUE;
 	cpu->halt_IE_and_IF = TRUE;
+#ifdef USE_EXOPHASEJIT
+	extern u32 is_exophasejit;
+	if(is_exophasejit)
+		cpu->R[31] = 2;
+#endif
 	return 1;
 }
 
-template<u32 PROCNUM>
-FORCEINLINE static u32 armcpu_prefetch()
-{
-	armcpu_t* const armcpu = &ARMPROC;
-//#ifdef GDB_STUB
-//	u32 temp_instruction;
-//#endif
-	u32 curInstruction = armcpu->next_instruction;
-
-	if(armcpu->CPSR.bits.T == 0)
-	{
-//#ifdef GDB_STUB
-//		temp_instruction =
-//			armcpu->mem_if->prefetch32( armcpu->mem_if->data,
-//			armcpu->next_instruction);
-//
-//		if ( !armcpu->stalled) {
-//			armcpu->instruction = temp_instruction;
-//			armcpu->instruct_adr = armcpu->next_instruction;
-//			armcpu->next_instruction += 4;
-//			armcpu->R[15] = armcpu->next_instruction + 4;
-//		}
-//#else
-		curInstruction &= 0xFFFFFFFC; //please don't change this to 0x0FFFFFFC -- the NDS will happily run on 0xF******* addresses all day long
-		//please note that we must setup R[15] before reading the instruction since there is a protection
-		//which prevents PC > 0x3FFF from reading the bios region
-		armcpu->instruct_adr = curInstruction;
-		armcpu->next_instruction = curInstruction + 4;
-		armcpu->R[15] = curInstruction + 8;
-		armcpu->instruction = _MMU_read32<PROCNUM, MMU_AT_CODE>(curInstruction);
-//#endif
-
-		return MMU_codeFetchCycles<PROCNUM,32>(curInstruction);
-	}
-
-//#ifdef GDB_STUB
-//	temp_instruction =
-//		armcpu->mem_if->prefetch16( armcpu->mem_if->data,
-//		armcpu->next_instruction);
-//
-//	if ( !armcpu->stalled) {
-//		armcpu->instruction = temp_instruction;
-//		armcpu->instruct_adr = armcpu->next_instruction;
-//		armcpu->next_instruction = armcpu->next_instruction + 2;
-//		armcpu->R[15] = armcpu->next_instruction + 2;
-//	}
-//#else
-	curInstruction &= 0xFFFFFFFE; //please don't change this to 0x0FFFFFFE -- the NDS will happily run on 0xF******* addresses all day long
-	//please note that we must setup R[15] before reading the instruction since there is a protection
-	//which prevents PC > 0x3FFF from reading the bios region
-	armcpu->instruct_adr = curInstruction;
-	armcpu->next_instruction = curInstruction + 2;
-	armcpu->R[15] = curInstruction + 4;
-	armcpu->instruction = _MMU_read16<PROCNUM, MMU_AT_CODE>(curInstruction);
-//#endif
-
-	if(PROCNUM==0)
-	{
-		// arm9 fetches 2 instructions at a time in thumb mode
-		if(!(curInstruction == armcpu->instruct_adr + 2 && (curInstruction & 2)))
-			return MMU_codeFetchCycles<PROCNUM,32>(curInstruction);
-		else
-			return 0;
-	}
-
-	return MMU_codeFetchCycles<PROCNUM,16>(curInstruction);
-}
 
 #if 0 /* not used */
 static BOOL FASTCALL test_EQ(Status_Reg CPSR) { return ( CPSR.bits.Z); }
@@ -513,6 +431,14 @@ void armcpu_exception(armcpu_t *cpu, u32 number)
 
 BOOL armcpu_irqException(armcpu_t *armcpu)
 {
+#ifdef USE_EXOPHASEJIT
+	if (is_exophasejit)
+	{
+		armcpu->instruct_adr = armcpu->R[Dynarec::REG_PC];
+		armcpu->R[CHANGED_PC_STATUS] = 1;
+	}
+#endif
+
     Status_Reg tmp;
 
 	//TODO - remove GDB specific code
@@ -537,7 +463,14 @@ BOOL armcpu_irqException(armcpu_t *armcpu)
 
 	//must retain invariant of having next instruction to be executed prefetched
 	//(yucky)
+#ifdef USE_EXOPHASEJIT
+	if (is_exophasejit)
+		armcpu->R[15] =  armcpu->intVector + 0x18;
+	else
+		armcpu_prefetch(armcpu);
+#else
 	armcpu_prefetch(armcpu);
+#endif
 
 	return TRUE;
 }
@@ -558,7 +491,7 @@ BOOL armcpu_irqException(armcpu_t *armcpu)
 
 u32 TRAPUNDEF(armcpu_t* cpu)
 {
-	INFO("ARM%c: Undefined instruction: 0x%08X (%s) PC=0x%08X\n", cpu->proc_ID?'7':'9', cpu->instruction, decodeIntruction(false, cpu->instruction), cpu->instruct_adr);
+	INFO("ARM%c: Undefined instruction: 0x%08X (%s) PC=0x%08X\n", cpu->proc_ID?'7':'9', cpu->instruction, decodeIntruction(cpu->CPSR.bits.T, cpu->instruction), cpu->instruct_adr);
 
 	if (((cpu->intVector != 0) ^ (cpu->proc_ID == ARMCPU_ARM9)))
 	{
@@ -585,141 +518,74 @@ u32 TRAPUNDEF(armcpu_t* cpu)
 //  return TRUE;
 //}
 
-template<int PROCNUM>
-u32 armcpu_exec()
+void armcpu_sync()
 {
-	// Usually, fetching and executing are processed parallelly.
-	// So this function stores the cycles of each process to
-	// the variables below, and returns appropriate cycle count.
-	u32 cFetch = 0;
-	u32 cExecute = 0;
-
-	//this assert is annoying. but sometimes it is handy.
-	//assert(ARMPROC.instruct_adr!=0x00000000);
-//#ifdef DEVELOPER
-#if 0
-	if ((((ARMPROC.instruct_adr & 0x0F000000) == 0x0F000000) && (PROCNUM == 0)) ||
-		(((ARMPROC.instruct_adr & 0x0F000000) == 0x00000000) && (PROCNUM == 1)))
-	{
-		switch (ARMPROC.instruct_adr & 0xFFFF)
-		{
-			case 0x00000000:
-				printf("BIOS%c: Reset!!!\n", PROCNUM?'7':'9');
-				emu_halt();
-				break;
-			case 0x00000004:
-				printf("BIOS%c: Undefined instruction\n", PROCNUM?'7':'9');
-				//emu_halt();
-				break;
-			case 0x00000008:
-				//printf("BIOS%c: SWI\n", PROCNUM?'7':'9');
-				break;
-			case 0x0000000C:
-				printf("BIOS%c: Prefetch Abort!!!\n", PROCNUM?'7':'9');
-				//emu_halt();
-				break;
-			case 0x00000010:
-				//printf("BIOS%c: Data Abort!!!\n", PROCNUM?'7':'9');
-				//emu_halt();
-				break;
-			case 0x00000014:
-				printf("BIOS%c: Reserved!!!\n", PROCNUM?'7':'9');
-				break;
-			case 0x00000018:
-				//printf("BIOS%c: IRQ\n", PROCNUM?'7':'9');
-				break;
-			case 0x0000001C:
-				printf("BIOS%c: Fast IRQ\n", PROCNUM?'7':'9');
-				break;
-		}
-	}
-#endif
-
-#if 0 //#ifdef GDB_STUB
-	if (ARMPROC.stalled) {
-		return STALLED_CYCLE_COUNT;
-	}
-
-	/* check for interrupts */
-	if (ARMPROC.irq_flag) {
-		armcpu_irqException(&ARMPROC);
-	}
-
-	cFetch = armcpu_prefetch(&ARMPROC);
-
-	if (ARMPROC.stalled) {
-		return MMU_fetchExecuteCycles<PROCNUM>(cExecute, cFetch);
-	}
-#endif
-
-	//cFetch = armcpu_prefetch(&ARMPROC);
-
-	//printf("%d: %08X\n",PROCNUM,ARMPROC.instruct_adr);
-
-	if(ARMPROC.CPSR.bits.T == 0)
-	{
-		if(
-			CONDITION(ARMPROC.instruction) == 0x0E  //fast path for unconditional instructions
-			|| (TEST_COND(CONDITION(ARMPROC.instruction), CODE(ARMPROC.instruction), ARMPROC.CPSR)) //handles any condition
-			)
-		{
-#ifdef HAVE_LUA
-			CallRegisteredLuaMemHook(ARMPROC.instruct_adr, 4, ARMPROC.instruction, LUAMEMHOOK_EXEC); // should report even if condition=false?
-#endif
-			if(PROCNUM==0) {
-				#ifdef DEVELOPER
-				DEBUG_statistics.instructionHits[0].arm[INSTRUCTION_INDEX(ARMPROC.instruction)]++;
-				#endif
-				cExecute = arm_instructions_set_0[INSTRUCTION_INDEX(ARMPROC.instruction)](ARMPROC.instruction);
-			}
-			else {
-				#ifdef DEVELOPER
-				DEBUG_statistics.instructionHits[1].arm[INSTRUCTION_INDEX(ARMPROC.instruction)]++;
-				#endif
-				cExecute = arm_instructions_set_1[INSTRUCTION_INDEX(ARMPROC.instruction)](ARMPROC.instruction);
-			}
-		}
-		else
-			cExecute = 1; // If condition=false: 1S cycle
-#ifdef GDB_STUB
-		if ( ARMPROC.post_ex_fn != NULL) {
-			/* call the external post execute function */
-			ARMPROC.post_ex_fn(ARMPROC.post_ex_fn_data, ARMPROC.instruct_adr, 0);
-		}
-		ARMPROC.mem_if->prefetch32( ARMPROC.mem_if->data, ARMPROC.next_instruction);
-#endif
-		cFetch = armcpu_prefetch<PROCNUM>();
-		return MMU_fetchExecuteCycles<PROCNUM>(cExecute, cFetch);
-	}
-
-#ifdef HAVE_LUA
-	CallRegisteredLuaMemHook(ARMPROC.instruct_adr, 2, ARMPROC.instruction, LUAMEMHOOK_EXEC);
-#endif
-	if(PROCNUM==0)
-	{
-		#ifdef DEVELOPER
-		DEBUG_statistics.instructionHits[0].thumb[ARMPROC.instruction>>6]++;
-		#endif
-		cExecute = thumb_instructions_set_0[ARMPROC.instruction>>6](ARMPROC.instruction);
-	}
-	else {
-		#ifdef DEVELOPER
-		DEBUG_statistics.instructionHits[1].thumb[ARMPROC.instruction>>6]++;
-		#endif
-		cExecute = thumb_instructions_set_1[ARMPROC.instruction>>6](ARMPROC.instruction);
-	}
-
-#ifdef GDB_STUB
-	if ( ARMPROC.post_ex_fn != NULL) {
-		/* call the external post execute function */
-		ARMPROC.post_ex_fn( ARMPROC.post_ex_fn_data, ARMPROC.instruct_adr, 1);
-	}
-	ARMPROC.mem_if->prefetch32( ARMPROC.mem_if->data, ARMPROC.next_instruction);
-#endif
-	cFetch = armcpu_prefetch<PROCNUM>();
-	return MMU_fetchExecuteCycles<PROCNUM>(cExecute, cFetch);
+	NDS_ARM7.next_instruction = NDS_ARM7.instruct_adr;
+	NDS_ARM9.next_instruction = NDS_ARM9.instruct_adr;
+	armcpu_prefetch<0>();
+	armcpu_prefetch<1>();
 }
 
-//these templates needed to be instantiated manually
-template u32 armcpu_exec<0>();
-template u32 armcpu_exec<1>();
+void armcpu_setjitmode(int jitmode)
+{
+#ifdef HAVE_JIT
+	if (arm_cpubase)
+	{
+		arm_cpubase->Sync();
+		arm_cpubase->Shutdown();
+
+		arm_cpubase = NULL;
+	}
+
+#ifdef USE_EXOPHASEJIT
+	is_exophasejit = false;
+#endif
+
+	switch (jitmode)
+	{
+	case 0:
+		arm_cpubase = NULL;
+		break;
+
+	case 1:
+		arm_cpubase = &arm_threadedinterpreter;
+		break;
+
+#ifdef HAVE_CJIT
+	case 2:
+		arm_cpubase = &arm_cjit;
+		break;
+#endif
+
+#if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86) || defined(_M_X64)
+	case 3:
+		arm_cpubase = &arm_oldjit;
+		break;
+#elif defined(USE_EXOPHASEJIT)
+	case 3:
+		{
+			extern CpuBase arm_exophasejit;
+			arm_cpubase = &arm_exophasejit;
+			is_exophasejit = true;
+		}
+		break;
+#endif
+
+	default:
+		INFO("armcpu_setjitmode, unknow jitmode : %d\n", jitmode);
+		arm_cpubase = &arm_threadedinterpreter;
+		break;
+	}
+
+	if (arm_cpubase)
+	{
+		INFO("armcpu_setjitmode : %s, jit_max_block_size = %i\n", arm_cpubase->Description(), CommonSettings.jit_max_block_size);
+
+		arm_cpubase->Reserve();
+		arm_cpubase->Reset();
+	}
+	else
+		INFO("armcpu_setjitmode, jit off\n");
+#endif
+}
+

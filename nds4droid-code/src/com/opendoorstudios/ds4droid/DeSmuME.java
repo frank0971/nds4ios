@@ -22,7 +22,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Surface;
 
 class DeSmuME {
 	
@@ -58,14 +57,14 @@ class DeSmuME {
 	}
 	
 	static native int getCPUType();
+	static native int getCPUFamily();
 	static native void init();
 	static native void runCore();
-	static native int runOther();
 	static native void resize(Bitmap bitmap);
-	static native void draw(Bitmap bitmapMain, Bitmap bitmapTouch, boolean rotate);
+	static native int draw(Bitmap bitmapMain, Bitmap bitmapTouch, boolean rotate);
 	static native void touchScreenTouch(int x, int y);
 	static native void touchScreenRelease();
-	static native void setButtons(int l, int r, int up, int down, int left, int right, int a, int b, int x, int y, int start, int select);
+	static native void setButtons(int l, int r, int up, int down, int left, int right, int a, int b, int x, int y, int start, int select, int lid);
 	static native boolean loadRom(String path);
 	static native void setWorkingDir(String path, String temp);
 	static native void saveState(int slot);
@@ -74,11 +73,9 @@ class DeSmuME {
 	static native int getNativeWidth();
 	static native int getNativeHeight();
 	static native void setFilter(int index);
-	static native void copyMasterBuffer();
 	static native void change3D(int set);
 	static native void changeSound(int set);
 	static native void setSoundPaused(int set);
-	static native void drawToSurface(Surface surface);
 	static native void reloadFirmware();
 	static native int getNumberOfCheats();
 	static native String getCheatName(int pos);
@@ -92,10 +89,15 @@ class DeSmuME {
 	static native void deleteCheat(int pos);
 	static native void setMicPaused(int set);
 	static native void closeRom();
+	static native void exit();
+	static native void changeCpuMode(int mode);
+	static native void changeSoundSynchMode(int mode);
 	
 	static boolean touchScreenMode = false;
 	static boolean inited = false;
 	static boolean romLoaded = false;
+	static boolean lidOpen = true;
+	static String loadedRom = null;
 	
 	public static int getSettingInt(String name, int def)
 	{

@@ -134,6 +134,7 @@ class Button {
 		case BUTTON_UPRIGHT: return "UpRight";
 		case BUTTON_DOWNLEFT: return "DownLeft";
 		case BUTTON_DOWNRIGHT: return "DownRight";
+		case BUTTON_OPTIONS: return "Options";
 		default: return "Unknown";
 		}
 	}
@@ -189,6 +190,7 @@ class Button {
 	static final int BUTTON_UPRIGHT = 16;
 	static final int BUTTON_DOWNLEFT = 17;
 	static final int BUTTON_DOWNRIGHT = 18;
+	static final int BUTTON_OPTIONS = 19;
 	
 	final Bitmap bitmap;
 	Rect position;

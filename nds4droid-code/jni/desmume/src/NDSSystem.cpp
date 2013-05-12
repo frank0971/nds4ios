@@ -1,6 +1,6 @@
 /*
 	Copyright (C) 2006 yopyop
-	Copyright (C) 2008-2012 DeSmuME team
+	Copyright (C) 2008-2013 DeSmuME team
 
 	This file is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "gfx3d.h"
 #include "utils/decrypt/decrypt.h"
 #include "utils/decrypt/crc.h"
+#include "cp15.h"
 #include "bios.h"
 #include "debug.h"
 #include "cheatSystem.h"
@@ -47,6 +48,7 @@
 //#define LOG_ARM9
 //#define LOG_ARM7
 //#define dolog (currFrameCounter>15)
+//bool dolog=true;
 //#define LOG_TO_FILE
 //#define LOG_TO_FILE_REGS
 
@@ -102,10 +104,11 @@ void Desmume_InitOnce()
 int NDS_Init( struct armcpu_memory_iface *arm9_mem_if,
 struct armcpu_ctrl_iface **arm9_ctrl_iface,
 struct armcpu_memory_iface *arm7_mem_if,
-struct armcpu_ctrl_iface **arm7_ctrl_iface) {
+struct armcpu_ctrl_iface **arm7_ctrl_iface)
 #else
-int NDS_Init( void) {
+int NDS_Init( void)
 #endif
+{
 	nds.idleFrameCounter = 0;
 	memset(nds.runCycleCollector,0,sizeof(nds.runCycleCollector));
 	MMU_Init();
@@ -114,8 +117,12 @@ int NDS_Init( void) {
 	//got to print this somewhere..
 	printf("%s\n", EMU_DESMUME_NAME_AND_VERSION());
 
-	if (Screen_Init(GFXCORE_DUMMY) != 0)
+	if (Screen_Init(0) != 0)
 		return -1;
+
+#ifdef HAVE_JIT
+	JitLutInit();
+#endif
 
 	gfx3d_init();
 
@@ -166,6 +173,13 @@ void NDS_DeInit(void) {
 		delete cheats;
 	if (cheatSearch)
 		delete cheatSearch;
+
+#ifdef HAVE_JIT
+	if (arm_cpubase)
+		arm_cpubase->Shutdown();
+
+	JitLutDeInit();
+#endif
 
 #ifdef LOG_ARM7
 	if (fp_dis7 != NULL) 
@@ -332,7 +346,7 @@ const RomBanner& GameInfo::getRomBanner()
 
 void GameInfo::populate()
 {
-	const char *regions[] = {	"JPFSEDIRKH",
+	const char *regions[] = {	"JPFSEDIRKHX",
 								"JPN",
 								"EUR",
 								"FRA",
@@ -343,6 +357,7 @@ void GameInfo::populate()
 								"RUS",
 								"KOR",
 								"HOL",
+								"EUU",
 
 	};
 
@@ -353,27 +368,30 @@ void GameInfo::populate()
 	memset(ROMserial, 0, sizeof(ROMserial));
 	memset(ROMname, 0, sizeof(ROMname));
 
-	if (
-		//Option 1. - look for this instruction in the game title
-		//(did this ever work?)
-		//(header->gameTile[0] == 0x2E) && 
-		//(header->gameTile[1] == 0x00) && 
-		//(header->gameTile[2] == 0x00) && 
-		//(header->gameTile[3] == 0xEA)
-		//) &&
-		//option 2. - look for gamecode #### (default for ndstool)
-		//or an invalid gamecode
-		(
-			((header.gameCode[0] == 0x23) && 
-			(header.gameCode[1] == 0x23) && 
-			(header.gameCode[2] == 0x23) && 
-			(header.gameCode[3] == 0x23)
-			) || 
-			(header.gameCode[0] == 0x00) 
+	//homebrew detection heuristics
+	//Option Old. - look for this instruction in the game title
+	//(did this ever work?)
+	//(header->gameTile[0] == 0x2E) && (header->gameTile[1] == 0x00) && header->gameTile[2] == 0x00) && header->gameTile[3] == 0xEA)
+	//Option New. - look for gamecode #### (default for ndstool)
+	//or an invalid gamecode
+	//this first part may look like a poor heuristic for detecting homebrew, but it is actually pretty good.
+	//setting your own game code is stupid, so homebrew should just leave it.
+	//however, non-devkitARM-default makefiles may not have set this.
+	bool gamecodeHash = !memcmp(header.gameCode,"####",4);
+	bool gamecodeInvalid = header.gameCode[0] == 0x00;
+
+
+	if((gamecodeHash || gamecodeInvalid) 
+		//TBD - is this check a good idea?
+		&& header.makerCode == 0x0
 		)
-		&&
-			header.makerCode == 0x0
-		)
+	{
+		isHomebrew = true;
+	}
+	else
+		isHomebrew = false;
+
+	if(isHomebrew)
 	{
 		//we can't really make a serial for a homebrew game that hasnt set a game code
 		strcpy(ROMserial, "Homebrew");
@@ -384,13 +402,13 @@ void GameInfo::populate()
 		memcpy(ROMserial+4, header.gameCode, 4);
 
 		u32 region = (u32)(std::max<s32>(strchr(regions[0],header.gameCode[3]) - regions[0] + 1, 0));
-		if (region != 0)
+		if (region > 0 && region < 12)
 			strcat(ROMserial, regions[region]);
 		else
 			strcat(ROMserial, "Unknown");
 	}
 
-	//rom name is probably set even in homebrew
+	//rom name is probably set even in homebrew, so do it regardless
 	memset(ROMname, 0, sizeof(ROMname));
 	memcpy(ROMname, header.gameTile, 12);
 	trim(ROMname,20);
@@ -405,10 +423,7 @@ void GameInfo::populate()
 			}
 		}*/
 
-	//this may look like a poor heuristic for detecting homebrew, but it is actually pretty good.
-	//setting your own game code is stupid, so homebrew should just leave it.
-	//however, non-devkitARM-default makefiles may not have set this.
-	isHomebrew = !memcmp(header.gameCode,"####",4);
+
 }
 
 #if defined(_WINDOWS) || defined(ANDROID)
@@ -610,7 +625,7 @@ int NDS_LoadROM(const char *filename, const char *logicalFilename)
 				printf("None");
 			else
 			{
-				printf("%s", save_names[sv]);
+				printf("%s", save_types[sv].descr);
 				if (CommonSettings.autodetectBackupMethod == 1)
 					backup_setManualBackupType(sv+1);
 			}
@@ -961,14 +976,10 @@ int NDS_WriteBMP_32bppBuffer(int width, int height, const void* buf, const char 
 }
 
 void NDS_Sleep() { nds.sleeping = TRUE; }
-void NDS_ToggleCardEject()
+
+void NDS_TriggerCardEjectIRQ()
 {
-	if(!nds.cardEjected)
-	{
-		//staff of kings will test this (it also uses the arm9 0xB8 poll)
-		NDS_makeIrq(ARMCPU_ARM7, IRQ_BIT_GC_IREQ_MC);
-	}
-	nds.cardEjected ^= TRUE;
+	NDS_makeIrq(ARMCPU_ARM7, IRQ_BIT_GC_IREQ_MC);
 }
 
 
@@ -1490,7 +1501,7 @@ static void execHardware_hblank()
 		//trigger hblank dmas
 		//but notice, we do that just after we finished drawing the line
 		//(values copied by this hdma should not be used until the next scanline)
-		triggerDma(EDMAMode_HBlank);
+		triggerDma<EDMAMode_HBlank>();
 	}
 
 	if(nds.VCount==262)
@@ -1550,7 +1561,7 @@ static void execHardware_hstart_vblankStart()
 		}
 
 	//trigger vblank dmas
-	triggerDma(EDMAMode_VBlank);
+	triggerDma<EDMAMode_VBlank>();
 
 	//tracking for arm9 load average
 	nds.runCycleCollector[0][nds.idleFrameCounter] = 1120380-nds.idleCycles[0];
@@ -1657,11 +1668,6 @@ static void execHardware_hstart()
 		//when the vcount hits 262, vblank ends (oam pre-renders by one scanline)
 		execHardware_hstart_vblankEnd();
 	}
-	else if(nds.VCount==191)
-	{
-		//when the vcount hits 191, the 3d vblank occurs (maybe because OAM doesnt need to run anymore, so we can power it down, and give the 3d as much time as possible?)
-		gfx3d_VBlankSignal();
-	}
 	else if(nds.VCount==192)
 	{
 		//turn on vblank status bit
@@ -1671,6 +1677,16 @@ static void execHardware_hstart()
 		//check whether we'll need to fire vblank irqs
 		if(T1ReadWord(MMU.ARM9_REG, 4) & 0x8) MMU.reg_IF_pending[ARMCPU_ARM9] |= (1<<IRQ_BIT_LCD_VBLANK);
 		if(T1ReadWord(MMU.ARM7_REG, 4) & 0x8) MMU.reg_IF_pending[ARMCPU_ARM7] |= (1<<IRQ_BIT_LCD_VBLANK);
+
+		//this is important for the character select in Dragon Ball Kai - Ultimate Butouden
+		//it seems if you allow the 3d to begin before the vblank, then it will get interrupted and not complete.
+		//the game needs to pick up the gxstat reg busy as clear after it finishes processing vblank.
+		//therefore, this can't happen until sometime after vblank.
+		//devil survivor 2 will have screens get stuck if this is on any other scanline.
+		//obviously 192 is the right choice.
+		gfx3d_VBlankSignal();
+		//this isnt important for any known game, but it would be nice to prove it.
+		NDS_RescheduleGXFIFO(392*2);
 	}
 
 	//write the new vcount
@@ -1687,7 +1703,7 @@ static void execHardware_hstart()
 	execHardware_hstart_vcount();
 
 	//trigger hstart dmas
-	triggerDma(EDMAMode_HStart);
+	triggerDma<EDMAMode_HStart>();
 
 	if(nds.VCount<192)
 	{
@@ -1696,7 +1712,7 @@ static void execHardware_hstart()
 		//it should be driven by a fifo (and generate just in time as the scanline is displayed)
 		//but that isnt even possible until we have some sort of sub-scanline timing.
 		//it may not be necessary.
-		triggerDma(EDMAMode_MemDisplay);
+		triggerDma<EDMAMode_MemDisplay>();
 	}
 }
 
@@ -1944,24 +1960,28 @@ FORCEINLINE void arm7log()
 static const int kMaxWork = 4000;
 static const int kIrqWait = 4000;
 
+static FORCEINLINE s32 fasts32min(const s32& a, const s32& b)
+{
+	const s32 mask=a-b; 
+	return b+((mask)&(mask>>31));
+}
 
 template<bool doarm9, bool doarm7>
-static FORCEINLINE s32 minarmtime(s32 arm9, s32 arm7)
+static FORCEINLINE s32 minarmtime(const s32& arm9, const s32& arm7)
 {
 	if(doarm9)
 		if(doarm7)
-			return min(arm9,arm7);
+			return fasts32min(arm9,arm7);
 		else
 			return arm9;
 	else
 		return arm7;
 }
 
-template<bool doarm9, bool doarm7>
-static /*donotinline*/ std::pair<s32,s32> armInnerLoop(
-	const u64 nds_timer_base, const s32 s32next, s32 arm9, s32 arm7) HOT;
 
-template<bool doarm9, bool doarm7>
+#include "armcpu_exec_inline.h"
+
+template<bool doarm9, bool doarm7, int cpuMode>
 static /*donotinline*/ std::pair<s32,s32> armInnerLoop(
 	const u64 nds_timer_base, const s32 s32next, s32 arm9, s32 arm7)
 {
@@ -1970,50 +1990,37 @@ static /*donotinline*/ std::pair<s32,s32> armInnerLoop(
 	{
 		if(doarm9 && (!doarm7 || arm9 <= timer))
 		{
-			if(!NDS_ARM9.waitIRQ&&!nds.freezeBus)
-			{
-				arm9log();
-				debug();
-				arm9 += armcpu_exec<ARMCPU_ARM9>();
-				#ifdef DEVELOPER
-					nds_debug_continuing[0] = false;
-				#endif
-			}
+			if(!NDS_ARM9.waitIRQ && !nds.freezeBus)
+				arm9 += armcpu_exec<ARMCPU_ARM9,cpuMode>();
 			else
 			{
 				s32 temp = arm9;
-				arm9 = min(s32next, arm9 + kIrqWait);
+				arm9 = fasts32min(s32next, arm9 + kIrqWait);
 				nds.idleCycles[0] += arm9-temp;
 				if (gxFIFO.size < 255) nds.freezeBus &= ~1;
 			}
 		}
 		if(doarm7 && (!doarm9 || arm7 <= timer))
 		{
-			if(!NDS_ARM7.waitIRQ&&!nds.freezeBus)
-			{
-				arm7log();
-				arm7 += (armcpu_exec<ARMCPU_ARM7>()<<1);
-				#ifdef DEVELOPER
-					nds_debug_continuing[1] = false;
-				#endif
-			}
+			if(!NDS_ARM7.waitIRQ && !nds.freezeBus)
+				arm7 += (armcpu_exec<ARMCPU_ARM7,cpuMode>()<<1);
 			else
 			{
 				s32 temp = arm7;
-				arm7 = min(s32next, arm7 + kIrqWait);
+				arm7 = fasts32min(s32next, arm7 + kIrqWait);
 				nds.idleCycles[1] += arm7-temp;
 				if(arm7 == s32next)
 				{
 					nds_timer = nds_timer_base + minarmtime<doarm9,false>(arm9,arm7);
-					return armInnerLoop<doarm9,false>(nds_timer_base, s32next, arm9, arm7);
+					return armInnerLoop<doarm9,false,cpuMode>(nds_timer_base, s32next, arm9, arm7);
+
 				}
 			}
 		}
 
 		timer = minarmtime<doarm9,doarm7>(arm9,arm7);
-		nds_timer = nds_timer_base + timer;
 	}
-
+	nds_timer = nds_timer_base + timer;
 	return std::make_pair(arm9, arm7);
 }
 
@@ -2062,8 +2069,21 @@ void NDS_exec(s32 nb)
 	}
 	else
 	{
+//#define PRINT_LOOP
+#ifdef PRINT_LOOP
+		extern unsigned long long RawGetTickCount();
+		extern unsigned long long RawGetTickPerSecond();
+
+		unsigned long long tps = RawGetTickPerSecond();
+		unsigned long long st,ed,ed2;
+		unsigned int s1=0,s2=0,s3=0;
+#endif
+
 		for(;;)
 		{
+#ifdef PRINT_LOOP
+			st=RawGetTickCount();
+#endif
 			//trap the debug-stalled condition
 			#ifdef DEVELOPER
 				singleStep = false;
@@ -2108,8 +2128,20 @@ void NDS_exec(s32 nb)
 					s32next = 1;
 				}
 			#endif
-
-			std::pair<s32,s32> arm9arm7 = armInnerLoop<true,true>(nds_timer_base,s32next,arm9,arm7);
+#ifdef PRINT_LOOP
+			ed=RawGetTickCount();
+			s1+=ed-st;
+#endif
+			
+			std::pair<s32,s32> arm9arm7;
+			switch(CommonSettings.CpuMode)
+			{
+				case 1: arm9arm7 = armInnerLoop<true,true,1>(nds_timer_base,s32next,arm9,arm7); break;
+				case 2: arm9arm7 = armInnerLoop<true,true,2>(nds_timer_base,s32next,arm9,arm7); break;
+				case 3: arm9arm7 = armInnerLoop<true,true,3>(nds_timer_base,s32next,arm9,arm7); break;
+				default: arm9arm7 = armInnerLoop<true,true,0>(nds_timer_base,s32next,arm9,arm7); break;
+					
+			}
 
 			#ifdef DEVELOPER
 				if(singleStep)
@@ -2141,11 +2173,25 @@ void NDS_exec(s32 nb)
 				nds.idleCycles[1] -= (s32)(nds_arm7_timer-nds_timer);
 				nds_arm7_timer = nds_timer;
 			}
+#ifdef PRINT_LOOP
+			ed2=RawGetTickCount();
+			s2+=ed2-ed;
+			s3+=ed2-st;
+#endif
 		}
+#ifdef PRINT_LOOP
+		INFO("s1:%f s2:%f s3:%f\n",(float)(s1*1000000.0)/tps,(float)(s2*1000000.0)/tps,(float)(s3*1000000.0)/tps);
+#endif
 	}
 
-	//DEBUG_statistics.printSequencerExecutionCounters();
-	//DEBUG_statistics.print();
+	//static int debug_pcount = 0;
+	//if (debug_pcount++ > 10)
+	//{
+	//	//DEBUG_statistics.printSequencerExecutionCounters();
+	//	DEBUG_statistics.print();
+	//	//DEBUG_reset();
+	//	debug_pcount = 0;
+	//}
 
 	//end of frame emulation housekeeping
 	if(LagFrameFlag)
@@ -2190,107 +2236,41 @@ void execHardware_interrupts()
 
 static void resetUserInput();
 
-bool _HACK_DONT_STOPMOVIE = false;
-void NDS_Reset()
+static void PrepareBiosARM7()
 {
-	singleStep = false;
-	nds_debug_continuing[0] = nds_debug_continuing[1] = false;
-	u32 src = 0;
-	u32 dst = 0;
-	bool fw_success = false;
-	FILE* inf = NULL;
-	NDS_header * header = NDS_getROMHeader();
-
-	DEBUG_reset();
-
-	if (!header) return ;
-
-	nds.sleeping = FALSE;
-	nds.cardEjected = FALSE;
-	nds.freezeBus = 0;
-	nds.power1.lcd = nds.power1.gpuMain = nds.power1.gfx3d_render = nds.power1.gfx3d_geometry = nds.power1.gpuSub = nds.power1.dispswap = 1;
-	nds.power2.speakers = 1;
-	nds.power2.wifi = 0;
-
-	nds_timer = 0;
-	nds_arm9_timer = 0;
-	nds_arm7_timer = 0;
-
-	if(movieMode != MOVIEMODE_INACTIVE && !_HACK_DONT_STOPMOVIE)
-		movie_reset_command = true;
-
-	if(movieMode == MOVIEMODE_INACTIVE) {
-		currFrameCounter = 0;
-		lagframecounter = 0;
-		LagFrameFlag = 0;
-		lastLag = 0;
-		TotalLagFrames = 0;
+	NDS_ARM7.BIOS_loaded = false;
+	memset(MMU.ARM7_BIOS, 0, sizeof(MMU.ARM7_BIOS));
+	if(CommonSettings.UseExtBIOS == true)
+	{
+		//read arm7 bios from inputfile and flag it if it succeeds
+		FILE *arm7inf = fopen(CommonSettings.ARM7BIOS,"rb");
+		if (fread(MMU.ARM7_BIOS,1,16384,arm7inf) == 16384)
+			NDS_ARM7.BIOS_loaded = true;
+		fclose(arm7inf);
 	}
 
-	SPU_DeInit();
-
-	MMU_Reset();
-
-
-	//put random garbage in vram for homebrew games, to help mimic the situation where libnds does not clear out junk
-	//which the card's launcher may or may not have left behind
-  //1. retail games dont clear TCM, so why should we jumble it and expect homebrew to clear it?
-  //2. some retail games _dont boot_ if main memory is jumbled. wha...?
-  //3. clearing this is not as useful as tracking uninitialized reads in dev+ builds
-  //4. the vram clearing causes lots of graphical corruptions in badly coded homebrews. this reduces compatibility substantially
-  //conclusion: disable it for now and bring it back as an option
-	//if(gameInfo.isHomebrew)
-	//{
-	//	u32 w=100000,x=99,y=117,z=19382173;
-	//	CTASSERT(sizeof(MMU.ARM9_LCD) < sizeof(MMU.MAIN_MEM));
-	//	CTASSERT(sizeof(MMU.ARM9_VMEM) < sizeof(MMU.MAIN_MEM));
-	//	CTASSERT(sizeof(MMU.ARM9_ITCM) < sizeof(MMU.MAIN_MEM));
-	//	CTASSERT(sizeof(MMU.ARM9_DTCM) < sizeof(MMU.MAIN_MEM));
-	//	for(int i=0;i<sizeof(MMU.MAIN_MEM);i++)
-	//	{
-	//		u32 t= (x^(x<<11)); 
-	//		x=y;
-	//		y=z; 
-	//		z=w;
-	//		t = (w= (w^(w>>19))^(t^(t>>8)));
-	//		//MMU.MAIN_MEM[i] = t;
-	//		if (i<sizeof(MMU.ARM9_LCD)) MMU.ARM9_LCD[i] = t;
-	//		if (i<sizeof(MMU.ARM9_VMEM)) MMU.ARM9_VMEM[i] = t;
-	//		//if (i<sizeof(MMU.ARM9_ITCM)) MMU.ARM9_ITCM[i] = t;
-	//		//if (i<sizeof(MMU.ARM9_DTCM)) MMU.ARM9_DTCM[i] = t;
-	//	}
-	//}
-
-
-	NDS_ARM7.BIOS_loaded = false;
-	NDS_ARM9.BIOS_loaded = false;
-	memset(MMU.ARM7_BIOS, 0, sizeof(MMU.ARM7_BIOS));
-	memset(MMU.ARM9_BIOS, 0, sizeof(MMU.ARM9_BIOS));
-
-	//ARM7 BIOS IRQ HANDLER
-	if(CommonSettings.UseExtBIOS == true)
-		inf = fopen(CommonSettings.ARM7BIOS,"rb");
-	else
-		inf = NULL;
-
-	if(inf) 
+	//choose to use SWI emulation or routines from bios
+	if((CommonSettings.SWIFromBIOS) && (NDS_ARM7.BIOS_loaded))
 	{
-		if (fread(MMU.ARM7_BIOS,1,16384,inf) == 16384) NDS_ARM7.BIOS_loaded = true;
-		fclose(inf);
+		NDS_ARM7.swi_tab = 0;
 
-		if((CommonSettings.SWIFromBIOS) && (NDS_ARM7.BIOS_loaded)) NDS_ARM7.swi_tab = 0;
-		else NDS_ARM7.swi_tab = ARM7_swi_tab;
-
+		//if we used routines from bios, apply patches
 		if (CommonSettings.PatchSWI3)
 			_MMU_write16<ARMCPU_ARM7>(0x00002F08, 0x4770);
-
-		INFO("ARM7 BIOS is %s.\n", NDS_ARM7.BIOS_loaded?"loaded":"failed");
 	} 
 	else 
+		NDS_ARM7.swi_tab = ARM_swi_tab[ARMCPU_ARM7];
+
+	if(NDS_ARM7.BIOS_loaded)
 	{
-		NDS_ARM7.swi_tab = ARM7_swi_tab;
+		INFO("ARM7 BIOS load: %s.\n", NDS_ARM7.BIOS_loaded?"OK":"FAILED");
+	}
+	else
+	{
+		//fake bios content, critical to normal operations, since we dont have a real bios.
 
 #if 0
+		//someone please document what is in progress here
 		// TODO
 		T1WriteLong(MMU.ARM7_BIOS, 0x0000, 0xEAFFFFFE);		// loop for Reset !!!
 		T1WriteLong(MMU.ARM7_BIOS, 0x0004, 0xEAFFFFFE);		// loop for Undef instr expection
@@ -2309,31 +2289,43 @@ void NDS_Reset()
 		T1WriteLong(MMU.ARM7_BIOS, 0x0030, 0xE8BD500F);
 		T1WriteLong(MMU.ARM7_BIOS, 0x0034, 0xE25EF004);
 	}
+}
 
-	//ARM9 BIOS IRQ HANDLER
+static void PrepareBiosARM9()
+{
+	memset(MMU.ARM9_BIOS, 0, sizeof(MMU.ARM9_BIOS));
+	NDS_ARM9.BIOS_loaded = false;
 	if(CommonSettings.UseExtBIOS == true)
-		inf = fopen(CommonSettings.ARM9BIOS,"rb");
-	else
-		inf = NULL;
-
-	if(inf) 
 	{
-		if (fread(MMU.ARM9_BIOS,1,4096,inf) == 4096) NDS_ARM9.BIOS_loaded = true;
-		fclose(inf);
+		//read arm9 bios from inputfile and flag it if it succeeds
+		FILE* arm9inf = fopen(CommonSettings.ARM9BIOS,"rb");
+		if (fread(MMU.ARM9_BIOS,1,4096,arm9inf) == 4096) 
+			NDS_ARM9.BIOS_loaded = true;
+		fclose(arm9inf);
+	}
 
-		if((CommonSettings.SWIFromBIOS) && (NDS_ARM9.BIOS_loaded)) NDS_ARM9.swi_tab = 0;
-		else NDS_ARM9.swi_tab = ARM9_swi_tab;
-
+	//choose to use SWI emulation or routines from bios
+	if((CommonSettings.SWIFromBIOS) && (NDS_ARM9.BIOS_loaded))
+	{
+		NDS_ARM9.swi_tab = 0;
+		
+		//if we used routines from bios, apply patches
 		if (CommonSettings.PatchSWI3)
 			_MMU_write16<ARMCPU_ARM9>(0xFFFF07CC, 0x4770);
+	}
+	else NDS_ARM9.swi_tab = ARM_swi_tab[ARMCPU_ARM9];
 
-		INFO("ARM9 BIOS is %s.\n", NDS_ARM9.BIOS_loaded?"loaded":"failed");
+	if(NDS_ARM9.BIOS_loaded) 
+	{
+		INFO("ARM9 BIOS load: %s.\n", NDS_ARM9.BIOS_loaded?"OK":"FAILED");
 	} 
 	else 
 	{
-		NDS_ARM9.swi_tab = ARM9_swi_tab;
+		//fake bios content, critical to normal operations, since we dont have a real bios.
+		//it'd be cool if we could write this in some kind of assembly language, inline or otherwise, without some bulky dependencies
+		//perhaps we could build it with devkitarm? but thats bulky (offline) dependencies, to be sure..
 
-		//bios chains data abort to fast irq
+		//reminder: bios chains data abort to fast irq
 
 		//exception vectors:
 		T1WriteLong(MMU.ARM9_BIOS, 0x0000, 0xEAFFFFFE);		// (infinite loop for) Reset !!!
@@ -2345,6 +2337,19 @@ void NDS_Reset()
 		T1WriteLong(MMU.ARM9_BIOS, 0x0014, 0x00000000);		// Reserved
 		T1WriteLong(MMU.ARM9_BIOS, 0x0018, 0xEA000095);		// Normal IRQ -> 0x0274
 		T1WriteLong(MMU.ARM9_BIOS, 0x001C, 0xEA00009D);		// Fast IRQ -> 0x0298
+
+		static const u8 logo_data[156] = {
+			0x24,0xFF,0xAE,0x51,0x69,0x9A,0xA2,0x21,0x3D,0x84,0x82,0x0A,0x84,0xE4,0x09,0xAD,
+			0x11,0x24,0x8B,0x98,0xC0,0x81,0x7F,0x21,0xA3,0x52,0xBE,0x19,0x93,0x09,0xCE,0x20,
+			0x10,0x46,0x4A,0x4A,0xF8,0x27,0x31,0xEC,0x58,0xC7,0xE8,0x33,0x82,0xE3,0xCE,0xBF,
+			0x85,0xF4,0xDF,0x94,0xCE,0x4B,0x09,0xC1,0x94,0x56,0x8A,0xC0,0x13,0x72,0xA7,0xFC,
+			0x9F,0x84,0x4D,0x73,0xA3,0xCA,0x9A,0x61,0x58,0x97,0xA3,0x27,0xFC,0x03,0x98,0x76,
+			0x23,0x1D,0xC7,0x61,0x03,0x04,0xAE,0x56,0xBF,0x38,0x84,0x00,0x40,0xA7,0x0E,0xFD,
+			0xFF,0x52,0xFE,0x03,0x6F,0x95,0x30,0xF1,0x97,0xFB,0xC0,0x85,0x60,0xD6,0x80,0x25,
+			0xA9,0x63,0xBE,0x03,0x01,0x4E,0x38,0xE2,0xF9,0xA2,0x34,0xFF,0xBB,0x3E,0x03,0x44,
+			0x78,0x00,0x90,0xCB,0x88,0x11,0x3A,0x94,0x65,0xC0,0x7C,0x63,0x87,0xF0,0x3C,0xAF,
+			0xD6,0x25,0xE4,0x8B,0x38,0x0A,0xAC,0x72,0x21,0xD4,0xF8,0x07
+		};
 		
 		// logo (do some games fail to boot without this? example?)
 		for (int t = 0; t < 0x9C; t++)
@@ -2393,9 +2398,44 @@ void NDS_Reset()
 		T1WriteLong(MMU.ARM9_BIOS, 0x02D0, 0x112FFF3C); //BLXNE R12    
 		T1WriteLong(MMU.ARM9_BIOS, 0x02D4, 0x027FFD9C); //0x027FFD9C  
 		//---------
-
 	}
+}
 
+static void JumbleMemory()
+{
+	//put random garbage in vram for homebrew games, to help mimic the situation where libnds does not clear out junk
+	//which the card's launcher may or may not have left behind
+	//analysis:
+  //1. retail games dont clear TCM, so why should we jumble it and expect homebrew to clear it?
+  //2. some retail games _dont boot_ if main memory is jumbled. wha...?
+  //3. clearing this is not as useful as tracking uninitialized reads in dev+ builds
+  //4. the vram clearing causes lots of graphical corruptions in badly coded homebrews. this reduces compatibility substantially
+  //conclusion: disable it for now and bring it back as an option
+	//if(gameInfo.isHomebrew)
+	//{
+	//	u32 w=100000,x=99,y=117,z=19382173;
+	//	CTASSERT(sizeof(MMU.ARM9_LCD) < sizeof(MMU.MAIN_MEM));
+	//	CTASSERT(sizeof(MMU.ARM9_VMEM) < sizeof(MMU.MAIN_MEM));
+	//	CTASSERT(sizeof(MMU.ARM9_ITCM) < sizeof(MMU.MAIN_MEM));
+	//	CTASSERT(sizeof(MMU.ARM9_DTCM) < sizeof(MMU.MAIN_MEM));
+	//	for(int i=0;i<sizeof(MMU.MAIN_MEM);i++)
+	//	{
+	//		u32 t= (x^(x<<11)); 
+	//		x=y;
+	//		y=z; 
+	//		z=w;
+	//		t = (w= (w^(w>>19))^(t^(t>>8)));
+	//		//MMU.MAIN_MEM[i] = t;
+	//		if (i<sizeof(MMU.ARM9_LCD)) MMU.ARM9_LCD[i] = t;
+	//		if (i<sizeof(MMU.ARM9_VMEM)) MMU.ARM9_VMEM[i] = t;
+	//		//if (i<sizeof(MMU.ARM9_ITCM)) MMU.ARM9_ITCM[i] = t;
+	//		//if (i<sizeof(MMU.ARM9_DTCM)) MMU.ARM9_DTCM[i] = t;
+	//	}
+	//}
+}
+
+static void PrepareLogfiles()
+{
 #ifdef LOG_ARM7
 	if (fp_dis7 != NULL) 
 	{
@@ -2413,6 +2453,63 @@ void NDS_Reset()
 	}
 	fp_dis9 = fopen("D:\\desmume_dis9.asm", "w");
 #endif
+}
+
+bool _HACK_DONT_STOPMOVIE = false;
+void NDS_Reset()
+{
+	singleStep = false;
+	nds_debug_continuing[0] = nds_debug_continuing[1] = false;
+	bool fw_success = false;
+	FILE* inf = NULL;
+	NDS_header * header = NDS_getROMHeader();
+
+	DEBUG_reset();
+
+	if (!header) return ;
+
+	nds.sleeping = FALSE;
+	nds.cardEjected = FALSE;
+	nds.freezeBus = 0;
+	nds.power1.lcd = nds.power1.gpuMain = nds.power1.gfx3d_render = nds.power1.gfx3d_geometry = nds.power1.gpuSub = nds.power1.dispswap = 1;
+	nds.power2.speakers = 1;
+	nds.power2.wifi = 0;
+
+	nds_timer = 0;
+	nds_arm9_timer = 0;
+	nds_arm7_timer = 0;
+
+	if(movieMode != MOVIEMODE_INACTIVE && !_HACK_DONT_STOPMOVIE)
+		movie_reset_command = true;
+
+	if(movieMode == MOVIEMODE_INACTIVE) {
+		currFrameCounter = 0;
+		lagframecounter = 0;
+		LagFrameFlag = 0;
+		lastLag = 0;
+		TotalLagFrames = 0;
+	}
+
+	SPU_DeInit();
+
+	MMU_Reset();
+
+#ifdef HAVE_JIT
+	armcpu_setjitmode(CommonSettings.CpuMode);
+#endif
+
+	JumbleMemory();
+	PrepareBiosARM7();
+	PrepareBiosARM9();
+
+	PrepareLogfiles();
+
+	//according to smea, this is initialized to 3 by the time we get into a user game program. who does this? 
+	//well, the firmware load process is about to write a boot program into SIWRAM for the arm7. so we need it setup by now.
+	//but, this is a bit weird.. I would be expecting the bioses to do that. maybe we have some more detail to emulate.
+	//* is this setting the default, or does the bios do it before loading the firmware programs?
+	//at any, it's important that this be done long before the user code ever runs
+	_MMU_write08<ARMCPU_ARM9>(REG_WRAMCNT,3);
 
 	if (firmware)
 	{
@@ -2421,16 +2518,21 @@ void NDS_Reset()
 	}
 	firmware = new CFIRMWARE();
 	fw_success = firmware->load();
+
 	if (NDS_ARM7.BIOS_loaded && NDS_ARM9.BIOS_loaded && CommonSettings.BootFromFirmware && fw_success)
 	{
-		// Copy secure area to memory if needed
+		//Copy secure area to memory if needed.
+		//could we get a comment about what's going on here?
+		//how does this stuff get copied before anything ever even runs?
+		//does it get mapped straight to the rom somehow?
+		//This code could be made more clear too.
 		if ((header->ARM9src >= 0x4000) && (header->ARM9src < 0x8000))
 		{
-			src = header->ARM9src;
-			dst = header->ARM9cpy;
+			u32 src = header->ARM9src;
+			u32 dst = header->ARM9cpy;
 
 			u32 size = (0x8000 - src) >> 2;
-			//INFO("Copy secure area from 0x%08X to 0x%08X (size %i/0x%08X)\n", src, dst, size, size);
+	
 			for (u32 i = 0; i < size; i++)
 			{
 				_MMU_write32<ARMCPU_ARM9>(dst, T1ReadLong(MMU.CART_ROM, src));
@@ -2438,6 +2540,7 @@ void NDS_Reset()
 			}
 		}
 
+		//TODO someone describe why here
 		if (firmware->patched)
 		{
 			armcpu_init(&NDS_ARM7, 0x00000008);
@@ -2445,22 +2548,22 @@ void NDS_Reset()
 		}
 		else
 		{
-			//INFO("Booting at ARM9: 0x%08X, ARM7: 0x%08X\n", firmware->ARM9bootAddr, firmware->ARM7bootAddr);
-			// need for firmware
-			//armcpu_init(&NDS_ARM7, 0x00000008);
-			//armcpu_init(&NDS_ARM9, 0xFFFF0008);
+			//set the cpus to an initial state with their respective firmware program entrypoints
 			armcpu_init(&NDS_ARM7, firmware->ARM7bootAddr);
 			armcpu_init(&NDS_ARM9, firmware->ARM9bootAddr);
 		}
 
-			_MMU_write08<ARMCPU_ARM9>(0x04000300, 0);
-			_MMU_write08<ARMCPU_ARM7>(0x04000300, 0);
+		//set REG_POSTFLG to the value indicating pre-firmware status
+		MMU.ARM9_REG[0x300] = 0;
+		MMU.ARM7_REG[0x300] = 0;
 	}
 	else
 	{
-		src = header->ARM9src;
-		dst = header->ARM9cpy;
+		//fake firmware boot-up process
 
+		//copy the arm9 program to the address specified by rom header
+		u32 src = header->ARM9src;
+		u32 dst = header->ARM9cpy;
 		for(u32 i = 0; i < (header->ARM9binSize>>2); ++i)
 		{
 			_MMU_write32<ARMCPU_ARM9>(dst, T1ReadLong(MMU.CART_ROM, src));
@@ -2468,9 +2571,9 @@ void NDS_Reset()
 			src += 4;
 		}
 
+		//copy the arm7 program to the address specified by rom header
 		src = header->ARM7src;
 		dst = header->ARM7cpy;
-
 		for(u32 i = 0; i < (header->ARM7binSize>>2); ++i)
 		{
 			_MMU_write32<ARMCPU_ARM7>(dst, T1ReadLong(MMU.CART_ROM, src));
@@ -2478,12 +2581,19 @@ void NDS_Reset()
 			src += 4;
 		}
 
+		//set the cpus to an initial state with their respective programs entrypoints
 		armcpu_init(&NDS_ARM7, header->ARM7exe);
 		armcpu_init(&NDS_ARM9, header->ARM9exe);
-		
-		_MMU_write08<ARMCPU_ARM9>(REG_POSTFLG, 1);
-		_MMU_write08<ARMCPU_ARM7>(REG_POSTFLG, 1);
+
+		//set REG_POSTFLG to the value indicating post-firmware status
+		MMU.ARM9_REG[0x300] = 1;
+		MMU.ARM7_REG[0x300] = 1;
 	}
+
+	// only ARM9 have co-processor
+	reconstruct(&cp15);
+	cp15.reset(&NDS_ARM9);
+
 	//bitbox 4k demo is so stripped down it relies on default stack values
 	//otherwise the arm7 will crash before making a sound
 	//(these according to gbatek softreset bios docs)
@@ -2511,6 +2621,7 @@ void NDS_Reset()
 	nds.ConsoleType = CommonSettings.ConsoleType;
 	nds._DebugConsole = CommonSettings.DebugConsole;
 	nds.ensataEmulation = CommonSettings.EnsataEmulation;
+	nds.stylusJitter = CommonSettings.StylusJitter;
 	nds.ensataHandshake = ENSATA_HANDSHAKE_none;
 	nds.ensataIpcSyncCounter = 0;
 	SetupMMU(nds.Is_DebugConsole(),nds.Is_DSI());

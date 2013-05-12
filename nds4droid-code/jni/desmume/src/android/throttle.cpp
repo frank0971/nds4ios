@@ -58,6 +58,7 @@ static u64 desiredFpsScalers [] = {
 #ifdef ANDROID
 #include <sys/time.h>
 #include <time.h>
+#include <android/log.h>
 unsigned int GetTickCount()
 {
 	timeval timer;
@@ -65,8 +66,33 @@ unsigned int GetTickCount()
 	return (timer.tv_sec * 1000) + (timer.tv_usec/1000);
 }
 
+#if 0
+unsigned long long RawGetTickCount()
+{
+	return clock();
+}
+
+unsigned long long RawGetTickPerSecond()
+{
+	return (unsigned long long)CLOCKS_PER_SEC;
+}
+#else
+unsigned long long RawGetTickCount()
+{
+	timespec timer;
+	clock_gettime(CLOCK_MONOTONIC, &timer);
+	return ((unsigned long long)timer.tv_sec * 1000000000ULL) + timer.tv_nsec;
+}
+
+unsigned long long RawGetTickPerSecond()
+{
+	return 1000000000ULL;
+}
+#endif
+
 void Sleep(int ms)
 {
+	//__android_log_print(ANDROID_LOG_INFO,"nds4droid","Sleep of %i ms",ms);
 	usleep(ms * 1000);
 }
 

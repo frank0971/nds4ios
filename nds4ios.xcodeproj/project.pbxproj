@@ -7,372 +7,300 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CE3FA49416834FC4007CD53C /* desmume_neon.mk in Resources */ = {isa = PBXBuildFile; fileRef = CE3FA49316834FC4007CD53C /* desmume_neon.mk */; };
-		CE3FA4E316835348007CD53C /* matrix_impl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE3FA4E116835348007CD53C /* matrix_impl.cpp */; settings = {COMPILER_FLAGS = "-marm"; }; };
-		CEB894521682097D00F8A7DB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB894511682097D00F8A7DB /* QuartzCore.framework */; };
-		CEC742FE16776248006D193E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC742FD16776248006D193E /* UIKit.framework */; };
-		CEC7430016776248006D193E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC742FF16776248006D193E /* Foundation.framework */; };
-		CEC7430216776248006D193E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC7430116776248006D193E /* CoreGraphics.framework */; };
-		CEC7430816776248006D193E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CEC7430616776248006D193E /* InfoPlist.strings */; };
-		CEC7430A16776248006D193E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC7430916776248006D193E /* main.m */; };
-		CEC7430E16776248006D193E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CEC7430D16776248006D193E /* AppDelegate.m */; };
-		CEC7431016776248006D193E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = CEC7430F16776248006D193E /* Default.png */; };
-		CEC7431216776248006D193E /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEC7431116776248006D193E /* Default@2x.png */; };
-		CEC7431416776248006D193E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEC7431316776248006D193E /* Default-568h@2x.png */; };
-		CEC7431716776248006D193E /* EmuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC7431616776248006D193E /* EmuViewController.mm */; };
-		CEC7431A16776248006D193E /* EmuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEC7431816776248006D193E /* EmuViewController.xib */; };
-		CEC744AC167769EB006D193E /* agg_arrowhead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC74494167769EB006D193E /* agg_arrowhead.cpp */; };
-		CEC744AD167769EB006D193E /* agg_bezier_arc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC74495167769EB006D193E /* agg_bezier_arc.cpp */; };
-		CEC744AE167769EB006D193E /* agg_bspline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC74496167769EB006D193E /* agg_bspline.cpp */; };
-		CEC744AF167769EB006D193E /* agg_curves.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC74497167769EB006D193E /* agg_curves.cpp */; };
-		CEC744B0167769EB006D193E /* agg_embedded_raster_fonts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC74498167769EB006D193E /* agg_embedded_raster_fonts.cpp */; };
-		CEC744B1167769EB006D193E /* agg_gsv_text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC74499167769EB006D193E /* agg_gsv_text.cpp */; };
-		CEC744B2167769EB006D193E /* agg_image_filters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7449A167769EB006D193E /* agg_image_filters.cpp */; };
-		CEC744B3167769EB006D193E /* agg_line_aa_basics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7449B167769EB006D193E /* agg_line_aa_basics.cpp */; };
-		CEC744B4167769EB006D193E /* agg_line_profile_aa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7449C167769EB006D193E /* agg_line_profile_aa.cpp */; };
-		CEC744B5167769EB006D193E /* agg_rounded_rect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7449D167769EB006D193E /* agg_rounded_rect.cpp */; };
-		CEC744B6167769EB006D193E /* agg_sqrt_tables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7449E167769EB006D193E /* agg_sqrt_tables.cpp */; };
-		CEC744B7167769EB006D193E /* agg_trans_affine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7449F167769EB006D193E /* agg_trans_affine.cpp */; };
-		CEC744B8167769EB006D193E /* agg_trans_double_path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A0167769EB006D193E /* agg_trans_double_path.cpp */; };
-		CEC744B9167769EB006D193E /* agg_trans_single_path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A1167769EB006D193E /* agg_trans_single_path.cpp */; };
-		CEC744BA167769EB006D193E /* agg_trans_warp_magnifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A2167769EB006D193E /* agg_trans_warp_magnifier.cpp */; };
-		CEC744BB167769EB006D193E /* agg_vcgen_bspline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A3167769EB006D193E /* agg_vcgen_bspline.cpp */; };
-		CEC744BC167769EB006D193E /* agg_vcgen_contour.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A4167769EB006D193E /* agg_vcgen_contour.cpp */; };
-		CEC744BD167769EB006D193E /* agg_vcgen_dash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A5167769EB006D193E /* agg_vcgen_dash.cpp */; };
-		CEC744BE167769EB006D193E /* agg_vcgen_markers_term.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A6167769EB006D193E /* agg_vcgen_markers_term.cpp */; };
-		CEC744BF167769EB006D193E /* agg_vcgen_smooth_poly1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A7167769EB006D193E /* agg_vcgen_smooth_poly1.cpp */; };
-		CEC744C0167769EB006D193E /* agg_vcgen_stroke.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A8167769EB006D193E /* agg_vcgen_stroke.cpp */; };
-		CEC744C1167769EB006D193E /* agg_vpgen_clip_polygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744A9167769EB006D193E /* agg_vpgen_clip_polygon.cpp */; };
-		CEC744C2167769EB006D193E /* agg_vpgen_clip_polyline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744AA167769EB006D193E /* agg_vpgen_clip_polyline.cpp */; };
-		CEC744C3167769EB006D193E /* agg_vpgen_segmentator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744AB167769EB006D193E /* agg_vpgen_segmentator.cpp */; };
-		CEC744CF16776A00006D193E /* agg_bezier_ctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744C516776A00006D193E /* agg_bezier_ctrl.cpp */; };
-		CEC744D016776A00006D193E /* agg_cbox_ctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744C616776A00006D193E /* agg_cbox_ctrl.cpp */; };
-		CEC744D116776A00006D193E /* agg_gamma_ctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744C716776A00006D193E /* agg_gamma_ctrl.cpp */; };
-		CEC744D216776A00006D193E /* agg_gamma_spline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744C816776A00006D193E /* agg_gamma_spline.cpp */; };
-		CEC744D316776A00006D193E /* agg_polygon_ctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744C916776A00006D193E /* agg_polygon_ctrl.cpp */; };
-		CEC744D416776A00006D193E /* agg_rbox_ctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744CA16776A00006D193E /* agg_rbox_ctrl.cpp */; };
-		CEC744D516776A00006D193E /* agg_scale_ctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744CB16776A00006D193E /* agg_scale_ctrl.cpp */; };
-		CEC744D616776A00006D193E /* agg_slider_ctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744CC16776A00006D193E /* agg_slider_ctrl.cpp */; };
-		CEC744D716776A00006D193E /* agg_spline_ctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744CD16776A00006D193E /* agg_spline_ctrl.cpp */; };
-		CEC744DA16776AC3006D193E /* agg_arc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744D916776AC3006D193E /* agg_arc.cpp */; };
-		CEC7452216776BE0006D193E /* addons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744DB16776BE0006D193E /* addons.cpp */; };
-		CEC7452316776BE0006D193E /* aggdraw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744DD16776BE0006D193E /* aggdraw.cpp */; };
-		CEC7452416776BE0006D193E /* arm_instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744DF16776BE0006D193E /* arm_instructions.cpp */; };
-		CEC7452516776BE0006D193E /* armcpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744E116776BE0006D193E /* armcpu.cpp */; };
-		CEC7452616776BE0006D193E /* bios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744E316776BE0006D193E /* bios.cpp */; };
-		CEC7452716776BE0006D193E /* cheatSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744E516776BE0006D193E /* cheatSystem.cpp */; };
-		CEC7452816776BE0006D193E /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744E716776BE0006D193E /* common.cpp */; };
-		CEC7452916776BE0006D193E /* cp15.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744E916776BE0006D193E /* cp15.cpp */; };
-		CEC7452A16776BE0006D193E /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744EB16776BE0006D193E /* debug.cpp */; };
-		CEC7452B16776BE0006D193E /* driver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744ED16776BE0006D193E /* driver.cpp */; };
-		CEC7452C16776BE0006D193E /* emufile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744EF16776BE0006D193E /* emufile.cpp */; };
-		CEC7452D16776BE0006D193E /* FIFO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744F116776BE0006D193E /* FIFO.cpp */; };
-		CEC7452E16776BE0006D193E /* firmware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744F316776BE0006D193E /* firmware.cpp */; };
-		CEC7452F16776BE0006D193E /* fs-linux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744F516776BE0006D193E /* fs-linux.cpp */; };
-		CEC7453016776BE0006D193E /* gfx3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744F616776BE0006D193E /* gfx3d.cpp */; };
-		CEC7453116776BE0006D193E /* GPU_osd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744F816776BE0006D193E /* GPU_osd.cpp */; };
-		CEC7453216776BE0006D193E /* GPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744FA16776BE0006D193E /* GPU.cpp */; };
-		CEC7453316776BE0006D193E /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744FC16776BE0006D193E /* matrix.cpp */; };
-		CEC7453416776BE0006D193E /* mc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC744FE16776BE0006D193E /* mc.cpp */; };
-		CEC7453516776BE0006D193E /* MMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7450016776BE0006D193E /* MMU.cpp */; };
-		CEC7453616776BE0006D193E /* movie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7450216776BE0006D193E /* movie.cpp */; };
-		CEC7453716776BE0006D193E /* NDSSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7450416776BE0006D193E /* NDSSystem.cpp */; };
-		CEC7453816776BE0006D193E /* OGLRender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7450616776BE0006D193E /* OGLRender.cpp */; };
-		CEC7453916776BE0006D193E /* path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7450816776BE0006D193E /* path.cpp */; };
-		CEC7453A16776BE0006D193E /* rasterize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7450A16776BE0006D193E /* rasterize.cpp */; };
-		CEC7453B16776BE0006D193E /* readwrite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7450C16776BE0006D193E /* readwrite.cpp */; };
-		CEC7453C16776BE0006D193E /* render3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7450E16776BE0006D193E /* render3D.cpp */; };
-		CEC7453D16776BE0006D193E /* ROMReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7451016776BE0006D193E /* ROMReader.cpp */; };
-		CEC7453E16776BE0006D193E /* rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7451216776BE0006D193E /* rtc.cpp */; };
-		CEC7453F16776BE0006D193E /* saves.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7451416776BE0006D193E /* saves.cpp */; };
-		CEC7454016776BE0006D193E /* slot1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7451616776BE0006D193E /* slot1.cpp */; };
-		CEC7454116776BE0006D193E /* SPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7451816776BE0006D193E /* SPU.cpp */; };
-		CEC7454216776BE0006D193E /* texcache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7451A16776BE0006D193E /* texcache.cpp */; };
-		CEC7454316776BE0006D193E /* thumb_instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7451C16776BE0006D193E /* thumb_instructions.cpp */; };
-		CEC7454416776BE0006D193E /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7451E16776BE0006D193E /* version.cpp */; };
-		CEC7454516776BE0006D193E /* wifi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7452016776BE0006D193E /* wifi.cpp */; };
-		CEC7455316776BF6006D193E /* slot1_none.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454716776BF6006D193E /* slot1_none.cpp */; };
-		CEC7455416776BF6006D193E /* slot1_r4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454816776BF6006D193E /* slot1_r4.cpp */; };
-		CEC7455516776BF6006D193E /* slot1_retail_nand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454916776BF6006D193E /* slot1_retail_nand.cpp */; };
-		CEC7455616776BF6006D193E /* slot1_retail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454A16776BF6006D193E /* slot1_retail.cpp */; };
-		CEC7455716776BF6006D193E /* slot2_expMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454B16776BF6006D193E /* slot2_expMemory.cpp */; };
-		CEC7455816776BF6006D193E /* slot2_gbagame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454C16776BF6006D193E /* slot2_gbagame.cpp */; };
-		CEC7455916776BF6006D193E /* slot2_guitarGrip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454D16776BF6006D193E /* slot2_guitarGrip.cpp */; };
-		CEC7455A16776BF6006D193E /* slot2_mpcf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454E16776BF6006D193E /* slot2_mpcf.cpp */; };
-		CEC7455B16776BF6006D193E /* slot2_none.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7454F16776BF6006D193E /* slot2_none.cpp */; };
-		CEC7455C16776BF6006D193E /* slot2_paddle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7455016776BF6006D193E /* slot2_paddle.cpp */; };
-		CEC7455D16776BF6006D193E /* slot2_piano.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7455116776BF6006D193E /* slot2_piano.cpp */; };
-		CEC7455E16776BF6006D193E /* slot2_rumblepak.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7455216776BF6006D193E /* slot2_rumblepak.cpp */; };
-		CEC7456716776C1C006D193E /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7456116776C1C006D193E /* crc.cpp */; };
-		CEC7456816776C1C006D193E /* decrypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7456316776C1C006D193E /* decrypt.cpp */; };
-		CEC7456916776C1C006D193E /* header.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7456516776C1C006D193E /* header.cpp */; };
-		CEC7458D16776C30006D193E /* cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7456C16776C30006D193E /* cache.cpp */; };
-		CEC7458E16776C30006D193E /* directory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7456F16776C30006D193E /* directory.cpp */; };
-		CEC7458F16776C30006D193E /* disc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7457116776C30006D193E /* disc.cpp */; };
-		CEC7459016776C30006D193E /* fatdir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7457516776C30006D193E /* fatdir.cpp */; };
-		CEC7459116776C30006D193E /* fatfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7457716776C30006D193E /* fatfile.cpp */; };
-		CEC7459216776C30006D193E /* file_allocation_table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7457916776C30006D193E /* file_allocation_table.cpp */; };
-		CEC7459316776C30006D193E /* filetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7457B16776C30006D193E /* filetime.cpp */; };
-		CEC7459416776C30006D193E /* libfat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7457D16776C30006D193E /* libfat.cpp */; };
-		CEC7459516776C30006D193E /* libfat_public_api.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7457F16776C30006D193E /* libfat_public_api.cpp */; };
-		CEC7459616776C30006D193E /* lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7458116776C30006D193E /* lock.cpp */; };
-		CEC7459716776C30006D193E /* partition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7458416776C30006D193E /* partition.cpp */; };
-		CEC7459816776C30006D193E /* tinystr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7458716776C30006D193E /* tinystr.cpp */; };
-		CEC7459916776C30006D193E /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7458916776C30006D193E /* tinyxml.cpp */; };
-		CEC7459A16776C30006D193E /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7458B16776C30006D193E /* tinyxmlerror.cpp */; };
-		CEC7459B16776C30006D193E /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7458C16776C30006D193E /* tinyxmlparser.cpp */; };
-		CEC745AB16776C86006D193E /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = CEC7459C16776C86006D193E /* ConvertUTF.c */; };
-		CEC745AC16776C86006D193E /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC7459E16776C86006D193E /* datetime.cpp */; };
-		CEC745AD16776C86006D193E /* dlditool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC745A016776C86006D193E /* dlditool.cpp */; };
-		CEC745AE16776C86006D193E /* emufat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC745A116776C86006D193E /* emufat.cpp */; };
-		CEC745AF16776C86006D193E /* guid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC745A316776C86006D193E /* guid.cpp */; };
-		CEC745B016776C86006D193E /* task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC745A516776C86006D193E /* task.cpp */; };
-		CEC745B116776C86006D193E /* vfat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC745A716776C86006D193E /* vfat.cpp */; };
-		CEC745B216776C86006D193E /* xstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC745A916776C86006D193E /* xstring.cpp */; };
-		CEC745BD16776EE5006D193E /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC745BB16776EE5006D193E /* GLKit.framework */; };
-		CEC745BE16776EE5006D193E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC745BC16776EE5006D193E /* OpenGLES.framework */; };
-		CEC745C61677711B006D193E /* metaspu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC745C41677711B006D193E /* metaspu.cpp */; };
-		CEC745C816777162006D193E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC745C716777162006D193E /* libz.dylib */; };
-		CEC745D116777364006D193E /* throttle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC745CF16777364006D193E /* throttle.cpp */; };
-		CECEB5531683438A0093204D /* RomsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CECEB5511683438A0093204D /* RomsViewController.m */; };
-		CECEB5541683438A0093204D /* RomsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CECEB5521683438A0093204D /* RomsViewController.xib */; };
-		CED023851680AD2800061AA8 /* emu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED023831680AD2800061AA8 /* emu.cpp */; };
+		CE2EE5EB173F661D00786468 /* nds4ios-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE2EE5EA173F661D00786468 /* nds4ios-Info.plist */; };
+		CE2EE5EE173F663B00786468 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE5EC173F663B00786468 /* main.m */; };
+		CE2EE5FD173F66E300786468 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE5F6173F66E300786468 /* AppDelegate.m */; };
+		CE2EE5FE173F66E300786468 /* emu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE5F7173F66E300786468 /* emu.cpp */; };
+		CE2EE5FF173F66E300786468 /* EmuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE5FA173F66E300786468 /* EmuViewController.mm */; };
+		CE2EE600173F66E300786468 /* RomsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE5FC173F66E300786468 /* RomsViewController.m */; };
+		CE2EE604173F6BBA00786468 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2EE603173F6BBA00786468 /* Foundation.framework */; };
+		CE2EE606173F6BC100786468 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2EE605173F6BC100786468 /* UIKit.framework */; };
+		CE2EE608173F6BEA00786468 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2EE607173F6BEA00786468 /* QuartzCore.framework */; };
+		CE2EE60A173F6BFF00786468 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2EE609173F6BFF00786468 /* CoreGraphics.framework */; };
+		CE2EE61C173F6D6300786468 /* slot1_none.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE610173F6D6300786468 /* slot1_none.cpp */; };
+		CE2EE61D173F6D6300786468 /* slot1_r4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE611173F6D6300786468 /* slot1_r4.cpp */; };
+		CE2EE61E173F6D6300786468 /* slot1_retail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE612173F6D6300786468 /* slot1_retail.cpp */; };
+		CE2EE61F173F6D6300786468 /* slot1_retail_nand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE613173F6D6300786468 /* slot1_retail_nand.cpp */; };
+		CE2EE620173F6D6300786468 /* slot2_expMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE614173F6D6300786468 /* slot2_expMemory.cpp */; };
+		CE2EE621173F6D6300786468 /* slot2_gbagame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE615173F6D6300786468 /* slot2_gbagame.cpp */; };
+		CE2EE622173F6D6300786468 /* slot2_guitarGrip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE616173F6D6300786468 /* slot2_guitarGrip.cpp */; };
+		CE2EE623173F6D6300786468 /* slot2_mpcf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE617173F6D6300786468 /* slot2_mpcf.cpp */; };
+		CE2EE624173F6D6300786468 /* slot2_none.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE618173F6D6300786468 /* slot2_none.cpp */; };
+		CE2EE625173F6D6300786468 /* slot2_paddle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE619173F6D6300786468 /* slot2_paddle.cpp */; };
+		CE2EE626173F6D6300786468 /* slot2_piano.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE61A173F6D6300786468 /* slot2_piano.cpp */; };
+		CE2EE627173F6D6300786468 /* slot2_rumblepak.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE61B173F6D6300786468 /* slot2_rumblepak.cpp */; };
+		CE2EE630173F6DB600786468 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE62A173F6DB600786468 /* crc.cpp */; };
+		CE2EE631173F6DB600786468 /* decrypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE62C173F6DB600786468 /* decrypt.cpp */; };
+		CE2EE632173F6DB600786468 /* header.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE62E173F6DB600786468 /* header.cpp */; };
+		CE2EE649173F6DF900786468 /* cache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE634173F6DF900786468 /* cache.cpp */; };
+		CE2EE64A173F6DF900786468 /* directory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE636173F6DF900786468 /* directory.cpp */; };
+		CE2EE64B173F6DF900786468 /* disc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE638173F6DF900786468 /* disc.cpp */; };
+		CE2EE64C173F6DF900786468 /* fatdir.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE63A173F6DF900786468 /* fatdir.cpp */; };
+		CE2EE64D173F6DF900786468 /* fatfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE63C173F6DF900786468 /* fatfile.cpp */; };
+		CE2EE64E173F6DF900786468 /* file_allocation_table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE63E173F6DF900786468 /* file_allocation_table.cpp */; };
+		CE2EE64F173F6DF900786468 /* filetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE640173F6DF900786468 /* filetime.cpp */; };
+		CE2EE650173F6DF900786468 /* libfat_public_api.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE642173F6DF900786468 /* libfat_public_api.cpp */; };
+		CE2EE651173F6DF900786468 /* libfat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE644173F6DF900786468 /* libfat.cpp */; };
+		CE2EE652173F6DF900786468 /* lock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE645173F6DF900786468 /* lock.cpp */; };
+		CE2EE653173F6DF900786468 /* partition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE647173F6DF900786468 /* partition.cpp */; };
+		CE2EE65B173F6E0900786468 /* tinystr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE655173F6E0900786468 /* tinystr.cpp */; };
+		CE2EE65C173F6E0900786468 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE657173F6E0900786468 /* tinyxml.cpp */; };
+		CE2EE65D173F6E0900786468 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE659173F6E0900786468 /* tinyxmlerror.cpp */; };
+		CE2EE65E173F6E0900786468 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE65A173F6E0900786468 /* tinyxmlparser.cpp */; };
+		CE2EE674173F6E3000786468 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE65F173F6E3000786468 /* ConvertUTF.c */; };
+		CE2EE675173F6E3000786468 /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE661173F6E3000786468 /* datetime.cpp */; };
+		CE2EE676173F6E3000786468 /* dlditool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE663173F6E3000786468 /* dlditool.cpp */; };
+		CE2EE677173F6E3000786468 /* emufat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE664173F6E3000786468 /* emufat.cpp */; };
+		CE2EE678173F6E3000786468 /* FileMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE666173F6E3000786468 /* FileMap.cpp */; };
+		CE2EE679173F6E3000786468 /* guid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE668173F6E3000786468 /* guid.cpp */; };
+		CE2EE67A173F6E3000786468 /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE66A173F6E3000786468 /* md5.cpp */; };
+		CE2EE67B173F6E3000786468 /* MemBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE66C173F6E3000786468 /* MemBuffer.cpp */; };
+		CE2EE67C173F6E3000786468 /* task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE66E173F6E3000786468 /* task.cpp */; };
+		CE2EE67D173F6E3000786468 /* vfat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE670173F6E3000786468 /* vfat.cpp */; };
+		CE2EE67E173F6E3000786468 /* xstring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE672173F6E3000786468 /* xstring.cpp */; };
+		CE2EE699173F706C00786468 /* metaspu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE697173F706C00786468 /* metaspu.cpp */; };
+		CE2EE6A6173F70A800786468 /* 2xsai.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE69A173F70A800786468 /* 2xsai.cpp */; };
+		CE2EE6A7173F70A800786468 /* bilinear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE69B173F70A800786468 /* bilinear.cpp */; };
+		CE2EE6A8173F70A800786468 /* epx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE69C173F70A800786468 /* epx.cpp */; };
+		CE2EE6A9173F70A800786468 /* hq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE69E173F70A800786468 /* hq2x.cpp */; };
+		CE2EE6AA173F70A800786468 /* hq4x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE6A0173F70A800786468 /* hq4x.cpp */; };
+		CE2EE6AB173F70A800786468 /* lq2x.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE6A3173F70A800786468 /* lq2x.cpp */; };
+		CE2EE6AC173F70A800786468 /* scanline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE6A5173F70A800786468 /* scanline.cpp */; };
+		CE34A0FC173F722C00C51EA1 /* addons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0AF173F722C00C51EA1 /* addons.cpp */; };
+		CE34A0FD173F722C00C51EA1 /* arm_instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0B1173F722C00C51EA1 /* arm_instructions.cpp */; };
+		CE34A100173F722C00C51EA1 /* armcpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0B7173F722C00C51EA1 /* armcpu.cpp */; };
+		CE34A101173F722C00C51EA1 /* ArmThreadedInterpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0B9173F722C00C51EA1 /* ArmThreadedInterpreter.cpp */; };
+		CE34A102173F722C00C51EA1 /* bios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0BB173F722C00C51EA1 /* bios.cpp */; };
+		CE34A103173F722C00C51EA1 /* cheatSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0BD173F722C00C51EA1 /* cheatSystem.cpp */; };
+		CE34A104173F722C00C51EA1 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0BF173F722C00C51EA1 /* common.cpp */; };
+		CE34A105173F722C00C51EA1 /* cp15.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0C1173F722C00C51EA1 /* cp15.cpp */; };
+		CE34A106173F722C00C51EA1 /* CpuBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0C3173F722C00C51EA1 /* CpuBase.cpp */; };
+		CE34A107173F722C00C51EA1 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0C5173F722C00C51EA1 /* debug.cpp */; };
+		CE34A108173F722C00C51EA1 /* Disassembler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0C7173F722C00C51EA1 /* Disassembler.cpp */; };
+		CE34A109173F722C00C51EA1 /* driver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0C9173F722C00C51EA1 /* driver.cpp */; };
+		CE34A10A173F722C00C51EA1 /* emufile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0CB173F722C00C51EA1 /* emufile.cpp */; };
+		CE34A10B173F722C00C51EA1 /* FIFO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0CD173F722C00C51EA1 /* FIFO.cpp */; };
+		CE34A10C173F722C00C51EA1 /* firmware.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0CF173F722C00C51EA1 /* firmware.cpp */; };
+		CE34A10D173F722C00C51EA1 /* fs-linux.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0D1173F722C00C51EA1 /* fs-linux.cpp */; };
+		CE34A10E173F722C00C51EA1 /* gfx3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0D3173F722C00C51EA1 /* gfx3d.cpp */; };
+		CE34A10F173F722C00C51EA1 /* GPU_osd_stub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0D5173F722C00C51EA1 /* GPU_osd_stub.cpp */; };
+		CE34A110173F722C00C51EA1 /* GPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0D7173F722C00C51EA1 /* GPU.cpp */; };
+		CE34A111173F722C00C51EA1 /* JitCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0D9173F722C00C51EA1 /* JitCommon.cpp */; };
+		CE34A112173F722C00C51EA1 /* mc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0DB173F722C00C51EA1 /* mc.cpp */; };
+		CE34A113173F722C00C51EA1 /* MMU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0DC173F722C00C51EA1 /* MMU.cpp */; };
+		CE34A114173F722C00C51EA1 /* movie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0DE173F722C00C51EA1 /* movie.cpp */; };
+		CE34A115173F722C00C51EA1 /* NDSSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0E0173F722C00C51EA1 /* NDSSystem.cpp */; };
+		CE34A116173F722C00C51EA1 /* path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0E2173F722C00C51EA1 /* path.cpp */; };
+		CE34A117173F722C00C51EA1 /* rasterize.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0E4173F722C00C51EA1 /* rasterize.cpp */; };
+		CE34A118173F722C00C51EA1 /* readwrite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0E6173F722C00C51EA1 /* readwrite.cpp */; };
+		CE34A119173F722C00C51EA1 /* render3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0E8173F722C00C51EA1 /* render3D.cpp */; };
+		CE34A11A173F722C00C51EA1 /* ROMReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0EA173F722C00C51EA1 /* ROMReader.cpp */; };
+		CE34A11B173F722C00C51EA1 /* rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0EC173F722C00C51EA1 /* rtc.cpp */; };
+		CE34A11C173F722C00C51EA1 /* saves.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0EE173F722C00C51EA1 /* saves.cpp */; };
+		CE34A11D173F722C00C51EA1 /* slot1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0F0173F722C00C51EA1 /* slot1.cpp */; };
+		CE34A11E173F722C00C51EA1 /* SPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0F2173F722C00C51EA1 /* SPU.cpp */; };
+		CE34A11F173F722C00C51EA1 /* texcache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0F4173F722C00C51EA1 /* texcache.cpp */; };
+		CE34A120173F722C00C51EA1 /* thumb_instructions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0F6173F722C00C51EA1 /* thumb_instructions.cpp */; };
+		CE34A121173F722C00C51EA1 /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0F8173F722C00C51EA1 /* version.cpp */; };
+		CE34A122173F722C00C51EA1 /* wifi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A0FA173F722C00C51EA1 /* wifi.cpp */; };
+		CE34A124173F74C000C51EA1 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE34A123173F74C000C51EA1 /* libz.dylib */; };
+		CE34A127173F758300C51EA1 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A125173F758300C51EA1 /* matrix.cpp */; };
+		CE34A131173F798200C51EA1 /* matrix_impl.c in Sources */ = {isa = PBXBuildFile; fileRef = CE34A12F173F798200C51EA1 /* matrix_impl.c */; settings = {COMPILER_FLAGS = "-marm"; }; };
+		CE34A134173F79F200C51EA1 /* throttle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE34A132173F79F200C51EA1 /* throttle.cpp */; };
+		CE34A137173F86E800C51EA1 /* UIButton+CTM.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE34A136173F86E800C51EA1 /* UIButton+CTM.mm */; };
+		CEB43C42173FCA3F00055F91 /* GLProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB43C41173FCA3F00055F91 /* GLProgram.m */; };
+		CEB43C45173FD25A00055F91 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB43C43173FD25900055F91 /* GLKit.framework */; };
+		CEB43C46173FD25A00055F91 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB43C44173FD25900055F91 /* OpenGLES.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CE3FA49316834FC4007CD53C /* desmume_neon.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = desmume_neon.mk; path = "nds4droid-code/jni/desmume_neon.mk"; sourceTree = "<group>"; };
-		CE3FA4E116835348007CD53C /* matrix_impl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = matrix_impl.cpp; path = nds4ios/matrix_impl.cpp; sourceTree = "<group>"; };
-		CE3FA4E216835348007CD53C /* matrix_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix_impl.h; path = nds4ios/matrix_impl.h; sourceTree = "<group>"; };
-		CE3FA4E516835386007CD53C /* common_macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = common_macros.h; sourceTree = "<group>"; };
-		CE3FA4E6168353AF007CD53C /* vfp_clobbers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vfp_clobbers.h; sourceTree = "<group>"; };
-		CEB894511682097D00F8A7DB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		CEB89454168214C100F8A7DB /* font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = font.h; sourceTree = "<group>"; };
-		CEB89455168214C100F8A7DB /* gles_render.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = gles_render.c; sourceTree = "<group>"; };
-		CEB89456168214C100F8A7DB /* gles_render.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gles_render.h; sourceTree = "<group>"; };
-		CEB89457168214C100F8A7DB /* importgl.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = importgl.c; sourceTree = "<group>"; };
-		CEB89458168214C100F8A7DB /* importgl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = importgl.h; sourceTree = "<group>"; };
+		CE2EE5EA173F661D00786468 /* nds4ios-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "nds4ios-Info.plist"; sourceTree = SOURCE_ROOT; };
+		CE2EE5EC173F663B00786468 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Classes/main.m; sourceTree = SOURCE_ROOT; };
+		CE2EE5ED173F663B00786468 /* nds4ios-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "nds4ios-Prefix.pch"; path = "Classes/nds4ios-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		CE2EE5F5173F66E300786468 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Classes/AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		CE2EE5F6173F66E300786468 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Classes/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		CE2EE5F7173F66E300786468 /* emu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = emu.cpp; path = Classes/emu.cpp; sourceTree = SOURCE_ROOT; };
+		CE2EE5F8173F66E300786468 /* emu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emu.h; path = Classes/emu.h; sourceTree = SOURCE_ROOT; };
+		CE2EE5F9173F66E300786468 /* EmuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EmuViewController.h; path = Classes/EmuViewController.h; sourceTree = SOURCE_ROOT; };
+		CE2EE5FA173F66E300786468 /* EmuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EmuViewController.mm; path = Classes/EmuViewController.mm; sourceTree = SOURCE_ROOT; };
+		CE2EE5FB173F66E300786468 /* RomsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RomsViewController.h; path = Classes/RomsViewController.h; sourceTree = SOURCE_ROOT; };
+		CE2EE5FC173F66E300786468 /* RomsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RomsViewController.m; path = Classes/RomsViewController.m; sourceTree = SOURCE_ROOT; };
+		CE2EE603173F6BBA00786468 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		CE2EE605173F6BC100786468 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		CE2EE607173F6BEA00786468 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CE2EE609173F6BFF00786468 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		CE2EE610173F6D6300786468 /* slot1_none.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1_none.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot1_none.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE611173F6D6300786468 /* slot1_r4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1_r4.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot1_r4.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE612173F6D6300786468 /* slot1_retail.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1_retail.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot1_retail.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE613173F6D6300786468 /* slot1_retail_nand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1_retail_nand.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot1_retail_nand.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE614173F6D6300786468 /* slot2_expMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_expMemory.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_expMemory.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE615173F6D6300786468 /* slot2_gbagame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_gbagame.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_gbagame.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE616173F6D6300786468 /* slot2_guitarGrip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_guitarGrip.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_guitarGrip.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE617173F6D6300786468 /* slot2_mpcf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_mpcf.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_mpcf.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE618173F6D6300786468 /* slot2_none.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_none.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_none.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE619173F6D6300786468 /* slot2_paddle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_paddle.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_paddle.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE61A173F6D6300786468 /* slot2_piano.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_piano.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_piano.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE61B173F6D6300786468 /* slot2_rumblepak.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_rumblepak.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_rumblepak.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE62A173F6DB600786468 /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc.cpp; path = "nds4droid-code/jni/desmume/src/utils/decrypt/crc.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE62B173F6DB600786468 /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc.h; path = "nds4droid-code/jni/desmume/src/utils/decrypt/crc.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE62C173F6DB600786468 /* decrypt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = decrypt.cpp; path = "nds4droid-code/jni/desmume/src/utils/decrypt/decrypt.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE62D173F6DB600786468 /* decrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = decrypt.h; path = "nds4droid-code/jni/desmume/src/utils/decrypt/decrypt.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE62E173F6DB600786468 /* header.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = header.cpp; path = "nds4droid-code/jni/desmume/src/utils/decrypt/header.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE62F173F6DB600786468 /* header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = header.h; path = "nds4droid-code/jni/desmume/src/utils/decrypt/header.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE634173F6DF900786468 /* cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cache.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/cache.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE635173F6DF900786468 /* cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cache.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/cache.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE636173F6DF900786468 /* directory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = directory.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/directory.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE637173F6DF900786468 /* directory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = directory.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/directory.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE638173F6DF900786468 /* disc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = disc.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/disc.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE639173F6DF900786468 /* disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = disc.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/disc.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE63A173F6DF900786468 /* fatdir.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fatdir.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/fatdir.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE63B173F6DF900786468 /* fatdir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fatdir.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/fatdir.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE63C173F6DF900786468 /* fatfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fatfile.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/fatfile.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE63D173F6DF900786468 /* fatfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fatfile.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/fatfile.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE63E173F6DF900786468 /* file_allocation_table.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_allocation_table.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/file_allocation_table.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE63F173F6DF900786468 /* file_allocation_table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file_allocation_table.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/file_allocation_table.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE640173F6DF900786468 /* filetime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = filetime.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/filetime.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE641173F6DF900786468 /* filetime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filetime.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/filetime.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE642173F6DF900786468 /* libfat_public_api.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = libfat_public_api.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/libfat_public_api.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE643173F6DF900786468 /* libfat_public_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libfat_public_api.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/libfat_public_api.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE644173F6DF900786468 /* libfat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = libfat.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/libfat.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE645173F6DF900786468 /* lock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lock.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/lock.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE646173F6DF900786468 /* lock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lock.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/lock.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE647173F6DF900786468 /* partition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = partition.cpp; path = "nds4droid-code/jni/desmume/src/utils/libfat/partition.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE648173F6DF900786468 /* partition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = partition.h; path = "nds4droid-code/jni/desmume/src/utils/libfat/partition.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE655173F6E0900786468 /* tinystr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinystr.cpp; path = "nds4droid-code/jni/desmume/src/utils/tinyxml/tinystr.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE656173F6E0900786468 /* tinystr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinystr.h; path = "nds4droid-code/jni/desmume/src/utils/tinyxml/tinystr.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE657173F6E0900786468 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxml.cpp; path = "nds4droid-code/jni/desmume/src/utils/tinyxml/tinyxml.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE658173F6E0900786468 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tinyxml.h; path = "nds4droid-code/jni/desmume/src/utils/tinyxml/tinyxml.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE659173F6E0900786468 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlerror.cpp; path = "nds4droid-code/jni/desmume/src/utils/tinyxml/tinyxmlerror.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE65A173F6E0900786468 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxmlparser.cpp; path = "nds4droid-code/jni/desmume/src/utils/tinyxml/tinyxmlparser.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE65F173F6E3000786468 /* ConvertUTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ConvertUTF.c; path = "nds4droid-code/jni/desmume/src/utils/ConvertUTF.c"; sourceTree = SOURCE_ROOT; };
+		CE2EE660173F6E3000786468 /* ConvertUTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConvertUTF.h; path = "nds4droid-code/jni/desmume/src/utils/ConvertUTF.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE661173F6E3000786468 /* datetime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datetime.cpp; path = "nds4droid-code/jni/desmume/src/utils/datetime.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE662173F6E3000786468 /* datetime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datetime.h; path = "nds4droid-code/jni/desmume/src/utils/datetime.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE663173F6E3000786468 /* dlditool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlditool.cpp; path = "nds4droid-code/jni/desmume/src/utils/dlditool.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE664173F6E3000786468 /* emufat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = emufat.cpp; path = "nds4droid-code/jni/desmume/src/utils/emufat.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE665173F6E3000786468 /* emufat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emufat.h; path = "nds4droid-code/jni/desmume/src/utils/emufat.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE666173F6E3000786468 /* FileMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileMap.cpp; path = "nds4droid-code/jni/desmume/src/utils/FileMap.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE667173F6E3000786468 /* FileMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileMap.h; path = "nds4droid-code/jni/desmume/src/utils/FileMap.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE668173F6E3000786468 /* guid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = guid.cpp; path = "nds4droid-code/jni/desmume/src/utils/guid.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE669173F6E3000786468 /* guid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = guid.h; path = "nds4droid-code/jni/desmume/src/utils/guid.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE66A173F6E3000786468 /* md5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = md5.cpp; path = "nds4droid-code/jni/desmume/src/utils/md5.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE66B173F6E3000786468 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = md5.h; path = "nds4droid-code/jni/desmume/src/utils/md5.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE66C173F6E3000786468 /* MemBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MemBuffer.cpp; path = "nds4droid-code/jni/desmume/src/utils/MemBuffer.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE66D173F6E3000786468 /* MemBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MemBuffer.h; path = "nds4droid-code/jni/desmume/src/utils/MemBuffer.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE66E173F6E3000786468 /* task.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = task.cpp; path = "nds4droid-code/jni/desmume/src/utils/task.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE66F173F6E3000786468 /* task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = task.h; path = "nds4droid-code/jni/desmume/src/utils/task.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE670173F6E3000786468 /* vfat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vfat.cpp; path = "nds4droid-code/jni/desmume/src/utils/vfat.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE671173F6E3000786468 /* vfat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vfat.h; path = "nds4droid-code/jni/desmume/src/utils/vfat.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE672173F6E3000786468 /* xstring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = xstring.cpp; path = "nds4droid-code/jni/desmume/src/utils/xstring.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE673173F6E3000786468 /* xstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xstring.h; path = "nds4droid-code/jni/desmume/src/utils/xstring.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE697173F706C00786468 /* metaspu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = metaspu.cpp; path = "nds4droid-code/jni/desmume/src/metaspu/metaspu.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE698173F706C00786468 /* metaspu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = metaspu.h; path = "nds4droid-code/jni/desmume/src/metaspu/metaspu.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE69A173F70A800786468 /* 2xsai.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = 2xsai.cpp; path = "nds4droid-code/jni/desmume/src/filter/2xsai.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE69B173F70A800786468 /* bilinear.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bilinear.cpp; path = "nds4droid-code/jni/desmume/src/filter/bilinear.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE69C173F70A800786468 /* epx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = epx.cpp; path = "nds4droid-code/jni/desmume/src/filter/epx.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE69D173F70A800786468 /* filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filter.h; path = "nds4droid-code/jni/desmume/src/filter/filter.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE69E173F70A800786468 /* hq2x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hq2x.cpp; path = "nds4droid-code/jni/desmume/src/filter/hq2x.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE69F173F70A800786468 /* hq2x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hq2x.h; path = "nds4droid-code/jni/desmume/src/filter/hq2x.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE6A0173F70A800786468 /* hq4x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hq4x.cpp; path = "nds4droid-code/jni/desmume/src/filter/hq4x.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE6A1173F70A800786468 /* hq4x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hq4x.h; path = "nds4droid-code/jni/desmume/src/filter/hq4x.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE6A2173F70A800786468 /* interp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interp.h; path = "nds4droid-code/jni/desmume/src/filter/interp.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE6A3173F70A800786468 /* lq2x.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lq2x.cpp; path = "nds4droid-code/jni/desmume/src/filter/lq2x.cpp"; sourceTree = SOURCE_ROOT; };
+		CE2EE6A4173F70A800786468 /* lq2x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lq2x.h; path = "nds4droid-code/jni/desmume/src/filter/lq2x.h"; sourceTree = SOURCE_ROOT; };
+		CE2EE6A5173F70A800786468 /* scanline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scanline.cpp; path = "nds4droid-code/jni/desmume/src/filter/scanline.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0AF173F722C00C51EA1 /* addons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = addons.cpp; path = "nds4droid-code/jni/desmume/src/addons.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0B0173F722C00C51EA1 /* addons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = addons.h; path = "nds4droid-code/jni/desmume/src/addons.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0B1173F722C00C51EA1 /* arm_instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arm_instructions.cpp; path = "nds4droid-code/jni/desmume/src/arm_instructions.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0B2173F722C00C51EA1 /* arm_instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arm_instructions.h; path = "nds4droid-code/jni/desmume/src/arm_instructions.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0B3173F722C00C51EA1 /* ArmAnalyze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ArmAnalyze.cpp; path = "nds4droid-code/jni/desmume/src/ArmAnalyze.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0B4173F722C00C51EA1 /* ArmAnalyze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArmAnalyze.h; path = "nds4droid-code/jni/desmume/src/ArmAnalyze.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0B5173F722C00C51EA1 /* ArmCJit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ArmCJit.cpp; path = "nds4droid-code/jni/desmume/src/ArmCJit.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0B6173F722C00C51EA1 /* ArmCJit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArmCJit.h; path = "nds4droid-code/jni/desmume/src/ArmCJit.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0B7173F722C00C51EA1 /* armcpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = armcpu.cpp; path = "nds4droid-code/jni/desmume/src/armcpu.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0B8173F722C00C51EA1 /* armcpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = armcpu.h; path = "nds4droid-code/jni/desmume/src/armcpu.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0B9173F722C00C51EA1 /* ArmThreadedInterpreter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ArmThreadedInterpreter.cpp; path = "nds4droid-code/jni/desmume/src/ArmThreadedInterpreter.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0BA173F722C00C51EA1 /* ArmThreadedInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArmThreadedInterpreter.h; path = "nds4droid-code/jni/desmume/src/ArmThreadedInterpreter.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0BB173F722C00C51EA1 /* bios.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bios.cpp; path = "nds4droid-code/jni/desmume/src/bios.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0BC173F722C00C51EA1 /* bios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bios.h; path = "nds4droid-code/jni/desmume/src/bios.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0BD173F722C00C51EA1 /* cheatSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cheatSystem.cpp; path = "nds4droid-code/jni/desmume/src/cheatSystem.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0BE173F722C00C51EA1 /* cheatSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cheatSystem.h; path = "nds4droid-code/jni/desmume/src/cheatSystem.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0BF173F722C00C51EA1 /* common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = common.cpp; path = "nds4droid-code/jni/desmume/src/common.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0C0173F722C00C51EA1 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = "nds4droid-code/jni/desmume/src/common.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0C1173F722C00C51EA1 /* cp15.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cp15.cpp; path = "nds4droid-code/jni/desmume/src/cp15.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0C2173F722C00C51EA1 /* cp15.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cp15.h; path = "nds4droid-code/jni/desmume/src/cp15.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0C3173F722C00C51EA1 /* CpuBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CpuBase.cpp; path = "nds4droid-code/jni/desmume/src/CpuBase.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0C4173F722C00C51EA1 /* CpuBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CpuBase.h; path = "nds4droid-code/jni/desmume/src/CpuBase.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0C5173F722C00C51EA1 /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = debug.cpp; path = "nds4droid-code/jni/desmume/src/debug.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0C6173F722C00C51EA1 /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug.h; path = "nds4droid-code/jni/desmume/src/debug.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0C7173F722C00C51EA1 /* Disassembler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Disassembler.cpp; path = "nds4droid-code/jni/desmume/src/Disassembler.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0C8173F722C00C51EA1 /* Disassembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Disassembler.h; path = "nds4droid-code/jni/desmume/src/Disassembler.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0C9173F722C00C51EA1 /* driver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = driver.cpp; path = "nds4droid-code/jni/desmume/src/driver.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0CA173F722C00C51EA1 /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = driver.h; path = "nds4droid-code/jni/desmume/src/driver.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0CB173F722C00C51EA1 /* emufile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = emufile.cpp; path = "nds4droid-code/jni/desmume/src/emufile.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0CC173F722C00C51EA1 /* emufile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emufile.h; path = "nds4droid-code/jni/desmume/src/emufile.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0CD173F722C00C51EA1 /* FIFO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FIFO.cpp; path = "nds4droid-code/jni/desmume/src/FIFO.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0CE173F722C00C51EA1 /* FIFO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIFO.h; path = "nds4droid-code/jni/desmume/src/FIFO.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0CF173F722C00C51EA1 /* firmware.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = firmware.cpp; path = "nds4droid-code/jni/desmume/src/firmware.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0D0173F722C00C51EA1 /* firmware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = firmware.h; path = "nds4droid-code/jni/desmume/src/firmware.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0D1173F722C00C51EA1 /* fs-linux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "fs-linux.cpp"; path = "nds4droid-code/jni/desmume/src/fs-linux.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0D2173F722C00C51EA1 /* fs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fs.h; path = "nds4droid-code/jni/desmume/src/fs.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0D3173F722C00C51EA1 /* gfx3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gfx3d.cpp; path = "nds4droid-code/jni/desmume/src/gfx3d.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0D4173F722C00C51EA1 /* gfx3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx3d.h; path = "nds4droid-code/jni/desmume/src/gfx3d.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0D5173F722C00C51EA1 /* GPU_osd_stub.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GPU_osd_stub.cpp; path = "nds4droid-code/jni/desmume/src/GPU_osd_stub.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0D6173F722C00C51EA1 /* GPU_osd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPU_osd.h; path = "nds4droid-code/jni/desmume/src/GPU_osd.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0D7173F722C00C51EA1 /* GPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GPU.cpp; path = "nds4droid-code/jni/desmume/src/GPU.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0D8173F722C00C51EA1 /* GPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPU.h; path = "nds4droid-code/jni/desmume/src/GPU.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0D9173F722C00C51EA1 /* JitCommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JitCommon.cpp; path = "nds4droid-code/jni/desmume/src/JitCommon.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0DA173F722C00C51EA1 /* JitCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JitCommon.h; path = "nds4droid-code/jni/desmume/src/JitCommon.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0DB173F722C00C51EA1 /* mc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mc.cpp; path = "nds4droid-code/jni/desmume/src/mc.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0DC173F722C00C51EA1 /* MMU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMU.cpp; path = "nds4droid-code/jni/desmume/src/MMU.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0DD173F722C00C51EA1 /* MMU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMU.h; path = "nds4droid-code/jni/desmume/src/MMU.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0DE173F722C00C51EA1 /* movie.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = movie.cpp; path = "nds4droid-code/jni/desmume/src/movie.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0DF173F722C00C51EA1 /* movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = movie.h; path = "nds4droid-code/jni/desmume/src/movie.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0E0173F722C00C51EA1 /* NDSSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NDSSystem.cpp; path = "nds4droid-code/jni/desmume/src/NDSSystem.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0E1173F722C00C51EA1 /* NDSSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDSSystem.h; path = "nds4droid-code/jni/desmume/src/NDSSystem.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0E2173F722C00C51EA1 /* path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = path.cpp; path = "nds4droid-code/jni/desmume/src/path.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0E3173F722C00C51EA1 /* path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = path.h; path = "nds4droid-code/jni/desmume/src/path.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0E4173F722C00C51EA1 /* rasterize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rasterize.cpp; path = "nds4droid-code/jni/desmume/src/rasterize.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0E5173F722C00C51EA1 /* rasterize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rasterize.h; path = "nds4droid-code/jni/desmume/src/rasterize.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0E6173F722C00C51EA1 /* readwrite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = readwrite.cpp; path = "nds4droid-code/jni/desmume/src/readwrite.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0E7173F722C00C51EA1 /* readwrite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = readwrite.h; path = "nds4droid-code/jni/desmume/src/readwrite.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0E8173F722C00C51EA1 /* render3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render3D.cpp; path = "nds4droid-code/jni/desmume/src/render3D.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0E9173F722C00C51EA1 /* render3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = render3D.h; path = "nds4droid-code/jni/desmume/src/render3D.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0EA173F722C00C51EA1 /* ROMReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ROMReader.cpp; path = "nds4droid-code/jni/desmume/src/ROMReader.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0EB173F722C00C51EA1 /* ROMReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ROMReader.h; path = "nds4droid-code/jni/desmume/src/ROMReader.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0EC173F722C00C51EA1 /* rtc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rtc.cpp; path = "nds4droid-code/jni/desmume/src/rtc.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0ED173F722C00C51EA1 /* rtc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rtc.h; path = "nds4droid-code/jni/desmume/src/rtc.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0EE173F722C00C51EA1 /* saves.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = saves.cpp; path = "nds4droid-code/jni/desmume/src/saves.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0EF173F722C00C51EA1 /* saves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = saves.h; path = "nds4droid-code/jni/desmume/src/saves.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0F0173F722C00C51EA1 /* slot1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1.cpp; path = "nds4droid-code/jni/desmume/src/slot1.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0F1173F722C00C51EA1 /* slot1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slot1.h; path = "nds4droid-code/jni/desmume/src/slot1.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0F2173F722C00C51EA1 /* SPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SPU.cpp; path = "nds4droid-code/jni/desmume/src/SPU.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0F3173F722C00C51EA1 /* SPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPU.h; path = "nds4droid-code/jni/desmume/src/SPU.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0F4173F722C00C51EA1 /* texcache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texcache.cpp; path = "nds4droid-code/jni/desmume/src/texcache.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0F5173F722C00C51EA1 /* texcache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = texcache.h; path = "nds4droid-code/jni/desmume/src/texcache.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0F6173F722C00C51EA1 /* thumb_instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = thumb_instructions.cpp; path = "nds4droid-code/jni/desmume/src/thumb_instructions.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0F7173F722C00C51EA1 /* thumb_instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = thumb_instructions.h; path = "nds4droid-code/jni/desmume/src/thumb_instructions.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0F8173F722C00C51EA1 /* version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = version.cpp; path = "nds4droid-code/jni/desmume/src/version.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0F9173F722C00C51EA1 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = "nds4droid-code/jni/desmume/src/version.h"; sourceTree = SOURCE_ROOT; };
+		CE34A0FA173F722C00C51EA1 /* wifi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wifi.cpp; path = "nds4droid-code/jni/desmume/src/wifi.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A0FB173F722C00C51EA1 /* wifi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wifi.h; path = "nds4droid-code/jni/desmume/src/wifi.h"; sourceTree = SOURCE_ROOT; };
+		CE34A123173F74C000C51EA1 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		CE34A125173F758300C51EA1 /* matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = matrix.cpp; path = "nds4droid-code/jni/desmume/src/matrix.cpp"; sourceTree = SOURCE_ROOT; };
+		CE34A126173F758300C51EA1 /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix.h; path = "nds4droid-code/jni/desmume/src/matrix.h"; sourceTree = SOURCE_ROOT; };
+		CE34A128173F769200C51EA1 /* nullJit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nullJit.h; path = Classes/nullJit.h; sourceTree = SOURCE_ROOT; };
+		CE34A12F173F798200C51EA1 /* matrix_impl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = matrix_impl.c; path = Classes/matrix_impl.c; sourceTree = SOURCE_ROOT; };
+		CE34A130173F798200C51EA1 /* matrix_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix_impl.h; path = Classes/matrix_impl.h; sourceTree = SOURCE_ROOT; };
+		CE34A132173F79F200C51EA1 /* throttle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = throttle.cpp; path = Classes/throttle.cpp; sourceTree = SOURCE_ROOT; };
+		CE34A133173F79F200C51EA1 /* throttle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = throttle.h; path = Classes/throttle.h; sourceTree = SOURCE_ROOT; };
+		CE34A135173F86E800C51EA1 /* UIButton+CTM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+CTM.h"; path = "Classes/UIButton+CTM.h"; sourceTree = "<group>"; };
+		CE34A136173F86E800C51EA1 /* UIButton+CTM.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIButton+CTM.mm"; path = "Classes/UIButton+CTM.mm"; sourceTree = "<group>"; };
+		CEB43C40173FCA3F00055F91 /* GLProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLProgram.h; path = Classes/GLProgram.h; sourceTree = "<group>"; };
+		CEB43C41173FCA3F00055F91 /* GLProgram.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GLProgram.m; path = Classes/GLProgram.m; sourceTree = "<group>"; };
+		CEB43C43173FD25900055F91 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		CEB43C44173FD25900055F91 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		CEC742F916776248006D193E /* nds4ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nds4ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CEC742FD16776248006D193E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		CEC742FF16776248006D193E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		CEC7430116776248006D193E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		CEC7430516776248006D193E /* nds4ios-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "nds4ios-Info.plist"; sourceTree = "<group>"; };
-		CEC7430716776248006D193E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		CEC7430916776248006D193E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		CEC7430B16776248006D193E /* nds4ios-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nds4ios-Prefix.pch"; sourceTree = "<group>"; };
-		CEC7430C16776248006D193E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		CEC7430D16776248006D193E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		CEC7430F16776248006D193E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		CEC7431116776248006D193E /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		CEC7431316776248006D193E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		CEC7431516776248006D193E /* EmuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmuViewController.h; sourceTree = "<group>"; };
-		CEC7431616776248006D193E /* EmuViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = EmuViewController.mm; sourceTree = "<group>"; };
-		CEC7431916776248006D193E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/EmuViewController.xib; sourceTree = "<group>"; };
-		CEC7432116776330006D193E /* desmume_v7.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = desmume_v7.mk; path = "nds4droid-code/jni/desmume_v7.mk"; sourceTree = "<group>"; };
-		CEC74494167769EB006D193E /* agg_arrowhead.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_arrowhead.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_arrowhead.cpp"; sourceTree = "<group>"; };
-		CEC74495167769EB006D193E /* agg_bezier_arc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_bezier_arc.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_bezier_arc.cpp"; sourceTree = "<group>"; };
-		CEC74496167769EB006D193E /* agg_bspline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_bspline.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_bspline.cpp"; sourceTree = "<group>"; };
-		CEC74497167769EB006D193E /* agg_curves.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_curves.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_curves.cpp"; sourceTree = "<group>"; };
-		CEC74498167769EB006D193E /* agg_embedded_raster_fonts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_embedded_raster_fonts.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_embedded_raster_fonts.cpp"; sourceTree = "<group>"; };
-		CEC74499167769EB006D193E /* agg_gsv_text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_gsv_text.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_gsv_text.cpp"; sourceTree = "<group>"; };
-		CEC7449A167769EB006D193E /* agg_image_filters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_image_filters.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_image_filters.cpp"; sourceTree = "<group>"; };
-		CEC7449B167769EB006D193E /* agg_line_aa_basics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_line_aa_basics.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_line_aa_basics.cpp"; sourceTree = "<group>"; };
-		CEC7449C167769EB006D193E /* agg_line_profile_aa.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_line_profile_aa.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_line_profile_aa.cpp"; sourceTree = "<group>"; };
-		CEC7449D167769EB006D193E /* agg_rounded_rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_rounded_rect.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_rounded_rect.cpp"; sourceTree = "<group>"; };
-		CEC7449E167769EB006D193E /* agg_sqrt_tables.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_sqrt_tables.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_sqrt_tables.cpp"; sourceTree = "<group>"; };
-		CEC7449F167769EB006D193E /* agg_trans_affine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_trans_affine.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_trans_affine.cpp"; sourceTree = "<group>"; };
-		CEC744A0167769EB006D193E /* agg_trans_double_path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_trans_double_path.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_trans_double_path.cpp"; sourceTree = "<group>"; };
-		CEC744A1167769EB006D193E /* agg_trans_single_path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_trans_single_path.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_trans_single_path.cpp"; sourceTree = "<group>"; };
-		CEC744A2167769EB006D193E /* agg_trans_warp_magnifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_trans_warp_magnifier.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_trans_warp_magnifier.cpp"; sourceTree = "<group>"; };
-		CEC744A3167769EB006D193E /* agg_vcgen_bspline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vcgen_bspline.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vcgen_bspline.cpp"; sourceTree = "<group>"; };
-		CEC744A4167769EB006D193E /* agg_vcgen_contour.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vcgen_contour.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vcgen_contour.cpp"; sourceTree = "<group>"; };
-		CEC744A5167769EB006D193E /* agg_vcgen_dash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vcgen_dash.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vcgen_dash.cpp"; sourceTree = "<group>"; };
-		CEC744A6167769EB006D193E /* agg_vcgen_markers_term.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vcgen_markers_term.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vcgen_markers_term.cpp"; sourceTree = "<group>"; };
-		CEC744A7167769EB006D193E /* agg_vcgen_smooth_poly1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vcgen_smooth_poly1.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vcgen_smooth_poly1.cpp"; sourceTree = "<group>"; };
-		CEC744A8167769EB006D193E /* agg_vcgen_stroke.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vcgen_stroke.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vcgen_stroke.cpp"; sourceTree = "<group>"; };
-		CEC744A9167769EB006D193E /* agg_vpgen_clip_polygon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vpgen_clip_polygon.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vpgen_clip_polygon.cpp"; sourceTree = "<group>"; };
-		CEC744AA167769EB006D193E /* agg_vpgen_clip_polyline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vpgen_clip_polyline.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vpgen_clip_polyline.cpp"; sourceTree = "<group>"; };
-		CEC744AB167769EB006D193E /* agg_vpgen_segmentator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_vpgen_segmentator.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_vpgen_segmentator.cpp"; sourceTree = "<group>"; };
-		CEC744C516776A00006D193E /* agg_bezier_ctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_bezier_ctrl.cpp; sourceTree = "<group>"; };
-		CEC744C616776A00006D193E /* agg_cbox_ctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_cbox_ctrl.cpp; sourceTree = "<group>"; };
-		CEC744C716776A00006D193E /* agg_gamma_ctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_gamma_ctrl.cpp; sourceTree = "<group>"; };
-		CEC744C816776A00006D193E /* agg_gamma_spline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_gamma_spline.cpp; sourceTree = "<group>"; };
-		CEC744C916776A00006D193E /* agg_polygon_ctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_polygon_ctrl.cpp; sourceTree = "<group>"; };
-		CEC744CA16776A00006D193E /* agg_rbox_ctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_rbox_ctrl.cpp; sourceTree = "<group>"; };
-		CEC744CB16776A00006D193E /* agg_scale_ctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_scale_ctrl.cpp; sourceTree = "<group>"; };
-		CEC744CC16776A00006D193E /* agg_slider_ctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_slider_ctrl.cpp; sourceTree = "<group>"; };
-		CEC744CD16776A00006D193E /* agg_spline_ctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = agg_spline_ctrl.cpp; sourceTree = "<group>"; };
-		CEC744D916776AC3006D193E /* agg_arc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = agg_arc.cpp; path = "nds4droid-code/jni/desmume/src/android/agg/src/agg_arc.cpp"; sourceTree = "<group>"; };
-		CEC744DB16776BE0006D193E /* addons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = addons.cpp; path = "nds4droid-code/jni/desmume/src/addons.cpp"; sourceTree = "<group>"; };
-		CEC744DC16776BE0006D193E /* addons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = addons.h; path = "nds4droid-code/jni/desmume/src/addons.h"; sourceTree = "<group>"; };
-		CEC744DD16776BE0006D193E /* aggdraw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aggdraw.cpp; path = "nds4droid-code/jni/desmume/src/aggdraw.cpp"; sourceTree = "<group>"; };
-		CEC744DE16776BE0006D193E /* aggdraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aggdraw.h; path = "nds4droid-code/jni/desmume/src/aggdraw.h"; sourceTree = "<group>"; };
-		CEC744DF16776BE0006D193E /* arm_instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arm_instructions.cpp; path = "nds4droid-code/jni/desmume/src/arm_instructions.cpp"; sourceTree = "<group>"; };
-		CEC744E016776BE0006D193E /* arm_instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = arm_instructions.h; path = "nds4droid-code/jni/desmume/src/arm_instructions.h"; sourceTree = "<group>"; };
-		CEC744E116776BE0006D193E /* armcpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = armcpu.cpp; path = "nds4droid-code/jni/desmume/src/armcpu.cpp"; sourceTree = "<group>"; };
-		CEC744E216776BE0006D193E /* armcpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = armcpu.h; path = "nds4droid-code/jni/desmume/src/armcpu.h"; sourceTree = "<group>"; };
-		CEC744E316776BE0006D193E /* bios.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bios.cpp; path = "nds4droid-code/jni/desmume/src/bios.cpp"; sourceTree = "<group>"; };
-		CEC744E416776BE0006D193E /* bios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bios.h; path = "nds4droid-code/jni/desmume/src/bios.h"; sourceTree = "<group>"; };
-		CEC744E516776BE0006D193E /* cheatSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cheatSystem.cpp; path = "nds4droid-code/jni/desmume/src/cheatSystem.cpp"; sourceTree = "<group>"; };
-		CEC744E616776BE0006D193E /* cheatSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cheatSystem.h; path = "nds4droid-code/jni/desmume/src/cheatSystem.h"; sourceTree = "<group>"; };
-		CEC744E716776BE0006D193E /* common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = common.cpp; path = "nds4droid-code/jni/desmume/src/common.cpp"; sourceTree = "<group>"; };
-		CEC744E816776BE0006D193E /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = common.h; path = "nds4droid-code/jni/desmume/src/common.h"; sourceTree = "<group>"; };
-		CEC744E916776BE0006D193E /* cp15.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cp15.cpp; path = "nds4droid-code/jni/desmume/src/cp15.cpp"; sourceTree = "<group>"; };
-		CEC744EA16776BE0006D193E /* cp15.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cp15.h; path = "nds4droid-code/jni/desmume/src/cp15.h"; sourceTree = "<group>"; };
-		CEC744EB16776BE0006D193E /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = debug.cpp; path = "nds4droid-code/jni/desmume/src/debug.cpp"; sourceTree = "<group>"; };
-		CEC744EC16776BE0006D193E /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = debug.h; path = "nds4droid-code/jni/desmume/src/debug.h"; sourceTree = "<group>"; };
-		CEC744ED16776BE0006D193E /* driver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = driver.cpp; path = "nds4droid-code/jni/desmume/src/driver.cpp"; sourceTree = "<group>"; };
-		CEC744EE16776BE0006D193E /* driver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = driver.h; path = "nds4droid-code/jni/desmume/src/driver.h"; sourceTree = "<group>"; };
-		CEC744EF16776BE0006D193E /* emufile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = emufile.cpp; path = "nds4droid-code/jni/desmume/src/emufile.cpp"; sourceTree = "<group>"; };
-		CEC744F016776BE0006D193E /* emufile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emufile.h; path = "nds4droid-code/jni/desmume/src/emufile.h"; sourceTree = "<group>"; };
-		CEC744F116776BE0006D193E /* FIFO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FIFO.cpp; path = "nds4droid-code/jni/desmume/src/FIFO.cpp"; sourceTree = "<group>"; };
-		CEC744F216776BE0006D193E /* FIFO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIFO.h; path = "nds4droid-code/jni/desmume/src/FIFO.h"; sourceTree = "<group>"; };
-		CEC744F316776BE0006D193E /* firmware.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = firmware.cpp; path = "nds4droid-code/jni/desmume/src/firmware.cpp"; sourceTree = "<group>"; };
-		CEC744F416776BE0006D193E /* firmware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = firmware.h; path = "nds4droid-code/jni/desmume/src/firmware.h"; sourceTree = "<group>"; };
-		CEC744F516776BE0006D193E /* fs-linux.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "fs-linux.cpp"; path = "nds4droid-code/jni/desmume/src/fs-linux.cpp"; sourceTree = "<group>"; };
-		CEC744F616776BE0006D193E /* gfx3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gfx3d.cpp; path = "nds4droid-code/jni/desmume/src/gfx3d.cpp"; sourceTree = "<group>"; };
-		CEC744F716776BE0006D193E /* gfx3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gfx3d.h; path = "nds4droid-code/jni/desmume/src/gfx3d.h"; sourceTree = "<group>"; };
-		CEC744F816776BE0006D193E /* GPU_osd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GPU_osd.cpp; path = "nds4droid-code/jni/desmume/src/GPU_osd.cpp"; sourceTree = "<group>"; };
-		CEC744F916776BE0006D193E /* GPU_osd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPU_osd.h; path = "nds4droid-code/jni/desmume/src/GPU_osd.h"; sourceTree = "<group>"; };
-		CEC744FA16776BE0006D193E /* GPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GPU.cpp; path = "nds4droid-code/jni/desmume/src/GPU.cpp"; sourceTree = "<group>"; };
-		CEC744FB16776BE0006D193E /* GPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GPU.h; path = "nds4droid-code/jni/desmume/src/GPU.h"; sourceTree = "<group>"; };
-		CEC744FC16776BE0006D193E /* matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = matrix.cpp; path = "nds4droid-code/jni/desmume/src/matrix.cpp"; sourceTree = "<group>"; };
-		CEC744FD16776BE0006D193E /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix.h; path = "nds4droid-code/jni/desmume/src/matrix.h"; sourceTree = "<group>"; };
-		CEC744FE16776BE0006D193E /* mc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mc.cpp; path = "nds4droid-code/jni/desmume/src/mc.cpp"; sourceTree = "<group>"; };
-		CEC744FF16776BE0006D193E /* mc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mc.h; path = "nds4droid-code/jni/desmume/src/mc.h"; sourceTree = "<group>"; };
-		CEC7450016776BE0006D193E /* MMU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MMU.cpp; path = "nds4droid-code/jni/desmume/src/MMU.cpp"; sourceTree = "<group>"; };
-		CEC7450116776BE0006D193E /* MMU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MMU.h; path = "nds4droid-code/jni/desmume/src/MMU.h"; sourceTree = "<group>"; };
-		CEC7450216776BE0006D193E /* movie.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = movie.cpp; path = "nds4droid-code/jni/desmume/src/movie.cpp"; sourceTree = "<group>"; };
-		CEC7450316776BE0006D193E /* movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = movie.h; path = "nds4droid-code/jni/desmume/src/movie.h"; sourceTree = "<group>"; };
-		CEC7450416776BE0006D193E /* NDSSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NDSSystem.cpp; path = "nds4droid-code/jni/desmume/src/NDSSystem.cpp"; sourceTree = "<group>"; };
-		CEC7450516776BE0006D193E /* NDSSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDSSystem.h; path = "nds4droid-code/jni/desmume/src/NDSSystem.h"; sourceTree = "<group>"; };
-		CEC7450616776BE0006D193E /* OGLRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OGLRender.cpp; path = "nds4droid-code/jni/desmume/src/OGLRender.cpp"; sourceTree = "<group>"; };
-		CEC7450716776BE0006D193E /* OGLRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OGLRender.h; path = "nds4droid-code/jni/desmume/src/OGLRender.h"; sourceTree = "<group>"; };
-		CEC7450816776BE0006D193E /* path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = path.cpp; path = "nds4droid-code/jni/desmume/src/path.cpp"; sourceTree = "<group>"; };
-		CEC7450916776BE0006D193E /* path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = path.h; path = "nds4droid-code/jni/desmume/src/path.h"; sourceTree = "<group>"; };
-		CEC7450A16776BE0006D193E /* rasterize.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rasterize.cpp; path = "nds4droid-code/jni/desmume/src/rasterize.cpp"; sourceTree = "<group>"; };
-		CEC7450B16776BE0006D193E /* rasterize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rasterize.h; path = "nds4droid-code/jni/desmume/src/rasterize.h"; sourceTree = "<group>"; };
-		CEC7450C16776BE0006D193E /* readwrite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = readwrite.cpp; path = "nds4droid-code/jni/desmume/src/readwrite.cpp"; sourceTree = "<group>"; };
-		CEC7450D16776BE0006D193E /* readwrite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = readwrite.h; path = "nds4droid-code/jni/desmume/src/readwrite.h"; sourceTree = "<group>"; };
-		CEC7450E16776BE0006D193E /* render3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = render3D.cpp; path = "nds4droid-code/jni/desmume/src/render3D.cpp"; sourceTree = "<group>"; };
-		CEC7450F16776BE0006D193E /* render3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = render3D.h; path = "nds4droid-code/jni/desmume/src/render3D.h"; sourceTree = "<group>"; };
-		CEC7451016776BE0006D193E /* ROMReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ROMReader.cpp; path = "nds4droid-code/jni/desmume/src/ROMReader.cpp"; sourceTree = "<group>"; };
-		CEC7451116776BE0006D193E /* ROMReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ROMReader.h; path = "nds4droid-code/jni/desmume/src/ROMReader.h"; sourceTree = "<group>"; };
-		CEC7451216776BE0006D193E /* rtc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rtc.cpp; path = "nds4droid-code/jni/desmume/src/rtc.cpp"; sourceTree = "<group>"; };
-		CEC7451316776BE0006D193E /* rtc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rtc.h; path = "nds4droid-code/jni/desmume/src/rtc.h"; sourceTree = "<group>"; };
-		CEC7451416776BE0006D193E /* saves.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = saves.cpp; path = "nds4droid-code/jni/desmume/src/saves.cpp"; sourceTree = "<group>"; };
-		CEC7451516776BE0006D193E /* saves.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = saves.h; path = "nds4droid-code/jni/desmume/src/saves.h"; sourceTree = "<group>"; };
-		CEC7451616776BE0006D193E /* slot1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1.cpp; path = "nds4droid-code/jni/desmume/src/slot1.cpp"; sourceTree = "<group>"; };
-		CEC7451716776BE0006D193E /* slot1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = slot1.h; path = "nds4droid-code/jni/desmume/src/slot1.h"; sourceTree = "<group>"; };
-		CEC7451816776BE0006D193E /* SPU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SPU.cpp; path = "nds4droid-code/jni/desmume/src/SPU.cpp"; sourceTree = "<group>"; };
-		CEC7451916776BE0006D193E /* SPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPU.h; path = "nds4droid-code/jni/desmume/src/SPU.h"; sourceTree = "<group>"; };
-		CEC7451A16776BE0006D193E /* texcache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texcache.cpp; path = "nds4droid-code/jni/desmume/src/texcache.cpp"; sourceTree = "<group>"; };
-		CEC7451B16776BE0006D193E /* texcache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = texcache.h; path = "nds4droid-code/jni/desmume/src/texcache.h"; sourceTree = "<group>"; };
-		CEC7451C16776BE0006D193E /* thumb_instructions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = thumb_instructions.cpp; path = "nds4droid-code/jni/desmume/src/thumb_instructions.cpp"; sourceTree = "<group>"; };
-		CEC7451D16776BE0006D193E /* thumb_instructions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = thumb_instructions.h; path = "nds4droid-code/jni/desmume/src/thumb_instructions.h"; sourceTree = "<group>"; };
-		CEC7451E16776BE0006D193E /* version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = version.cpp; path = "nds4droid-code/jni/desmume/src/version.cpp"; sourceTree = "<group>"; };
-		CEC7451F16776BE0006D193E /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = "nds4droid-code/jni/desmume/src/version.h"; sourceTree = "<group>"; };
-		CEC7452016776BE0006D193E /* wifi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wifi.cpp; path = "nds4droid-code/jni/desmume/src/wifi.cpp"; sourceTree = "<group>"; };
-		CEC7452116776BE0006D193E /* wifi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wifi.h; path = "nds4droid-code/jni/desmume/src/wifi.h"; sourceTree = "<group>"; };
-		CEC7454716776BF6006D193E /* slot1_none.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1_none.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot1_none.cpp"; sourceTree = "<group>"; };
-		CEC7454816776BF6006D193E /* slot1_r4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1_r4.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot1_r4.cpp"; sourceTree = "<group>"; };
-		CEC7454916776BF6006D193E /* slot1_retail_nand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1_retail_nand.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot1_retail_nand.cpp"; sourceTree = "<group>"; };
-		CEC7454A16776BF6006D193E /* slot1_retail.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot1_retail.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot1_retail.cpp"; sourceTree = "<group>"; };
-		CEC7454B16776BF6006D193E /* slot2_expMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_expMemory.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_expMemory.cpp"; sourceTree = "<group>"; };
-		CEC7454C16776BF6006D193E /* slot2_gbagame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_gbagame.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_gbagame.cpp"; sourceTree = "<group>"; };
-		CEC7454D16776BF6006D193E /* slot2_guitarGrip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_guitarGrip.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_guitarGrip.cpp"; sourceTree = "<group>"; };
-		CEC7454E16776BF6006D193E /* slot2_mpcf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_mpcf.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_mpcf.cpp"; sourceTree = "<group>"; };
-		CEC7454F16776BF6006D193E /* slot2_none.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_none.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_none.cpp"; sourceTree = "<group>"; };
-		CEC7455016776BF6006D193E /* slot2_paddle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_paddle.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_paddle.cpp"; sourceTree = "<group>"; };
-		CEC7455116776BF6006D193E /* slot2_piano.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_piano.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_piano.cpp"; sourceTree = "<group>"; };
-		CEC7455216776BF6006D193E /* slot2_rumblepak.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = slot2_rumblepak.cpp; path = "nds4droid-code/jni/desmume/src/addons/slot2_rumblepak.cpp"; sourceTree = "<group>"; };
-		CEC7456116776C1C006D193E /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc.cpp; path = "nds4droid-code/jni/desmume/src/utils/decrypt/crc.cpp"; sourceTree = "<group>"; };
-		CEC7456216776C1C006D193E /* crc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = crc.h; path = "nds4droid-code/jni/desmume/src/utils/decrypt/crc.h"; sourceTree = "<group>"; };
-		CEC7456316776C1C006D193E /* decrypt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = decrypt.cpp; path = "nds4droid-code/jni/desmume/src/utils/decrypt/decrypt.cpp"; sourceTree = "<group>"; };
-		CEC7456416776C1C006D193E /* decrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = decrypt.h; path = "nds4droid-code/jni/desmume/src/utils/decrypt/decrypt.h"; sourceTree = "<group>"; };
-		CEC7456516776C1C006D193E /* header.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = header.cpp; path = "nds4droid-code/jni/desmume/src/utils/decrypt/header.cpp"; sourceTree = "<group>"; };
-		CEC7456616776C1C006D193E /* header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = header.h; path = "nds4droid-code/jni/desmume/src/utils/decrypt/header.h"; sourceTree = "<group>"; };
-		CEC7456B16776C30006D193E /* bit_ops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bit_ops.h; sourceTree = "<group>"; };
-		CEC7456C16776C30006D193E /* cache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cache.cpp; sourceTree = "<group>"; };
-		CEC7456D16776C30006D193E /* cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cache.h; sourceTree = "<group>"; };
-		CEC7456E16776C30006D193E /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
-		CEC7456F16776C30006D193E /* directory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = directory.cpp; sourceTree = "<group>"; };
-		CEC7457016776C30006D193E /* directory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = directory.h; sourceTree = "<group>"; };
-		CEC7457116776C30006D193E /* disc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = disc.cpp; sourceTree = "<group>"; };
-		CEC7457216776C30006D193E /* disc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = disc.h; sourceTree = "<group>"; };
-		CEC7457316776C30006D193E /* disc_io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = disc_io.h; sourceTree = "<group>"; };
-		CEC7457416776C30006D193E /* fat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fat.h; sourceTree = "<group>"; };
-		CEC7457516776C30006D193E /* fatdir.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fatdir.cpp; sourceTree = "<group>"; };
-		CEC7457616776C30006D193E /* fatdir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fatdir.h; sourceTree = "<group>"; };
-		CEC7457716776C30006D193E /* fatfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fatfile.cpp; sourceTree = "<group>"; };
-		CEC7457816776C30006D193E /* fatfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fatfile.h; sourceTree = "<group>"; };
-		CEC7457916776C30006D193E /* file_allocation_table.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = file_allocation_table.cpp; sourceTree = "<group>"; };
-		CEC7457A16776C30006D193E /* file_allocation_table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = file_allocation_table.h; sourceTree = "<group>"; };
-		CEC7457B16776C30006D193E /* filetime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = filetime.cpp; sourceTree = "<group>"; };
-		CEC7457C16776C30006D193E /* filetime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filetime.h; sourceTree = "<group>"; };
-		CEC7457D16776C30006D193E /* libfat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libfat.cpp; sourceTree = "<group>"; };
-		CEC7457E16776C30006D193E /* libfat_pc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libfat_pc.h; sourceTree = "<group>"; };
-		CEC7457F16776C30006D193E /* libfat_public_api.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libfat_public_api.cpp; sourceTree = "<group>"; };
-		CEC7458016776C30006D193E /* libfat_public_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libfat_public_api.h; sourceTree = "<group>"; };
-		CEC7458116776C30006D193E /* lock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lock.cpp; sourceTree = "<group>"; };
-		CEC7458216776C30006D193E /* lock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lock.h; sourceTree = "<group>"; };
-		CEC7458316776C30006D193E /* mem_allocate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem_allocate.h; sourceTree = "<group>"; };
-		CEC7458416776C30006D193E /* partition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = partition.cpp; sourceTree = "<group>"; };
-		CEC7458516776C30006D193E /* partition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = partition.h; sourceTree = "<group>"; };
-		CEC7458716776C30006D193E /* tinystr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinystr.cpp; sourceTree = "<group>"; };
-		CEC7458816776C30006D193E /* tinystr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinystr.h; sourceTree = "<group>"; };
-		CEC7458916776C30006D193E /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
-		CEC7458A16776C30006D193E /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
-		CEC7458B16776C30006D193E /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
-		CEC7458C16776C30006D193E /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
-		CEC7459C16776C86006D193E /* ConvertUTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ConvertUTF.c; path = "nds4droid-code/jni/desmume/src/utils/ConvertUTF.c"; sourceTree = "<group>"; };
-		CEC7459D16776C86006D193E /* ConvertUTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConvertUTF.h; path = "nds4droid-code/jni/desmume/src/utils/ConvertUTF.h"; sourceTree = "<group>"; };
-		CEC7459E16776C86006D193E /* datetime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datetime.cpp; path = "nds4droid-code/jni/desmume/src/utils/datetime.cpp"; sourceTree = "<group>"; };
-		CEC7459F16776C86006D193E /* datetime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = datetime.h; path = "nds4droid-code/jni/desmume/src/utils/datetime.h"; sourceTree = "<group>"; };
-		CEC745A016776C86006D193E /* dlditool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dlditool.cpp; path = "nds4droid-code/jni/desmume/src/utils/dlditool.cpp"; sourceTree = "<group>"; };
-		CEC745A116776C86006D193E /* emufat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = emufat.cpp; path = "nds4droid-code/jni/desmume/src/utils/emufat.cpp"; sourceTree = "<group>"; };
-		CEC745A216776C86006D193E /* emufat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = emufat.h; path = "nds4droid-code/jni/desmume/src/utils/emufat.h"; sourceTree = "<group>"; };
-		CEC745A316776C86006D193E /* guid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = guid.cpp; path = "nds4droid-code/jni/desmume/src/utils/guid.cpp"; sourceTree = "<group>"; };
-		CEC745A416776C86006D193E /* guid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = guid.h; path = "nds4droid-code/jni/desmume/src/utils/guid.h"; sourceTree = "<group>"; };
-		CEC745A516776C86006D193E /* task.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = task.cpp; path = "nds4droid-code/jni/desmume/src/utils/task.cpp"; sourceTree = "<group>"; };
-		CEC745A616776C86006D193E /* task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = task.h; path = "nds4droid-code/jni/desmume/src/utils/task.h"; sourceTree = "<group>"; };
-		CEC745A716776C86006D193E /* vfat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vfat.cpp; path = "nds4droid-code/jni/desmume/src/utils/vfat.cpp"; sourceTree = "<group>"; };
-		CEC745A816776C86006D193E /* vfat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vfat.h; path = "nds4droid-code/jni/desmume/src/utils/vfat.h"; sourceTree = "<group>"; };
-		CEC745A916776C86006D193E /* xstring.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = xstring.cpp; path = "nds4droid-code/jni/desmume/src/utils/xstring.cpp"; sourceTree = "<group>"; };
-		CEC745AA16776C86006D193E /* xstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xstring.h; path = "nds4droid-code/jni/desmume/src/utils/xstring.h"; sourceTree = "<group>"; };
-		CEC745BB16776EE5006D193E /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		CEC745BC16776EE5006D193E /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		CEC745BF16776FB1006D193E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = "nds4droid-code/jni/desmume/src/android/main.cpp"; sourceTree = "<group>"; };
-		CEC745C01677705F006D193E /* sndopensl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sndopensl.cpp; path = "nds4droid-code/jni/desmume/src/android/sndopensl.cpp"; sourceTree = "<group>"; };
-		CEC745C11677705F006D193E /* throttle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = throttle.cpp; path = "nds4droid-code/jni/desmume/src/android/throttle.cpp"; sourceTree = "<group>"; };
-		CEC745C21677706A006D193E /* mic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mic.cpp; path = "nds4droid-code/jni/desmume/src/android/mic.cpp"; sourceTree = "<group>"; };
-		CEC745C41677711B006D193E /* metaspu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = metaspu.cpp; path = "nds4droid-code/jni/desmume/src/metaspu/metaspu.cpp"; sourceTree = "<group>"; };
-		CEC745C51677711B006D193E /* metaspu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = metaspu.h; path = "nds4droid-code/jni/desmume/src/metaspu/metaspu.h"; sourceTree = "<group>"; };
-		CEC745C716777162006D193E /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		CEC745CF16777364006D193E /* throttle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = throttle.cpp; path = "nds4droid-code/jni/desmume/src/android/throttle.cpp"; sourceTree = SOURCE_ROOT; };
-		CEC745D016777364006D193E /* throttle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = throttle.h; path = "nds4droid-code/jni/desmume/src/android/throttle.h"; sourceTree = SOURCE_ROOT; };
-		CEC745D2167776A6006D193E /* video.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = video.h; path = "nds4droid-code/jni/desmume/src/android/video.h"; sourceTree = "<group>"; };
-		CECEB5501683438A0093204D /* RomsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RomsViewController.h; sourceTree = "<group>"; };
-		CECEB5511683438A0093204D /* RomsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RomsViewController.m; sourceTree = "<group>"; };
-		CECEB5521683438A0093204D /* RomsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RomsViewController.xib; sourceTree = "<group>"; };
-		CED023751680AC0300061AA8 /* Button.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = Button.java; sourceTree = "<group>"; };
-		CED023761680AC0300061AA8 /* ButtonLayoutEditor.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = ButtonLayoutEditor.java; sourceTree = "<group>"; };
-		CED023771680AC0300061AA8 /* Cheats.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = Cheats.java; sourceTree = "<group>"; };
-		CED023781680AC0300061AA8 /* Controls.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = Controls.java; sourceTree = "<group>"; };
-		CED023791680AC0300061AA8 /* DeSmuME.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = DeSmuME.java; sourceTree = "<group>"; };
-		CED0237A1680AC0300061AA8 /* DrawingThread.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = DrawingThread.java; sourceTree = "<group>"; };
-		CED0237B1680AC0300061AA8 /* ds4droidApplication.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = ds4droidApplication.java; sourceTree = "<group>"; };
-		CED0237C1680AC0300061AA8 /* EmulatorThread.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = EmulatorThread.java; sourceTree = "<group>"; };
-		CED0237D1680AC0300061AA8 /* FileDialog.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = FileDialog.java; sourceTree = "<group>"; };
-		CED0237E1680AC0300061AA8 /* KeyMapPreference.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = KeyMapPreference.java; sourceTree = "<group>"; };
-		CED0237F1680AC0300061AA8 /* KeyMapSettings.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = KeyMapSettings.java; sourceTree = "<group>"; };
-		CED023801680AC0300061AA8 /* MainActivity.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = MainActivity.java; sourceTree = "<group>"; };
-		CED023811680AC0300061AA8 /* Settings.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = Settings.java; sourceTree = "<group>"; };
-		CED023821680AC0300061AA8 /* TransparencyPreference.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = TransparencyPreference.java; sourceTree = "<group>"; };
-		CED023831680AD2800061AA8 /* emu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = emu.cpp; sourceTree = "<group>"; };
-		CED023841680AD2800061AA8 /* emu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emu.h; sourceTree = "<group>"; };
-		CED023861680AEF400061AA8 /* 7zip.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = 7zip.cpp; path = "nds4droid-code/jni/desmume/src/android/7zip.cpp"; sourceTree = "<group>"; };
-		CED023871680B07500061AA8 /* OpenArchive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OpenArchive.cpp; path = "nds4droid-code/jni/desmume/src/android/OpenArchive.cpp"; sourceTree = "<group>"; };
-		CEEBA1F11684BD0600613311 /* agg_neon.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = agg_neon.mk; path = "nds4droid-code/jni/desmume/src/android/agg/agg_neon.mk"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -380,63 +308,288 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEB894521682097D00F8A7DB /* QuartzCore.framework in Frameworks */,
-				CEC745C816777162006D193E /* libz.dylib in Frameworks */,
-				CEC745BD16776EE5006D193E /* GLKit.framework in Frameworks */,
-				CEC745BE16776EE5006D193E /* OpenGLES.framework in Frameworks */,
-				CEC742FE16776248006D193E /* UIKit.framework in Frameworks */,
-				CEC7430016776248006D193E /* Foundation.framework in Frameworks */,
-				CEC7430216776248006D193E /* CoreGraphics.framework in Frameworks */,
+				CEB43C45173FD25A00055F91 /* GLKit.framework in Frameworks */,
+				CEB43C46173FD25A00055F91 /* OpenGLES.framework in Frameworks */,
+				CE34A124173F74C000C51EA1 /* libz.dylib in Frameworks */,
+				CE2EE60A173F6BFF00786468 /* CoreGraphics.framework in Frameworks */,
+				CE2EE608173F6BEA00786468 /* QuartzCore.framework in Frameworks */,
+				CE2EE606173F6BC100786468 /* UIKit.framework in Frameworks */,
+				CE2EE604173F6BBA00786468 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		CE3FA4E41683534F007CD53C /* math */ = {
+		CE2EE5F4173F66D100786468 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				CE3FA4E116835348007CD53C /* matrix_impl.cpp */,
-				CE3FA4E216835348007CD53C /* matrix_impl.h */,
-				CE3FA4E516835386007CD53C /* common_macros.h */,
-				CE3FA4E6168353AF007CD53C /* vfp_clobbers.h */,
+				CE34A132173F79F200C51EA1 /* throttle.cpp */,
+				CE34A133173F79F200C51EA1 /* throttle.h */,
+				CE34A12F173F798200C51EA1 /* matrix_impl.c */,
+				CE34A130173F798200C51EA1 /* matrix_impl.h */,
+				CE34A128173F769200C51EA1 /* nullJit.h */,
+				CE2EE5F5173F66E300786468 /* AppDelegate.h */,
+				CE2EE5F6173F66E300786468 /* AppDelegate.m */,
+				CE2EE5F7173F66E300786468 /* emu.cpp */,
+				CE2EE5F8173F66E300786468 /* emu.h */,
+				CE2EE5FB173F66E300786468 /* RomsViewController.h */,
+				CE2EE5FC173F66E300786468 /* RomsViewController.m */,
+				CEB43C40173FCA3F00055F91 /* GLProgram.h */,
+				CEB43C41173FCA3F00055F91 /* GLProgram.m */,
+				CE2EE5F9173F66E300786468 /* EmuViewController.h */,
+				CE2EE5FA173F66E300786468 /* EmuViewController.mm */,
+				CE34A135173F86E800C51EA1 /* UIButton+CTM.h */,
+				CE34A136173F86E800C51EA1 /* UIButton+CTM.mm */,
 			);
-			name = math;
+			name = Classes;
 			sourceTree = "<group>";
 		};
-		CEB89453168214C100F8A7DB /* gles */ = {
+		CE2EE60B173F6C0D00786468 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
-				CEB89454168214C100F8A7DB /* font.h */,
-				CEB89455168214C100F8A7DB /* gles_render.c */,
-				CEB89456168214C100F8A7DB /* gles_render.h */,
-				CEB89457168214C100F8A7DB /* importgl.c */,
-				CEB89458168214C100F8A7DB /* importgl.h */,
+				CEB43C43173FD25900055F91 /* GLKit.framework */,
+				CEB43C44173FD25900055F91 /* OpenGLES.framework */,
+				CE34A123173F74C000C51EA1 /* libz.dylib */,
+				CE2EE609173F6BFF00786468 /* CoreGraphics.framework */,
+				CE2EE607173F6BEA00786468 /* QuartzCore.framework */,
+				CE2EE605173F6BC100786468 /* UIKit.framework */,
+				CE2EE603173F6BBA00786468 /* Foundation.framework */,
 			);
-			name = gles;
-			path = "../../../../../Volumes/VMware Shared Folders/Share/gles";
+			name = Framework;
+			sourceTree = "<group>";
+		};
+		CE2EE60C173F6C1E00786468 /* nds4droid-code */ = {
+			isa = PBXGroup;
+			children = (
+				CE34A0AF173F722C00C51EA1 /* addons.cpp */,
+				CE34A0B0173F722C00C51EA1 /* addons.h */,
+				CE34A0B1173F722C00C51EA1 /* arm_instructions.cpp */,
+				CE34A0B2173F722C00C51EA1 /* arm_instructions.h */,
+				CE34A0B3173F722C00C51EA1 /* ArmAnalyze.cpp */,
+				CE34A0B4173F722C00C51EA1 /* ArmAnalyze.h */,
+				CE34A0B5173F722C00C51EA1 /* ArmCJit.cpp */,
+				CE34A0B6173F722C00C51EA1 /* ArmCJit.h */,
+				CE34A0B7173F722C00C51EA1 /* armcpu.cpp */,
+				CE34A0B8173F722C00C51EA1 /* armcpu.h */,
+				CE34A0B9173F722C00C51EA1 /* ArmThreadedInterpreter.cpp */,
+				CE34A0BA173F722C00C51EA1 /* ArmThreadedInterpreter.h */,
+				CE34A0BB173F722C00C51EA1 /* bios.cpp */,
+				CE34A0BC173F722C00C51EA1 /* bios.h */,
+				CE34A0BD173F722C00C51EA1 /* cheatSystem.cpp */,
+				CE34A0BE173F722C00C51EA1 /* cheatSystem.h */,
+				CE34A0BF173F722C00C51EA1 /* common.cpp */,
+				CE34A0C0173F722C00C51EA1 /* common.h */,
+				CE34A0C1173F722C00C51EA1 /* cp15.cpp */,
+				CE34A0C2173F722C00C51EA1 /* cp15.h */,
+				CE34A0C3173F722C00C51EA1 /* CpuBase.cpp */,
+				CE34A0C4173F722C00C51EA1 /* CpuBase.h */,
+				CE34A0C5173F722C00C51EA1 /* debug.cpp */,
+				CE34A0C6173F722C00C51EA1 /* debug.h */,
+				CE34A0C7173F722C00C51EA1 /* Disassembler.cpp */,
+				CE34A0C8173F722C00C51EA1 /* Disassembler.h */,
+				CE34A0C9173F722C00C51EA1 /* driver.cpp */,
+				CE34A0CA173F722C00C51EA1 /* driver.h */,
+				CE34A0CB173F722C00C51EA1 /* emufile.cpp */,
+				CE34A0CC173F722C00C51EA1 /* emufile.h */,
+				CE34A0CD173F722C00C51EA1 /* FIFO.cpp */,
+				CE34A0CE173F722C00C51EA1 /* FIFO.h */,
+				CE34A0CF173F722C00C51EA1 /* firmware.cpp */,
+				CE34A0D0173F722C00C51EA1 /* firmware.h */,
+				CE34A0D1173F722C00C51EA1 /* fs-linux.cpp */,
+				CE34A0D2173F722C00C51EA1 /* fs.h */,
+				CE34A0D3173F722C00C51EA1 /* gfx3d.cpp */,
+				CE34A0D4173F722C00C51EA1 /* gfx3d.h */,
+				CE34A0D5173F722C00C51EA1 /* GPU_osd_stub.cpp */,
+				CE34A0D6173F722C00C51EA1 /* GPU_osd.h */,
+				CE34A0D7173F722C00C51EA1 /* GPU.cpp */,
+				CE34A0D8173F722C00C51EA1 /* GPU.h */,
+				CE34A0D9173F722C00C51EA1 /* JitCommon.cpp */,
+				CE34A0DA173F722C00C51EA1 /* JitCommon.h */,
+				CE34A125173F758300C51EA1 /* matrix.cpp */,
+				CE34A126173F758300C51EA1 /* matrix.h */,
+				CE34A0DB173F722C00C51EA1 /* mc.cpp */,
+				CE34A0DC173F722C00C51EA1 /* MMU.cpp */,
+				CE34A0DD173F722C00C51EA1 /* MMU.h */,
+				CE34A0DE173F722C00C51EA1 /* movie.cpp */,
+				CE34A0DF173F722C00C51EA1 /* movie.h */,
+				CE34A0E0173F722C00C51EA1 /* NDSSystem.cpp */,
+				CE34A0E1173F722C00C51EA1 /* NDSSystem.h */,
+				CE34A0E2173F722C00C51EA1 /* path.cpp */,
+				CE34A0E3173F722C00C51EA1 /* path.h */,
+				CE34A0E4173F722C00C51EA1 /* rasterize.cpp */,
+				CE34A0E5173F722C00C51EA1 /* rasterize.h */,
+				CE34A0E6173F722C00C51EA1 /* readwrite.cpp */,
+				CE34A0E7173F722C00C51EA1 /* readwrite.h */,
+				CE34A0E8173F722C00C51EA1 /* render3D.cpp */,
+				CE34A0E9173F722C00C51EA1 /* render3D.h */,
+				CE34A0EA173F722C00C51EA1 /* ROMReader.cpp */,
+				CE34A0EB173F722C00C51EA1 /* ROMReader.h */,
+				CE34A0EC173F722C00C51EA1 /* rtc.cpp */,
+				CE34A0ED173F722C00C51EA1 /* rtc.h */,
+				CE34A0EE173F722C00C51EA1 /* saves.cpp */,
+				CE34A0EF173F722C00C51EA1 /* saves.h */,
+				CE34A0F0173F722C00C51EA1 /* slot1.cpp */,
+				CE34A0F1173F722C00C51EA1 /* slot1.h */,
+				CE34A0F2173F722C00C51EA1 /* SPU.cpp */,
+				CE34A0F3173F722C00C51EA1 /* SPU.h */,
+				CE34A0F4173F722C00C51EA1 /* texcache.cpp */,
+				CE34A0F5173F722C00C51EA1 /* texcache.h */,
+				CE34A0F6173F722C00C51EA1 /* thumb_instructions.cpp */,
+				CE34A0F7173F722C00C51EA1 /* thumb_instructions.h */,
+				CE34A0F8173F722C00C51EA1 /* version.cpp */,
+				CE34A0F9173F722C00C51EA1 /* version.h */,
+				CE34A0FA173F722C00C51EA1 /* wifi.cpp */,
+				CE34A0FB173F722C00C51EA1 /* wifi.h */,
+				CE2EE683173F6FF100786468 /* filter */,
+				CE2EE67F173F6FD400786468 /* metaspu */,
+				CE2EE628173F6D9300786468 /* utils */,
+				CE2EE60F173F6D6300786468 /* addons */,
+			);
+			name = "nds4droid-code";
+			sourceTree = "<group>";
+		};
+		CE2EE60F173F6D6300786468 /* addons */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE610173F6D6300786468 /* slot1_none.cpp */,
+				CE2EE611173F6D6300786468 /* slot1_r4.cpp */,
+				CE2EE612173F6D6300786468 /* slot1_retail.cpp */,
+				CE2EE613173F6D6300786468 /* slot1_retail_nand.cpp */,
+				CE2EE614173F6D6300786468 /* slot2_expMemory.cpp */,
+				CE2EE615173F6D6300786468 /* slot2_gbagame.cpp */,
+				CE2EE616173F6D6300786468 /* slot2_guitarGrip.cpp */,
+				CE2EE617173F6D6300786468 /* slot2_mpcf.cpp */,
+				CE2EE618173F6D6300786468 /* slot2_none.cpp */,
+				CE2EE619173F6D6300786468 /* slot2_paddle.cpp */,
+				CE2EE61A173F6D6300786468 /* slot2_piano.cpp */,
+				CE2EE61B173F6D6300786468 /* slot2_rumblepak.cpp */,
+			);
+			name = addons;
+			path = "nds4droid-code/jni/desmume/src/addons";
+			sourceTree = "<group>";
+		};
+		CE2EE628173F6D9300786468 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE65F173F6E3000786468 /* ConvertUTF.c */,
+				CE2EE660173F6E3000786468 /* ConvertUTF.h */,
+				CE2EE661173F6E3000786468 /* datetime.cpp */,
+				CE2EE662173F6E3000786468 /* datetime.h */,
+				CE2EE663173F6E3000786468 /* dlditool.cpp */,
+				CE2EE664173F6E3000786468 /* emufat.cpp */,
+				CE2EE665173F6E3000786468 /* emufat.h */,
+				CE2EE666173F6E3000786468 /* FileMap.cpp */,
+				CE2EE667173F6E3000786468 /* FileMap.h */,
+				CE2EE668173F6E3000786468 /* guid.cpp */,
+				CE2EE669173F6E3000786468 /* guid.h */,
+				CE2EE66A173F6E3000786468 /* md5.cpp */,
+				CE2EE66B173F6E3000786468 /* md5.h */,
+				CE2EE66C173F6E3000786468 /* MemBuffer.cpp */,
+				CE2EE66D173F6E3000786468 /* MemBuffer.h */,
+				CE2EE66E173F6E3000786468 /* task.cpp */,
+				CE2EE66F173F6E3000786468 /* task.h */,
+				CE2EE670173F6E3000786468 /* vfat.cpp */,
+				CE2EE671173F6E3000786468 /* vfat.h */,
+				CE2EE672173F6E3000786468 /* xstring.cpp */,
+				CE2EE673173F6E3000786468 /* xstring.h */,
+				CE2EE654173F6DFE00786468 /* tinyxml */,
+				CE2EE633173F6DF000786468 /* libfat */,
+				CE2EE629173F6DB600786468 /* decrypt */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
+		CE2EE629173F6DB600786468 /* decrypt */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE62A173F6DB600786468 /* crc.cpp */,
+				CE2EE62B173F6DB600786468 /* crc.h */,
+				CE2EE62C173F6DB600786468 /* decrypt.cpp */,
+				CE2EE62D173F6DB600786468 /* decrypt.h */,
+				CE2EE62E173F6DB600786468 /* header.cpp */,
+				CE2EE62F173F6DB600786468 /* header.h */,
+			);
+			name = decrypt;
+			path = "nds4droid-code/jni/desmume/src/utils/decrypt";
+			sourceTree = "<group>";
+		};
+		CE2EE633173F6DF000786468 /* libfat */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE634173F6DF900786468 /* cache.cpp */,
+				CE2EE635173F6DF900786468 /* cache.h */,
+				CE2EE636173F6DF900786468 /* directory.cpp */,
+				CE2EE637173F6DF900786468 /* directory.h */,
+				CE2EE638173F6DF900786468 /* disc.cpp */,
+				CE2EE639173F6DF900786468 /* disc.h */,
+				CE2EE63A173F6DF900786468 /* fatdir.cpp */,
+				CE2EE63B173F6DF900786468 /* fatdir.h */,
+				CE2EE63C173F6DF900786468 /* fatfile.cpp */,
+				CE2EE63D173F6DF900786468 /* fatfile.h */,
+				CE2EE63E173F6DF900786468 /* file_allocation_table.cpp */,
+				CE2EE63F173F6DF900786468 /* file_allocation_table.h */,
+				CE2EE640173F6DF900786468 /* filetime.cpp */,
+				CE2EE641173F6DF900786468 /* filetime.h */,
+				CE2EE642173F6DF900786468 /* libfat_public_api.cpp */,
+				CE2EE643173F6DF900786468 /* libfat_public_api.h */,
+				CE2EE644173F6DF900786468 /* libfat.cpp */,
+				CE2EE645173F6DF900786468 /* lock.cpp */,
+				CE2EE646173F6DF900786468 /* lock.h */,
+				CE2EE647173F6DF900786468 /* partition.cpp */,
+				CE2EE648173F6DF900786468 /* partition.h */,
+			);
+			name = libfat;
+			sourceTree = "<group>";
+		};
+		CE2EE654173F6DFE00786468 /* tinyxml */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE655173F6E0900786468 /* tinystr.cpp */,
+				CE2EE656173F6E0900786468 /* tinystr.h */,
+				CE2EE657173F6E0900786468 /* tinyxml.cpp */,
+				CE2EE658173F6E0900786468 /* tinyxml.h */,
+				CE2EE659173F6E0900786468 /* tinyxmlerror.cpp */,
+				CE2EE65A173F6E0900786468 /* tinyxmlparser.cpp */,
+			);
+			name = tinyxml;
+			sourceTree = "<group>";
+		};
+		CE2EE67F173F6FD400786468 /* metaspu */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE697173F706C00786468 /* metaspu.cpp */,
+				CE2EE698173F706C00786468 /* metaspu.h */,
+			);
+			name = metaspu;
+			sourceTree = "<group>";
+		};
+		CE2EE683173F6FF100786468 /* filter */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE69A173F70A800786468 /* 2xsai.cpp */,
+				CE2EE69B173F70A800786468 /* bilinear.cpp */,
+				CE2EE69C173F70A800786468 /* epx.cpp */,
+				CE2EE69D173F70A800786468 /* filter.h */,
+				CE2EE69E173F70A800786468 /* hq2x.cpp */,
+				CE2EE69F173F70A800786468 /* hq2x.h */,
+				CE2EE6A0173F70A800786468 /* hq4x.cpp */,
+				CE2EE6A1173F70A800786468 /* hq4x.h */,
+				CE2EE6A2173F70A800786468 /* interp.h */,
+				CE2EE6A3173F70A800786468 /* lq2x.cpp */,
+				CE2EE6A4173F70A800786468 /* lq2x.h */,
+				CE2EE6A5173F70A800786468 /* scanline.cpp */,
+			);
+			name = filter;
 			sourceTree = "<group>";
 		};
 		CEC742EE16776248006D193E = {
 			isa = PBXGroup;
 			children = (
-				CEB89453168214C100F8A7DB /* gles */,
-				CED023741680AC0300061AA8 /* ds4droid */,
-				CED023871680B07500061AA8 /* OpenArchive.cpp */,
-				CED023861680AEF400061AA8 /* 7zip.cpp */,
-				CEC745D2167776A6006D193E /* video.h */,
-				CEC745C21677706A006D193E /* mic.cpp */,
-				CEC745C01677705F006D193E /* sndopensl.cpp */,
-				CEC745C11677705F006D193E /* throttle.cpp */,
-				CEC745BF16776FB1006D193E /* main.cpp */,
-				CEEBA1F11684BD0600613311 /* agg_neon.mk */,
-				CEC7432116776330006D193E /* desmume_v7.mk */,
-				CE3FA49316834FC4007CD53C /* desmume_neon.mk */,
-				CE3FA4E41683534F007CD53C /* math */,
-				CEC74322167763C7006D193E /* aggcompat */,
-				CEC743201677631D006D193E /* Desmume */,
-				CEC7430316776248006D193E /* nds4ios */,
-				CEC742FC16776248006D193E /* Frameworks */,
+				CE2EE60C173F6C1E00786468 /* nds4droid-code */,
+				CE2EE5F4173F66D100786468 /* Classes */,
+				CEC7430416776248006D193E /* Supporting Files */,
+				CE2EE60B173F6C0D00786468 /* Framework */,
 				CEC742FA16776248006D193E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -449,320 +602,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CEC742FC16776248006D193E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				CEB894511682097D00F8A7DB /* QuartzCore.framework */,
-				CEC745C716777162006D193E /* libz.dylib */,
-				CEC745BB16776EE5006D193E /* GLKit.framework */,
-				CEC745BC16776EE5006D193E /* OpenGLES.framework */,
-				CEC742FD16776248006D193E /* UIKit.framework */,
-				CEC742FF16776248006D193E /* Foundation.framework */,
-				CEC7430116776248006D193E /* CoreGraphics.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		CEC7430316776248006D193E /* nds4ios */ = {
-			isa = PBXGroup;
-			children = (
-				CECEB5511683438A0093204D /* RomsViewController.m */,
-				CECEB5501683438A0093204D /* RomsViewController.h */,
-				CECEB5521683438A0093204D /* RomsViewController.xib */,
-				CEC7431616776248006D193E /* EmuViewController.mm */,
-				CEC7431516776248006D193E /* EmuViewController.h */,
-				CEC7431816776248006D193E /* EmuViewController.xib */,
-				CED023831680AD2800061AA8 /* emu.cpp */,
-				CED023841680AD2800061AA8 /* emu.h */,
-				CEC745CF16777364006D193E /* throttle.cpp */,
-				CEC745D016777364006D193E /* throttle.h */,
-				CEC7430D16776248006D193E /* AppDelegate.m */,
-				CEC7430C16776248006D193E /* AppDelegate.h */,
-				CEC7430416776248006D193E /* Supporting Files */,
-			);
-			path = nds4ios;
-			sourceTree = "<group>";
-		};
 		CEC7430416776248006D193E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				CEC7430516776248006D193E /* nds4ios-Info.plist */,
-				CEC7430616776248006D193E /* InfoPlist.strings */,
-				CEC7430916776248006D193E /* main.m */,
-				CEC7430B16776248006D193E /* nds4ios-Prefix.pch */,
-				CEC7430F16776248006D193E /* Default.png */,
-				CEC7431116776248006D193E /* Default@2x.png */,
-				CEC7431316776248006D193E /* Default-568h@2x.png */,
+				CE2EE5EC173F663B00786468 /* main.m */,
+				CE2EE5ED173F663B00786468 /* nds4ios-Prefix.pch */,
+				CE2EE5EA173F661D00786468 /* nds4ios-Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		CEC743201677631D006D193E /* Desmume */ = {
-			isa = PBXGroup;
-			children = (
-				CEC745C316777114006D193E /* metaspu */,
-				CEC7455F16776BFF006D193E /* utils */,
-				CEC7454616776BEB006D193E /* addons */,
-				CEC744DB16776BE0006D193E /* addons.cpp */,
-				CEC744DC16776BE0006D193E /* addons.h */,
-				CEC744DD16776BE0006D193E /* aggdraw.cpp */,
-				CEC744DE16776BE0006D193E /* aggdraw.h */,
-				CEC744DF16776BE0006D193E /* arm_instructions.cpp */,
-				CEC744E016776BE0006D193E /* arm_instructions.h */,
-				CEC744E116776BE0006D193E /* armcpu.cpp */,
-				CEC744E216776BE0006D193E /* armcpu.h */,
-				CEC744E316776BE0006D193E /* bios.cpp */,
-				CEC744E416776BE0006D193E /* bios.h */,
-				CEC744E516776BE0006D193E /* cheatSystem.cpp */,
-				CEC744E616776BE0006D193E /* cheatSystem.h */,
-				CEC744E716776BE0006D193E /* common.cpp */,
-				CEC744E816776BE0006D193E /* common.h */,
-				CEC744E916776BE0006D193E /* cp15.cpp */,
-				CEC744EA16776BE0006D193E /* cp15.h */,
-				CEC744EB16776BE0006D193E /* debug.cpp */,
-				CEC744EC16776BE0006D193E /* debug.h */,
-				CEC744ED16776BE0006D193E /* driver.cpp */,
-				CEC744EE16776BE0006D193E /* driver.h */,
-				CEC744EF16776BE0006D193E /* emufile.cpp */,
-				CEC744F016776BE0006D193E /* emufile.h */,
-				CEC744F116776BE0006D193E /* FIFO.cpp */,
-				CEC744F216776BE0006D193E /* FIFO.h */,
-				CEC744F316776BE0006D193E /* firmware.cpp */,
-				CEC744F416776BE0006D193E /* firmware.h */,
-				CEC744F516776BE0006D193E /* fs-linux.cpp */,
-				CEC744F616776BE0006D193E /* gfx3d.cpp */,
-				CEC744F716776BE0006D193E /* gfx3d.h */,
-				CEC744F816776BE0006D193E /* GPU_osd.cpp */,
-				CEC744F916776BE0006D193E /* GPU_osd.h */,
-				CEC744FA16776BE0006D193E /* GPU.cpp */,
-				CEC744FB16776BE0006D193E /* GPU.h */,
-				CEC744FC16776BE0006D193E /* matrix.cpp */,
-				CEC744FD16776BE0006D193E /* matrix.h */,
-				CEC744FE16776BE0006D193E /* mc.cpp */,
-				CEC744FF16776BE0006D193E /* mc.h */,
-				CEC7450016776BE0006D193E /* MMU.cpp */,
-				CEC7450116776BE0006D193E /* MMU.h */,
-				CEC7450216776BE0006D193E /* movie.cpp */,
-				CEC7450316776BE0006D193E /* movie.h */,
-				CEC7450416776BE0006D193E /* NDSSystem.cpp */,
-				CEC7450516776BE0006D193E /* NDSSystem.h */,
-				CEC7450616776BE0006D193E /* OGLRender.cpp */,
-				CEC7450716776BE0006D193E /* OGLRender.h */,
-				CEC7450816776BE0006D193E /* path.cpp */,
-				CEC7450916776BE0006D193E /* path.h */,
-				CEC7450A16776BE0006D193E /* rasterize.cpp */,
-				CEC7450B16776BE0006D193E /* rasterize.h */,
-				CEC7450C16776BE0006D193E /* readwrite.cpp */,
-				CEC7450D16776BE0006D193E /* readwrite.h */,
-				CEC7450E16776BE0006D193E /* render3D.cpp */,
-				CEC7450F16776BE0006D193E /* render3D.h */,
-				CEC7451016776BE0006D193E /* ROMReader.cpp */,
-				CEC7451116776BE0006D193E /* ROMReader.h */,
-				CEC7451216776BE0006D193E /* rtc.cpp */,
-				CEC7451316776BE0006D193E /* rtc.h */,
-				CEC7451416776BE0006D193E /* saves.cpp */,
-				CEC7451516776BE0006D193E /* saves.h */,
-				CEC7451616776BE0006D193E /* slot1.cpp */,
-				CEC7451716776BE0006D193E /* slot1.h */,
-				CEC7451816776BE0006D193E /* SPU.cpp */,
-				CEC7451916776BE0006D193E /* SPU.h */,
-				CEC7451A16776BE0006D193E /* texcache.cpp */,
-				CEC7451B16776BE0006D193E /* texcache.h */,
-				CEC7451C16776BE0006D193E /* thumb_instructions.cpp */,
-				CEC7451D16776BE0006D193E /* thumb_instructions.h */,
-				CEC7451E16776BE0006D193E /* version.cpp */,
-				CEC7451F16776BE0006D193E /* version.h */,
-				CEC7452016776BE0006D193E /* wifi.cpp */,
-				CEC7452116776BE0006D193E /* wifi.h */,
-			);
-			name = Desmume;
-			sourceTree = "<group>";
-		};
-		CEC74322167763C7006D193E /* aggcompat */ = {
-			isa = PBXGroup;
-			children = (
-				CEC744C416776A00006D193E /* ctrl */,
-				CEC744D916776AC3006D193E /* agg_arc.cpp */,
-				CEC74494167769EB006D193E /* agg_arrowhead.cpp */,
-				CEC74495167769EB006D193E /* agg_bezier_arc.cpp */,
-				CEC74496167769EB006D193E /* agg_bspline.cpp */,
-				CEC74497167769EB006D193E /* agg_curves.cpp */,
-				CEC74498167769EB006D193E /* agg_embedded_raster_fonts.cpp */,
-				CEC74499167769EB006D193E /* agg_gsv_text.cpp */,
-				CEC7449A167769EB006D193E /* agg_image_filters.cpp */,
-				CEC7449B167769EB006D193E /* agg_line_aa_basics.cpp */,
-				CEC7449C167769EB006D193E /* agg_line_profile_aa.cpp */,
-				CEC7449D167769EB006D193E /* agg_rounded_rect.cpp */,
-				CEC7449E167769EB006D193E /* agg_sqrt_tables.cpp */,
-				CEC7449F167769EB006D193E /* agg_trans_affine.cpp */,
-				CEC744A0167769EB006D193E /* agg_trans_double_path.cpp */,
-				CEC744A1167769EB006D193E /* agg_trans_single_path.cpp */,
-				CEC744A2167769EB006D193E /* agg_trans_warp_magnifier.cpp */,
-				CEC744A3167769EB006D193E /* agg_vcgen_bspline.cpp */,
-				CEC744A4167769EB006D193E /* agg_vcgen_contour.cpp */,
-				CEC744A5167769EB006D193E /* agg_vcgen_dash.cpp */,
-				CEC744A6167769EB006D193E /* agg_vcgen_markers_term.cpp */,
-				CEC744A7167769EB006D193E /* agg_vcgen_smooth_poly1.cpp */,
-				CEC744A8167769EB006D193E /* agg_vcgen_stroke.cpp */,
-				CEC744A9167769EB006D193E /* agg_vpgen_clip_polygon.cpp */,
-				CEC744AA167769EB006D193E /* agg_vpgen_clip_polyline.cpp */,
-				CEC744AB167769EB006D193E /* agg_vpgen_segmentator.cpp */,
-			);
-			name = aggcompat;
-			sourceTree = "<group>";
-		};
-		CEC744C416776A00006D193E /* ctrl */ = {
-			isa = PBXGroup;
-			children = (
-				CEC744C516776A00006D193E /* agg_bezier_ctrl.cpp */,
-				CEC744C616776A00006D193E /* agg_cbox_ctrl.cpp */,
-				CEC744C716776A00006D193E /* agg_gamma_ctrl.cpp */,
-				CEC744C816776A00006D193E /* agg_gamma_spline.cpp */,
-				CEC744C916776A00006D193E /* agg_polygon_ctrl.cpp */,
-				CEC744CA16776A00006D193E /* agg_rbox_ctrl.cpp */,
-				CEC744CB16776A00006D193E /* agg_scale_ctrl.cpp */,
-				CEC744CC16776A00006D193E /* agg_slider_ctrl.cpp */,
-				CEC744CD16776A00006D193E /* agg_spline_ctrl.cpp */,
-			);
-			name = ctrl;
-			path = "nds4droid-code/jni/desmume/src/android/agg/src/ctrl";
-			sourceTree = "<group>";
-		};
-		CEC7454616776BEB006D193E /* addons */ = {
-			isa = PBXGroup;
-			children = (
-				CEC7454716776BF6006D193E /* slot1_none.cpp */,
-				CEC7454816776BF6006D193E /* slot1_r4.cpp */,
-				CEC7454916776BF6006D193E /* slot1_retail_nand.cpp */,
-				CEC7454A16776BF6006D193E /* slot1_retail.cpp */,
-				CEC7454B16776BF6006D193E /* slot2_expMemory.cpp */,
-				CEC7454C16776BF6006D193E /* slot2_gbagame.cpp */,
-				CEC7454D16776BF6006D193E /* slot2_guitarGrip.cpp */,
-				CEC7454E16776BF6006D193E /* slot2_mpcf.cpp */,
-				CEC7454F16776BF6006D193E /* slot2_none.cpp */,
-				CEC7455016776BF6006D193E /* slot2_paddle.cpp */,
-				CEC7455116776BF6006D193E /* slot2_piano.cpp */,
-				CEC7455216776BF6006D193E /* slot2_rumblepak.cpp */,
-			);
-			name = addons;
-			sourceTree = "<group>";
-		};
-		CEC7455F16776BFF006D193E /* utils */ = {
-			isa = PBXGroup;
-			children = (
-				CEC7456A16776C30006D193E /* libfat */,
-				CEC7458616776C30006D193E /* tinyxml */,
-				CEC7456016776C11006D193E /* decrypt */,
-				CEC7459C16776C86006D193E /* ConvertUTF.c */,
-				CEC7459D16776C86006D193E /* ConvertUTF.h */,
-				CEC7459E16776C86006D193E /* datetime.cpp */,
-				CEC7459F16776C86006D193E /* datetime.h */,
-				CEC745A016776C86006D193E /* dlditool.cpp */,
-				CEC745A116776C86006D193E /* emufat.cpp */,
-				CEC745A216776C86006D193E /* emufat.h */,
-				CEC745A316776C86006D193E /* guid.cpp */,
-				CEC745A416776C86006D193E /* guid.h */,
-				CEC745A516776C86006D193E /* task.cpp */,
-				CEC745A616776C86006D193E /* task.h */,
-				CEC745A716776C86006D193E /* vfat.cpp */,
-				CEC745A816776C86006D193E /* vfat.h */,
-				CEC745A916776C86006D193E /* xstring.cpp */,
-				CEC745AA16776C86006D193E /* xstring.h */,
-			);
-			name = utils;
-			sourceTree = "<group>";
-		};
-		CEC7456016776C11006D193E /* decrypt */ = {
-			isa = PBXGroup;
-			children = (
-				CEC7456116776C1C006D193E /* crc.cpp */,
-				CEC7456216776C1C006D193E /* crc.h */,
-				CEC7456316776C1C006D193E /* decrypt.cpp */,
-				CEC7456416776C1C006D193E /* decrypt.h */,
-				CEC7456516776C1C006D193E /* header.cpp */,
-				CEC7456616776C1C006D193E /* header.h */,
-			);
-			name = decrypt;
-			sourceTree = "<group>";
-		};
-		CEC7456A16776C30006D193E /* libfat */ = {
-			isa = PBXGroup;
-			children = (
-				CEC7456B16776C30006D193E /* bit_ops.h */,
-				CEC7456C16776C30006D193E /* cache.cpp */,
-				CEC7456D16776C30006D193E /* cache.h */,
-				CEC7456E16776C30006D193E /* common.h */,
-				CEC7456F16776C30006D193E /* directory.cpp */,
-				CEC7457016776C30006D193E /* directory.h */,
-				CEC7457116776C30006D193E /* disc.cpp */,
-				CEC7457216776C30006D193E /* disc.h */,
-				CEC7457316776C30006D193E /* disc_io.h */,
-				CEC7457416776C30006D193E /* fat.h */,
-				CEC7457516776C30006D193E /* fatdir.cpp */,
-				CEC7457616776C30006D193E /* fatdir.h */,
-				CEC7457716776C30006D193E /* fatfile.cpp */,
-				CEC7457816776C30006D193E /* fatfile.h */,
-				CEC7457916776C30006D193E /* file_allocation_table.cpp */,
-				CEC7457A16776C30006D193E /* file_allocation_table.h */,
-				CEC7457B16776C30006D193E /* filetime.cpp */,
-				CEC7457C16776C30006D193E /* filetime.h */,
-				CEC7457D16776C30006D193E /* libfat.cpp */,
-				CEC7457E16776C30006D193E /* libfat_pc.h */,
-				CEC7457F16776C30006D193E /* libfat_public_api.cpp */,
-				CEC7458016776C30006D193E /* libfat_public_api.h */,
-				CEC7458116776C30006D193E /* lock.cpp */,
-				CEC7458216776C30006D193E /* lock.h */,
-				CEC7458316776C30006D193E /* mem_allocate.h */,
-				CEC7458416776C30006D193E /* partition.cpp */,
-				CEC7458516776C30006D193E /* partition.h */,
-			);
-			name = libfat;
-			path = "nds4droid-code/jni/desmume/src/utils/libfat";
-			sourceTree = "<group>";
-		};
-		CEC7458616776C30006D193E /* tinyxml */ = {
-			isa = PBXGroup;
-			children = (
-				CEC7458716776C30006D193E /* tinystr.cpp */,
-				CEC7458816776C30006D193E /* tinystr.h */,
-				CEC7458916776C30006D193E /* tinyxml.cpp */,
-				CEC7458A16776C30006D193E /* tinyxml.h */,
-				CEC7458B16776C30006D193E /* tinyxmlerror.cpp */,
-				CEC7458C16776C30006D193E /* tinyxmlparser.cpp */,
-			);
-			name = tinyxml;
-			path = "nds4droid-code/jni/desmume/src/utils/tinyxml";
-			sourceTree = "<group>";
-		};
-		CEC745C316777114006D193E /* metaspu */ = {
-			isa = PBXGroup;
-			children = (
-				CEC745C41677711B006D193E /* metaspu.cpp */,
-				CEC745C51677711B006D193E /* metaspu.h */,
-			);
-			name = metaspu;
-			sourceTree = "<group>";
-		};
-		CED023741680AC0300061AA8 /* ds4droid */ = {
-			isa = PBXGroup;
-			children = (
-				CED023751680AC0300061AA8 /* Button.java */,
-				CED023761680AC0300061AA8 /* ButtonLayoutEditor.java */,
-				CED023771680AC0300061AA8 /* Cheats.java */,
-				CED023781680AC0300061AA8 /* Controls.java */,
-				CED023791680AC0300061AA8 /* DeSmuME.java */,
-				CED0237A1680AC0300061AA8 /* DrawingThread.java */,
-				CED0237B1680AC0300061AA8 /* ds4droidApplication.java */,
-				CED0237C1680AC0300061AA8 /* EmulatorThread.java */,
-				CED0237D1680AC0300061AA8 /* FileDialog.java */,
-				CED0237E1680AC0300061AA8 /* KeyMapPreference.java */,
-				CED0237F1680AC0300061AA8 /* KeyMapSettings.java */,
-				CED023801680AC0300061AA8 /* MainActivity.java */,
-				CED023811680AC0300061AA8 /* Settings.java */,
-				CED023821680AC0300061AA8 /* TransparencyPreference.java */,
-			);
-			name = ds4droid;
-			path = "nds4droid-code/src/com/opendoorstudios/ds4droid";
+			path = nds4ios;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -816,13 +664,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEC7430816776248006D193E /* InfoPlist.strings in Resources */,
-				CEC7431016776248006D193E /* Default.png in Resources */,
-				CEC7431216776248006D193E /* Default@2x.png in Resources */,
-				CEC7431416776248006D193E /* Default-568h@2x.png in Resources */,
-				CEC7431A16776248006D193E /* EmuViewController.xib in Resources */,
-				CECEB5541683438A0093204D /* RomsViewController.xib in Resources */,
-				CE3FA49416834FC4007CD53C /* desmume_neon.mk in Resources */,
+				CE2EE5EB173F661D00786468 /* nds4ios-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,145 +675,106 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEC7430A16776248006D193E /* main.m in Sources */,
-				CEC7430E16776248006D193E /* AppDelegate.m in Sources */,
-				CEC7431716776248006D193E /* EmuViewController.mm in Sources */,
-				CEC744AC167769EB006D193E /* agg_arrowhead.cpp in Sources */,
-				CEC744AD167769EB006D193E /* agg_bezier_arc.cpp in Sources */,
-				CEC744AE167769EB006D193E /* agg_bspline.cpp in Sources */,
-				CEC744AF167769EB006D193E /* agg_curves.cpp in Sources */,
-				CEC744B0167769EB006D193E /* agg_embedded_raster_fonts.cpp in Sources */,
-				CEC744B1167769EB006D193E /* agg_gsv_text.cpp in Sources */,
-				CEC744B2167769EB006D193E /* agg_image_filters.cpp in Sources */,
-				CEC744B3167769EB006D193E /* agg_line_aa_basics.cpp in Sources */,
-				CEC744B4167769EB006D193E /* agg_line_profile_aa.cpp in Sources */,
-				CEC744B5167769EB006D193E /* agg_rounded_rect.cpp in Sources */,
-				CEC744B6167769EB006D193E /* agg_sqrt_tables.cpp in Sources */,
-				CEC744B7167769EB006D193E /* agg_trans_affine.cpp in Sources */,
-				CEC744B8167769EB006D193E /* agg_trans_double_path.cpp in Sources */,
-				CEC744B9167769EB006D193E /* agg_trans_single_path.cpp in Sources */,
-				CEC744BA167769EB006D193E /* agg_trans_warp_magnifier.cpp in Sources */,
-				CEC744BB167769EB006D193E /* agg_vcgen_bspline.cpp in Sources */,
-				CEC744BC167769EB006D193E /* agg_vcgen_contour.cpp in Sources */,
-				CEC744BD167769EB006D193E /* agg_vcgen_dash.cpp in Sources */,
-				CEC744BE167769EB006D193E /* agg_vcgen_markers_term.cpp in Sources */,
-				CEC744BF167769EB006D193E /* agg_vcgen_smooth_poly1.cpp in Sources */,
-				CEC744C0167769EB006D193E /* agg_vcgen_stroke.cpp in Sources */,
-				CEC744C1167769EB006D193E /* agg_vpgen_clip_polygon.cpp in Sources */,
-				CEC744C2167769EB006D193E /* agg_vpgen_clip_polyline.cpp in Sources */,
-				CEC744C3167769EB006D193E /* agg_vpgen_segmentator.cpp in Sources */,
-				CEC744CF16776A00006D193E /* agg_bezier_ctrl.cpp in Sources */,
-				CEC744D016776A00006D193E /* agg_cbox_ctrl.cpp in Sources */,
-				CEC744D116776A00006D193E /* agg_gamma_ctrl.cpp in Sources */,
-				CEC744D216776A00006D193E /* agg_gamma_spline.cpp in Sources */,
-				CEC744D316776A00006D193E /* agg_polygon_ctrl.cpp in Sources */,
-				CEC744D416776A00006D193E /* agg_rbox_ctrl.cpp in Sources */,
-				CEC744D516776A00006D193E /* agg_scale_ctrl.cpp in Sources */,
-				CEC744D616776A00006D193E /* agg_slider_ctrl.cpp in Sources */,
-				CEC744D716776A00006D193E /* agg_spline_ctrl.cpp in Sources */,
-				CEC744DA16776AC3006D193E /* agg_arc.cpp in Sources */,
-				CEC7452216776BE0006D193E /* addons.cpp in Sources */,
-				CEC7452316776BE0006D193E /* aggdraw.cpp in Sources */,
-				CEC7452416776BE0006D193E /* arm_instructions.cpp in Sources */,
-				CEC7452516776BE0006D193E /* armcpu.cpp in Sources */,
-				CEC7452616776BE0006D193E /* bios.cpp in Sources */,
-				CEC7452716776BE0006D193E /* cheatSystem.cpp in Sources */,
-				CEC7452816776BE0006D193E /* common.cpp in Sources */,
-				CEC7452916776BE0006D193E /* cp15.cpp in Sources */,
-				CEC7452A16776BE0006D193E /* debug.cpp in Sources */,
-				CEC7452B16776BE0006D193E /* driver.cpp in Sources */,
-				CEC7452C16776BE0006D193E /* emufile.cpp in Sources */,
-				CEC7452D16776BE0006D193E /* FIFO.cpp in Sources */,
-				CEC7452E16776BE0006D193E /* firmware.cpp in Sources */,
-				CEC7452F16776BE0006D193E /* fs-linux.cpp in Sources */,
-				CEC7453016776BE0006D193E /* gfx3d.cpp in Sources */,
-				CEC7453116776BE0006D193E /* GPU_osd.cpp in Sources */,
-				CEC7453216776BE0006D193E /* GPU.cpp in Sources */,
-				CEC7453316776BE0006D193E /* matrix.cpp in Sources */,
-				CEC7453416776BE0006D193E /* mc.cpp in Sources */,
-				CEC7453516776BE0006D193E /* MMU.cpp in Sources */,
-				CEC7453616776BE0006D193E /* movie.cpp in Sources */,
-				CEC7453716776BE0006D193E /* NDSSystem.cpp in Sources */,
-				CEC7453816776BE0006D193E /* OGLRender.cpp in Sources */,
-				CEC7453916776BE0006D193E /* path.cpp in Sources */,
-				CEC7453A16776BE0006D193E /* rasterize.cpp in Sources */,
-				CEC7453B16776BE0006D193E /* readwrite.cpp in Sources */,
-				CEC7453C16776BE0006D193E /* render3D.cpp in Sources */,
-				CEC7453D16776BE0006D193E /* ROMReader.cpp in Sources */,
-				CEC7453E16776BE0006D193E /* rtc.cpp in Sources */,
-				CEC7453F16776BE0006D193E /* saves.cpp in Sources */,
-				CEC7454016776BE0006D193E /* slot1.cpp in Sources */,
-				CEC7454116776BE0006D193E /* SPU.cpp in Sources */,
-				CEC7454216776BE0006D193E /* texcache.cpp in Sources */,
-				CEC7454316776BE0006D193E /* thumb_instructions.cpp in Sources */,
-				CEC7454416776BE0006D193E /* version.cpp in Sources */,
-				CEC7454516776BE0006D193E /* wifi.cpp in Sources */,
-				CEC7455316776BF6006D193E /* slot1_none.cpp in Sources */,
-				CEC7455416776BF6006D193E /* slot1_r4.cpp in Sources */,
-				CEC7455516776BF6006D193E /* slot1_retail_nand.cpp in Sources */,
-				CEC7455616776BF6006D193E /* slot1_retail.cpp in Sources */,
-				CEC7455716776BF6006D193E /* slot2_expMemory.cpp in Sources */,
-				CEC7455816776BF6006D193E /* slot2_gbagame.cpp in Sources */,
-				CEC7455916776BF6006D193E /* slot2_guitarGrip.cpp in Sources */,
-				CEC7455A16776BF6006D193E /* slot2_mpcf.cpp in Sources */,
-				CEC7455B16776BF6006D193E /* slot2_none.cpp in Sources */,
-				CEC7455C16776BF6006D193E /* slot2_paddle.cpp in Sources */,
-				CEC7455D16776BF6006D193E /* slot2_piano.cpp in Sources */,
-				CEC7455E16776BF6006D193E /* slot2_rumblepak.cpp in Sources */,
-				CEC7456716776C1C006D193E /* crc.cpp in Sources */,
-				CEC7456816776C1C006D193E /* decrypt.cpp in Sources */,
-				CEC7456916776C1C006D193E /* header.cpp in Sources */,
-				CEC7458D16776C30006D193E /* cache.cpp in Sources */,
-				CEC7458E16776C30006D193E /* directory.cpp in Sources */,
-				CEC7458F16776C30006D193E /* disc.cpp in Sources */,
-				CEC7459016776C30006D193E /* fatdir.cpp in Sources */,
-				CEC7459116776C30006D193E /* fatfile.cpp in Sources */,
-				CEC7459216776C30006D193E /* file_allocation_table.cpp in Sources */,
-				CEC7459316776C30006D193E /* filetime.cpp in Sources */,
-				CEC7459416776C30006D193E /* libfat.cpp in Sources */,
-				CEC7459516776C30006D193E /* libfat_public_api.cpp in Sources */,
-				CEC7459616776C30006D193E /* lock.cpp in Sources */,
-				CEC7459716776C30006D193E /* partition.cpp in Sources */,
-				CEC7459816776C30006D193E /* tinystr.cpp in Sources */,
-				CEC7459916776C30006D193E /* tinyxml.cpp in Sources */,
-				CEC7459A16776C30006D193E /* tinyxmlerror.cpp in Sources */,
-				CEC7459B16776C30006D193E /* tinyxmlparser.cpp in Sources */,
-				CEC745AB16776C86006D193E /* ConvertUTF.c in Sources */,
-				CEC745AC16776C86006D193E /* datetime.cpp in Sources */,
-				CEC745AD16776C86006D193E /* dlditool.cpp in Sources */,
-				CEC745AE16776C86006D193E /* emufat.cpp in Sources */,
-				CEC745AF16776C86006D193E /* guid.cpp in Sources */,
-				CEC745B016776C86006D193E /* task.cpp in Sources */,
-				CEC745B116776C86006D193E /* vfat.cpp in Sources */,
-				CEC745B216776C86006D193E /* xstring.cpp in Sources */,
-				CEC745C61677711B006D193E /* metaspu.cpp in Sources */,
-				CEC745D116777364006D193E /* throttle.cpp in Sources */,
-				CED023851680AD2800061AA8 /* emu.cpp in Sources */,
-				CECEB5531683438A0093204D /* RomsViewController.m in Sources */,
-				CE3FA4E316835348007CD53C /* matrix_impl.cpp in Sources */,
+				CE2EE5EE173F663B00786468 /* main.m in Sources */,
+				CE2EE5FD173F66E300786468 /* AppDelegate.m in Sources */,
+				CE2EE5FE173F66E300786468 /* emu.cpp in Sources */,
+				CE2EE5FF173F66E300786468 /* EmuViewController.mm in Sources */,
+				CE2EE600173F66E300786468 /* RomsViewController.m in Sources */,
+				CE2EE61C173F6D6300786468 /* slot1_none.cpp in Sources */,
+				CE2EE61D173F6D6300786468 /* slot1_r4.cpp in Sources */,
+				CE2EE61E173F6D6300786468 /* slot1_retail.cpp in Sources */,
+				CE2EE61F173F6D6300786468 /* slot1_retail_nand.cpp in Sources */,
+				CE2EE620173F6D6300786468 /* slot2_expMemory.cpp in Sources */,
+				CE2EE621173F6D6300786468 /* slot2_gbagame.cpp in Sources */,
+				CE2EE622173F6D6300786468 /* slot2_guitarGrip.cpp in Sources */,
+				CE2EE623173F6D6300786468 /* slot2_mpcf.cpp in Sources */,
+				CE2EE624173F6D6300786468 /* slot2_none.cpp in Sources */,
+				CE2EE625173F6D6300786468 /* slot2_paddle.cpp in Sources */,
+				CE2EE626173F6D6300786468 /* slot2_piano.cpp in Sources */,
+				CE2EE627173F6D6300786468 /* slot2_rumblepak.cpp in Sources */,
+				CE2EE630173F6DB600786468 /* crc.cpp in Sources */,
+				CE2EE631173F6DB600786468 /* decrypt.cpp in Sources */,
+				CE2EE632173F6DB600786468 /* header.cpp in Sources */,
+				CE2EE649173F6DF900786468 /* cache.cpp in Sources */,
+				CE2EE64A173F6DF900786468 /* directory.cpp in Sources */,
+				CE2EE64B173F6DF900786468 /* disc.cpp in Sources */,
+				CE2EE64C173F6DF900786468 /* fatdir.cpp in Sources */,
+				CE2EE64D173F6DF900786468 /* fatfile.cpp in Sources */,
+				CE2EE64E173F6DF900786468 /* file_allocation_table.cpp in Sources */,
+				CE2EE64F173F6DF900786468 /* filetime.cpp in Sources */,
+				CE2EE650173F6DF900786468 /* libfat_public_api.cpp in Sources */,
+				CE2EE651173F6DF900786468 /* libfat.cpp in Sources */,
+				CE2EE652173F6DF900786468 /* lock.cpp in Sources */,
+				CE2EE653173F6DF900786468 /* partition.cpp in Sources */,
+				CE2EE65B173F6E0900786468 /* tinystr.cpp in Sources */,
+				CE2EE65C173F6E0900786468 /* tinyxml.cpp in Sources */,
+				CE2EE65D173F6E0900786468 /* tinyxmlerror.cpp in Sources */,
+				CE2EE65E173F6E0900786468 /* tinyxmlparser.cpp in Sources */,
+				CE2EE674173F6E3000786468 /* ConvertUTF.c in Sources */,
+				CE2EE675173F6E3000786468 /* datetime.cpp in Sources */,
+				CE2EE676173F6E3000786468 /* dlditool.cpp in Sources */,
+				CE2EE677173F6E3000786468 /* emufat.cpp in Sources */,
+				CE2EE678173F6E3000786468 /* FileMap.cpp in Sources */,
+				CE2EE679173F6E3000786468 /* guid.cpp in Sources */,
+				CE2EE67A173F6E3000786468 /* md5.cpp in Sources */,
+				CE2EE67B173F6E3000786468 /* MemBuffer.cpp in Sources */,
+				CE2EE67C173F6E3000786468 /* task.cpp in Sources */,
+				CE2EE67D173F6E3000786468 /* vfat.cpp in Sources */,
+				CE2EE67E173F6E3000786468 /* xstring.cpp in Sources */,
+				CE2EE699173F706C00786468 /* metaspu.cpp in Sources */,
+				CE2EE6A6173F70A800786468 /* 2xsai.cpp in Sources */,
+				CE2EE6A7173F70A800786468 /* bilinear.cpp in Sources */,
+				CE2EE6A8173F70A800786468 /* epx.cpp in Sources */,
+				CE2EE6A9173F70A800786468 /* hq2x.cpp in Sources */,
+				CE2EE6AA173F70A800786468 /* hq4x.cpp in Sources */,
+				CE2EE6AB173F70A800786468 /* lq2x.cpp in Sources */,
+				CE2EE6AC173F70A800786468 /* scanline.cpp in Sources */,
+				CE34A0FC173F722C00C51EA1 /* addons.cpp in Sources */,
+				CE34A0FD173F722C00C51EA1 /* arm_instructions.cpp in Sources */,
+				CE34A100173F722C00C51EA1 /* armcpu.cpp in Sources */,
+				CE34A101173F722C00C51EA1 /* ArmThreadedInterpreter.cpp in Sources */,
+				CE34A102173F722C00C51EA1 /* bios.cpp in Sources */,
+				CE34A103173F722C00C51EA1 /* cheatSystem.cpp in Sources */,
+				CE34A104173F722C00C51EA1 /* common.cpp in Sources */,
+				CE34A105173F722C00C51EA1 /* cp15.cpp in Sources */,
+				CE34A106173F722C00C51EA1 /* CpuBase.cpp in Sources */,
+				CE34A107173F722C00C51EA1 /* debug.cpp in Sources */,
+				CE34A108173F722C00C51EA1 /* Disassembler.cpp in Sources */,
+				CE34A109173F722C00C51EA1 /* driver.cpp in Sources */,
+				CE34A10A173F722C00C51EA1 /* emufile.cpp in Sources */,
+				CE34A10B173F722C00C51EA1 /* FIFO.cpp in Sources */,
+				CE34A10C173F722C00C51EA1 /* firmware.cpp in Sources */,
+				CE34A10D173F722C00C51EA1 /* fs-linux.cpp in Sources */,
+				CE34A10E173F722C00C51EA1 /* gfx3d.cpp in Sources */,
+				CE34A10F173F722C00C51EA1 /* GPU_osd_stub.cpp in Sources */,
+				CE34A110173F722C00C51EA1 /* GPU.cpp in Sources */,
+				CE34A111173F722C00C51EA1 /* JitCommon.cpp in Sources */,
+				CE34A112173F722C00C51EA1 /* mc.cpp in Sources */,
+				CE34A113173F722C00C51EA1 /* MMU.cpp in Sources */,
+				CE34A114173F722C00C51EA1 /* movie.cpp in Sources */,
+				CE34A115173F722C00C51EA1 /* NDSSystem.cpp in Sources */,
+				CE34A116173F722C00C51EA1 /* path.cpp in Sources */,
+				CE34A117173F722C00C51EA1 /* rasterize.cpp in Sources */,
+				CE34A118173F722C00C51EA1 /* readwrite.cpp in Sources */,
+				CE34A119173F722C00C51EA1 /* render3D.cpp in Sources */,
+				CE34A11A173F722C00C51EA1 /* ROMReader.cpp in Sources */,
+				CE34A11B173F722C00C51EA1 /* rtc.cpp in Sources */,
+				CE34A11C173F722C00C51EA1 /* saves.cpp in Sources */,
+				CE34A11D173F722C00C51EA1 /* slot1.cpp in Sources */,
+				CE34A11E173F722C00C51EA1 /* SPU.cpp in Sources */,
+				CE34A11F173F722C00C51EA1 /* texcache.cpp in Sources */,
+				CE34A120173F722C00C51EA1 /* thumb_instructions.cpp in Sources */,
+				CE34A121173F722C00C51EA1 /* version.cpp in Sources */,
+				CE34A122173F722C00C51EA1 /* wifi.cpp in Sources */,
+				CE34A127173F758300C51EA1 /* matrix.cpp in Sources */,
+				CE34A131173F798200C51EA1 /* matrix_impl.c in Sources */,
+				CE34A134173F79F200C51EA1 /* throttle.cpp in Sources */,
+				CE34A137173F86E800C51EA1 /* UIButton+CTM.mm in Sources */,
+				CEB43C42173FCA3F00055F91 /* GLProgram.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		CEC7430616776248006D193E /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CEC7430716776248006D193E /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		CEC7431816776248006D193E /* EmuViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CEC7431916776248006D193E /* en */,
-			);
-			name = EmuViewController.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		CEC7431B16776248006D193E /* Debug */ = {
@@ -1027,23 +830,25 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "nds4ios/nds4ios-Prefix.pch";
+				GCC_PREFIX_HEADER = "Classes/nds4ios-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 					IOS,
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/nds4droid-code/jni/desmume/src/android/agg/include/**",
+					"$(SRCROOT)/Classes",
+					"$(SRCROOT)/nds4droid-code/jni/desmume/src",
+					"$(SRCROOT)/",
 					"$(SRCROOT)/nds4droid-code/jni/desmume/src/android",
 				);
-				INFOPLIST_FILE = "nds4ios/nds4ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				INFOPLIST_FILE = "nds4ios-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = (
 					"-DANDROID",
-					"-DHAVE_LIBAGG",
 					"-fexceptions",
 					"-ftree-vectorize",
 					"-fsingle-precision-constant",
@@ -1053,6 +858,7 @@
 					"-DIOS",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1062,18 +868,20 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "nds4ios/nds4ios-Prefix.pch";
+				GCC_PREFIX_HEADER = "Classes/nds4ios-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/nds4droid-code/jni/desmume/src/android/agg/include/**",
+					"$(SRCROOT)/Classes",
+					"$(SRCROOT)/nds4droid-code/jni/desmume/src",
+					"$(SRCROOT)/",
 					"$(SRCROOT)/nds4droid-code/jni/desmume/src/android",
 				);
-				INFOPLIST_FILE = "nds4ios/nds4ios-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				INFOPLIST_FILE = "nds4ios-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = (
 					"-DNS_BLOCK_ASSERTIONS=1",
 					"-DANDROID",
-					"-DHAVE_LIBAGG",
 					"-fexceptions",
 					"-ftree-vectorize",
 					"-fsingle-precision-constant",
@@ -1082,8 +890,10 @@
 					"-DCOMPRESS_MT",
 					"-DIOS",
 					"-DHAVE_NEON=1",
+					"-DHAVE_LIBZ",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

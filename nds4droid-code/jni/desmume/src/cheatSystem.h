@@ -73,8 +73,8 @@ public:
 	BOOL	add_AR(const char *code, const char *description, BOOL enabled);
 	BOOL	update_AR(const char *code, const char *description, BOOL enabled, u32 pos);
 	BOOL	add_AR_Direct(CHEATS_LIST cheat);
-	BOOL	add_CB(char *code, char *description, BOOL enabled);
-	BOOL	update_CB(char *code, char *description, BOOL enabled, u32 pos);
+	BOOL	add_CB(const char *code, const char *description, BOOL enabled);
+	BOOL	update_CB(const char *code, const char *description, BOOL enabled, u32 pos);
 	BOOL	remove(u32 pos);
 	void	getListReset();
 	BOOL	getList(CHEATS_LIST *cheat);

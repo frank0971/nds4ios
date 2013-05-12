@@ -1,6 +1,6 @@
 /*
 	Copyright (C) 2005 Guillaume Duhamel
-	Copyright (C) 2008-2011 DeSmuME team
+	Copyright (C) 2008-2012 DeSmuME team
 
 	This file is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@
 	#ifdef DEVELOPER
 		#define HAVE_LUA
 	#endif
+	#define HAVE_JIT
 #endif
 
 #ifdef __GNUC__
@@ -99,24 +100,18 @@
 //use this for example when you want a byte value to be better-aligned
 #define FAST_ALIGN DS_ALIGN(4)
 
-#ifndef FASTCALL
-#ifdef __MINGW32__
+#ifdef __MINGW32__ 
 #define FASTCALL __attribute__((fastcall))
+#define ASMJIT_CALL_CONV kX86FuncConvGccFastCall
 #elif defined (__i386__) && !defined(__clang__)
 #define FASTCALL __attribute__((regparm(3)))
+#define ASMJIT_CALL_CONV kX86FuncConvGccRegParm3
 #elif defined(_MSC_VER) || defined(__INTEL_COMPILER)
-#define FASTCALL
-#elif defined(ANDROID) 
-#define FASTCALL
+#define FASTCALL __fastcall
+#define ASMJIT_CALL_CONV kX86FuncConvMsFastCall
 #else
 #define FASTCALL
-#endif
-#endif
-
-#ifdef ANDROID
-#define HOT  __attribute__((hot))
-#else
-#define HOT
+#define ASMJIT_CALL_CONV kX86FuncConvDefault
 #endif
 
 #ifdef _MSC_VER
@@ -140,6 +135,14 @@
 #else
 #define FORCEINLINE inline __attribute__((always_inline)) 
 #define MSC_FORCEINLINE
+#endif
+#endif
+
+#ifndef NOINLINE
+#ifdef __GNUC__
+#define NOINLINE __attribute__((noinline))
+#else
+#define NOINLINE __declspec(noinline)
 #endif
 #endif
 
@@ -213,7 +216,7 @@ typedef s16 v10;
 
 /*----------------------*/
 
-#ifndef __OBJC__
+#ifndef OBJ_C
 typedef int BOOL;
 #else
 //apple also defines BOOL

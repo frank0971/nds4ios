@@ -69,13 +69,13 @@ void bqRecorderCallback(SLAndroidSimpleBufferQueueItf bq, void *context)
 	{
 		fullBufferPos = 0;
 		fullBuffer = recordingBuffer;
-		float bufferTime = GetTickCount() - lastBufferTime;
+		/*float bufferTime = GetTickCount() - lastBufferTime;
 		bufferTime = 1000.0 / bufferTime;
-		bufferTime *= MIC_BUFSIZE;
+		bufferTime *= MIC_BUFSIZE;*/
 		//LOGI("Approx mic sample rate is %d", (int)bufferTime);
 	}
 	recordingBuffer = nextBuffer;
-	lastBufferTime = GetTickCount();
+	//lastBufferTime = GetTickCount();
 }
 
 extern "C"
@@ -206,24 +206,21 @@ void Mic_Reset()
 u8 Mic_ReadSample()
 {
 	u8 ret = 0;
+	//static u8 print = 0;
 	if(Mic_Inited == TRUE && fullBuffer != -1)
 	{
-		const s16 original = Mic_Buffer[fullBuffer][fullBufferPos >> 1];
+		const s16 original = Mic_Buffer[fullBuffer][fullBufferPos];
 		s16 sixteen = original;
-		sixteen /= 256;//16 bit -> 8 bit
-		u8 tmp = sixteen; 
-		tmp += 128; //pcm 8 bit encoding midpoint is 127, while it's signed 0 for 16-bit
-		if(fullBufferPos & 0x1)
-		{
-			ret = ((tmp & 0x1) << 7);
-		}
-		else
-		{
-			ret = ((tmp & 0xFE) >> 1);
-		}
+		sixteen /= 256; //16 bit -> 8 bit
+		sixteen += 128; //pcm 8 bit encoding midpoint is 127, while it's signed 0 for 16-bit
+		ret = (u8)sixteen;
 		if(fullBufferPos != (MIC_BUFSIZE-1))
 			++fullBufferPos;
-		//LOGI("Sound: original = %d, tmp = %x, ret = %x", (int)original, (int)tmp, (int)ret);
+		/*if(++print == 10)
+		{
+			LOGI("Sound: original = %i, sixteen = %i, ret = %x", (int)original, (int)sixteen, (int)ret);
+			print = 0;
+		}*/
 		
 	}
 	return ret;

@@ -27,7 +27,7 @@
 
 
 #include "main.h"
-#include "../OGLRender.h"
+#include "../OGLES2Render.h"
 #include "../rasterize.h"
 #include "../SPU.h"
 #include "../debug.h"
@@ -48,12 +48,13 @@
 
 #define JNI(X,...) Java_com_opendoorstudios_ds4droid_DeSmuME_##X(JNIEnv* env, jclass* clazz, __VA_ARGS__)
 #define JNI_NOARGS(X) Java_com_opendoorstudios_ds4droid_DeSmuME_##X(JNIEnv* env, jclass* clazz)
+int scanline_filter_a = 0, scanline_filter_b = 2, scanline_filter_c = 2, scanline_filter_d = 4;
 
 unsigned int frameCount = 0;
 
 GPU3DInterface *core3DList[] = {
 	&gpu3DNull,
-	&gpu3Dgl,
+	&gpu3Dgles2,
 	&gpu3DRasterize,
 	NULL
 };
@@ -64,7 +65,6 @@ SoundInterface_struct *SNDCoreList[] = {
 	NULL
 };
 
-int scanline_filter_a = 2, scanline_filter_b = 4;
 volatile bool execute = false;
 volatile bool paused = true;
 volatile BOOL pausedByMinimize = FALSE;
@@ -78,6 +78,8 @@ bool staterewindingenabled = false;
 struct NDS_fw_config_data fw_config;
 bool FrameLimit = true;
 int sndcoretype, sndbuffersize;
+static int snd_synchmode=0;
+static int snd_synchmethod=0;
 AndroidBitmapInfo bitmapInfo;
 EGLSurface surface;
 EGLContext context;
@@ -86,13 +88,49 @@ char androidTempPath[1024];
 bool useMmapForRomLoading;
 extern bool enableMicrophone;
 
-extern "C" {
+#ifdef USE_PROFILER
+bool profiler_start = false;
+bool profiler_end = false;
+#include "android-ndk-profiler/prof.h"
+#endif
 
-void logCallback(const Logger& logger, const char* message)
+#ifdef MEASURE_FIRST_FRAMES
+int mff_totalFrames = 0;
+unsigned int mff_totalTime = 0;
+bool mff_do = false;
+const int mff_toMeasure = 600;
+#endif
+
+
+//triple buffering logic
+u16 displayBuffers[3][256*192*4];
+volatile int currDisplayBuffer=-1;
+volatile int newestDisplayBuffer=-2;
+
+struct HudStruct2
 {
-	if(message)
-		LOGI("%s", message);
-}
+public:
+	HudStruct2()
+	{
+		resetTransient();
+	}
+
+	void resetTransient()
+	{
+		fps = 0;
+		fps3d = 0;
+		cpuload[0] = cpuload[1] = 0;
+		cpuloopIterationCount = 0;
+	}
+
+	void reset()
+	{
+	}
+
+	int fps, fps3d, cpuload[2], cpuloopIterationCount;
+};
+
+HudStruct2 Hud;
 
 struct MainLoopData
 {
@@ -112,6 +150,16 @@ struct MainLoopData
 
 VideoInfo video;
 
+void doBitmapDraw(u8* pixels, u8* dest, int width, int height, int stride, int pixelFormat, int verticalOffset, bool rotate);
+
+extern "C" {
+
+void logCallback(const Logger& logger, const char* message)
+{
+	if(message)
+		LOGI("%s", message);
+}
+
 /**
  * Initialize an EGL context for the current display.
  */
@@ -124,11 +172,13 @@ static bool android_opengl_init() {
 			EGL_BLUE_SIZE, 8,
 			EGL_ALPHA_SIZE, 8,
 			EGL_DEPTH_SIZE, 16,
+			EGL_STENCIL_SIZE, 8,
 			EGL_SURFACE_TYPE, EGL_PBUFFER_BIT,
-			EGL_RENDERABLE_TYPE, 1, 
+			EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
 			EGL_NONE 
     };
-    EGLint w, h, dummy, format;
+	EGLint major, minor;
+    EGLint w, h, format;
     EGLint numConfigs;
     EGLConfig config;
     EGLSurface surface;
@@ -136,7 +186,7 @@ static bool android_opengl_init() {
 
     EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
-    eglInitialize(display, 0, 0);
+    eglInitialize(display, &major, &minor);
 
     /* Here, the application chooses the configuration it desires. In this
      * sample, we have a very simplified selection process, where we pick
@@ -145,209 +195,30 @@ static bool android_opengl_init() {
 
 	const EGLint surfaceAttribs[] = {
             EGL_WIDTH, 256,
-			EGL_HEIGHT, 384,
-			EGL_LARGEST_PBUFFER, 0,
+			EGL_HEIGHT, 256,
+			EGL_LARGEST_PBUFFER, EGL_FALSE,
 			EGL_NONE
     };
 	
     surface = eglCreatePbufferSurface(display, config, surfaceAttribs);
-    context = eglCreateContext(display, config, NULL, NULL);
+
+	const EGLint contextAttribs[] = {
+			EGL_CONTEXT_CLIENT_VERSION, 2,
+			EGL_NONE
+    };
+
+    context = eglCreateContext(display, config, NULL, contextAttribs);
 
     if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-        LOGW("Unable to eglMakeCurrent");
+        LOGW("Unable to eglMakeCurrent\n");
         return false;
     }
 	
-	INFO("Created OpenGL");
+	INFO("EGL(%u.%u): Created OpenGLES\n", major ,minor);
     return true;
 }
 
 
-
-void nds4droid_displayFrame()
-{
-}
-
-static void DoDisplay_DrawHud()
-{
-	osd->update();
-	DrawHUD();
-	osd->clear();
-}
-
-void JNI_NOARGS(copyMasterBuffer)
-{
-	video.srcBuffer = (u8*)GPU_screen;
-	
-	//draw directly to the gpu screen
-	aggDraw.hud->attach((u8*)video.srcBuffer, 256, 384, 512);
-	DoDisplay_DrawHud();
-	
-	//convert pixel format to 32bpp for compositing
-	//why do we do this over and over? well, we are compositing to 
-	//filteredbuffer32bpp, and it needs to get refreshed each frame..
-	const int size = video.size();
-	u16* src = (u16*)video.srcBuffer;
-	if(bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGBA_8888)
-	{
-		u32* dest = video.buffer;
-		for(int i=0;i<size;++i)
-			*dest++ = 0xFF000000 | RGB15TO32_NOALPHA(src[i]);
-	}
-	else if(bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGB_565)
-	{
-		u16* dest = (u16*)video.buffer;
-		for(int i=0;i<size;++i)
-			*dest++ = RGB15TO16_REVERSE(src[i]);
-	}
-}
-
-void doBitmapDraw(u8* pixels, u8* dest, int width, int height, int stride, int pixelFormat, int verticalOffset, bool rotate)
-{
-	if(pixelFormat == ANDROID_BITMAP_FORMAT_RGBA_8888)
-	{
-		u32* src = (u32*)pixels;
-		src += (verticalOffset * (rotate ? height : width));
-		if(video.currentfilter == VideoInfo::NONE)
-		{
-			if(rotate)
-			{
-				for(int y = 0 ; y < height ; ++y)
-				{
-					u32* destline = (u32*)dest;
-					u32* srccol = src + (height - y - 1);
-					for(int x = 0 ; x < width ; ++x) 
-					{
-						*destline++ = *srccol;
-						srccol += height;
-					}
-					dest += stride;
-				}
-			}
-			else
-			{
-				if(stride == width * sizeof(u32)) //bitmap is the same size, we can do one massive memcpy
-					memcpy(dest, src, width * height * sizeof(u32));
-				else
-				{
-					for(int y = 0 ; y < height ; ++y)
-					{
-						memcpy(dest, &src[y * width], width * sizeof(u32));
-						dest += stride;
-					}
-				}
-			}
-		}
-		else
-		{
-			//the alpha channels are screwy because of interpolation
-			//we need to go pixel by pixel and clear them
-			if(rotate)
-			{
-				for(int y = 0 ; y < height ; ++y)
-				{
-					u32* destline = (u32*)dest;
-					u32* srccol = src + (height - y - 1);
-					for(int x = 0 ; x < width ; ++x) 
-					{
-						*destline++ = 0xFF000000 | *srccol;
-						srccol += height;
-					}
-					dest += stride;
-				}
-			}
-			else
-			{
-				for(int y = 0 ; y < height ; ++y)
-				{
-					u32* destline = (u32*)dest;
-					for(int x = 0 ; x < width ; ++x)
-						*destline++ = 0xFF000000 | *src++;
-					dest += stride;
-				}
-			}
-		}
-	}
-	else
-	{
-		u16* src = (u16*)pixels;
-		src += (verticalOffset * (rotate ? height : width));
-		if(rotate)
-		{
-			for(int y = 0 ; y < height ; ++y)
-			{
-				u16* destline = (u16*)dest;
-				u16* srccol = src + (height - y - 1);
-				for(int x = 0 ; x < width ; ++x) 
-				{
-					*destline++ = *srccol;
-					srccol += height;
-				}
-				dest += stride;
-			}
-		}
-		else
-		{
-			if(stride == width * sizeof(u16)) //bitmap is the same size, we can do one massive memcpy
-				memcpy(dest, src, width * height * sizeof(u16));
-			else
-			{
-				for(int y = 0 ; y < height ; ++y)
-				{
-					memcpy(dest, &src[y * width], width * sizeof(u16));
-					dest += stride;
-				}
-			}
-		}
-	}
-}
-
-void JNI(draw, jobject bitmapMain, jobject bitmapTouch, jboolean rotate)
-{
-	if(bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGBA_8888)
-		video.filter();
-	//here the magic happens
-	void* pixels = NULL;
-	if(AndroidBitmap_lockPixels(env,bitmapMain,&pixels) >= 0)
-	{
-		doBitmapDraw((u8*)video.finalBuffer(), (u8*)pixels, bitmapInfo.width, bitmapInfo.height, bitmapInfo.stride, bitmapInfo.format, 0, rotate == JNI_TRUE);
-		AndroidBitmap_unlockPixels(env, bitmapMain);
-	}
-	if(AndroidBitmap_lockPixels(env,bitmapTouch,&pixels) >= 0)
-	{
-		doBitmapDraw((u8*)video.finalBuffer(), (u8*)pixels, bitmapInfo.width, bitmapInfo.height, bitmapInfo.stride, bitmapInfo.format, video.height / 2, rotate == JNI_TRUE);
-		AndroidBitmap_unlockPixels(env, bitmapTouch);
-	}
-}
-
-void JNI(drawToSurface, jobject surface)
-{
-	ANativeWindow* window = ANativeWindow_fromSurface(env, surface);
-	if(!window)
-		return;
-	
-	ANativeWindow_Buffer buffer;
-    if (ANativeWindow_lock(window, &buffer, NULL) >= 0) {
-		
-		int stride, format;
-		if(buffer.format == WINDOW_FORMAT_RGB_565)
-		{
-			stride = buffer.stride * sizeof(u16);
-			format = ANDROID_BITMAP_FORMAT_RGB_565;
-		}
-		else
-		{
-			stride = buffer.stride * sizeof(u32);
-			format = ANDROID_BITMAP_FORMAT_RGBA_8888;
-		}
-		
-		doBitmapDraw((u8*)video.finalBuffer(), (u8*)buffer.bits, video.width, video.height, stride, format, 0, false);
-		
-		ANativeWindow_unlockAndPost(window);
-    }
-	
-	ANativeWindow_release(window);
-}
 
 bool NDS_Pause(bool showMsg = true)
 {
@@ -373,6 +244,16 @@ void NDS_UnPause(bool showMsg = true)
 		if (showMsg) INFO("Emulation unpaused\n");
 
 	}
+}
+
+void nds4droid_display()
+{
+
+	if(int diff = (currDisplayBuffer+1)%3 - newestDisplayBuffer)
+		newestDisplayBuffer += diff;
+	else newestDisplayBuffer = (currDisplayBuffer+2)%3;
+
+	memcpy(displayBuffers[newestDisplayBuffer],GPU_screen,256*192*4);
 }
 
 static void nds4droid_throttle(bool allowSleep = true, int forceFrameSkip = -1)
@@ -459,7 +340,7 @@ void nds4droid_user()
 	Hud.fps = mainLoopData.fps;
 	Hud.fps3d = mainLoopData.fps3d;
 
-	//nds4droid_display();
+	nds4droid_display();
 
 	gfx3d.frameCtrRaw++;
 	if(gfx3d.frameCtrRaw == 60) {
@@ -513,12 +394,26 @@ void nds4droid_user()
 
 void nds4droid_core()
 {
+#ifdef MEASURE_FIRST_FRAMES
+	unsigned int start = GetTickCount();
+#endif
 	NDS_beginProcessingInput();
 	NDS_endProcessingInput();
 	NDS_exec<false>();
+	SPU_Emulate_user();
+#ifdef MEASURE_FIRST_FRAMES
+	unsigned int end = GetTickCount();
+	if(mff_do)
+	{
+		mff_totalTime += (end - start);
+		if(++mff_totalFrames == mff_toMeasure)
+		{
+			LOGI("Total time for first %i frames: %i ms", mff_toMeasure, mff_totalTime);
+			mff_do = false;
+		}
+	}
+#endif
 }
-
-
 
 void nds4droid_unpause()
 {
@@ -529,6 +424,23 @@ void nds4droid_unpause()
 
 bool doRomLoad(const char* path, const char* logical)
 {
+#ifdef USE_PROFILER
+	if(profiler_start && !profiler_end)
+	{
+		moncleanup();
+		profiler_end = true;
+		
+		INFO("profile end\n");
+	}
+	if(!profiler_start && !profiler_end)
+	{
+		setenv("CPUPROFILE_FREQUENCY", "1000000", 1);
+		monstartup("libdesmumeneon.so");
+		profiler_start = true;
+		INFO("profile start\n");
+	}
+#endif
+	NDS_Pause(false);
 	if(NDS_LoadROM(path, logical) >= 0)
 	{
 		INFO("Loading %s was successful\n",path);
@@ -551,9 +463,69 @@ bool nds4droid_loadrom(const char* path)
 	return doRomLoad(path, PhysicalName);
 }
 
+jint JNI(draw, jobject bitmapMain, jobject bitmapTouch, jboolean rotate)
+{
+	int todo;
+	bool alreadyDisplayed;
+
+	{
+		//find a buffer to display
+		todo = newestDisplayBuffer;
+		alreadyDisplayed = (todo == currDisplayBuffer);
+
+		//something new to display:
+		if(!alreadyDisplayed) {
+			//start displaying a new buffer
+			currDisplayBuffer = todo;
+			video.srcBuffer = (u8*)displayBuffers[currDisplayBuffer];
+		}
+	}
+
+	//convert pixel format to 32bpp for compositing
+	//why do we do this over and over? well, we are compositing to
+	//filteredbuffer32bpp, and it needs to get refreshed each frame..
+	//const int size = video.size();
+	const int size = 256*384;
+	u16* src = (u16*)video.srcBuffer;
+	if(bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGBA_8888)
+	{
+		u32* dest = video.buffer;
+		for(int i=0;i<size;++i)
+			*dest++ = 0xFF000000ul | RGB15TO32_NOALPHA(*src++);
+
+		video.filter();
+	}
+	else if(bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGB_565)
+	{
+		u16* dest = (u16*)video.buffer;
+		for(int i=0;i<size;++i)
+			*dest++ = RGB15TO16_REVERSE(*src++);
+	}
+
+	//here the magic happens
+	void* pixels = NULL;
+	//LOGI("width = %i, height = %i", bitmapInfo.width, bitmapInfo.height);
+	if(AndroidBitmap_lockPixels(env,bitmapMain,&pixels) >= 0)
+	{
+		doBitmapDraw((u8*)video.finalBuffer(), (u8*)pixels, bitmapInfo.width, bitmapInfo.height, bitmapInfo.stride, bitmapInfo.format, 0, rotate == JNI_TRUE);
+		AndroidBitmap_unlockPixels(env, bitmapMain);
+	}
+	if(AndroidBitmap_lockPixels(env,bitmapTouch,&pixels) >= 0)
+	{
+		doBitmapDraw((u8*)video.finalBuffer(), (u8*)pixels, bitmapInfo.width, bitmapInfo.height, bitmapInfo.stride, bitmapInfo.format, video.height / 2, rotate == JNI_TRUE);
+		AndroidBitmap_unlockPixels(env, bitmapTouch);
+	}
+
+	return ((Hud.fps & 0xFF)<<24)|((Hud.fps3d & 0xFF)<<16)|((Hud.cpuload[0] & 0xFF)<<8)|((Hud.cpuload[1] & 0xFF));
+}
+
 void JNI(resize, jobject bitmap)
 {
 	AndroidBitmap_getInfo(env, bitmap, &bitmapInfo);
+	if(bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGBA_8888)
+		LOGI("bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGBA_8888");
+	else if(bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGB_565)
+		LOGI("bitmapInfo.format == ANDROID_BITMAP_FORMAT_RGB_565");
 }
 
 int JNI_NOARGS(getNativeWidth)
@@ -574,13 +546,9 @@ void JNI(setFilter, int index)
 
 void JNI_NOARGS(runCore)
 {
-	int frameStart = GetTickCount();
 	nds4droid_core();
-	int frameEnd = GetTickCount();
-	/*if(frameCount ++ % 5 == 0)
-	{
-		LOGI("Core frame time %d ms", frameEnd - frameStart);
-	}*/
+	nds4droid_user();
+	nds4droid_throttle();
 }
 
 void JNI(setSoundPaused, int set)
@@ -611,19 +579,26 @@ void JNI(saveState, int slot)
 void JNI(restoreState, int slot)
 {
 	loadstate_slot(slot);
+#ifdef MEASURE_FIRST_FRAMES
+	mff_do = true;
+	mff_totalFrames = 0;
+	mff_totalTime = 0;
+#endif
 }
 
 void loadSettings(JNIEnv* env)
 {
 	CommonSettings.num_cores = sysconf( _SC_NPROCESSORS_ONLN );
 	LOGI("%i cores detected", CommonSettings.num_cores); 
-	CommonSettings.advanced_timing = false;
 	CommonSettings.cheatsDisable = GetPrivateProfileBool(env,"General", "cheatsDisable", false, IniName);
 	CommonSettings.autodetectBackupMethod = GetPrivateProfileInt(env,"General", "autoDetectMethod", 0, IniName);
+	enableMicrophone = GetPrivateProfileBool(env, "General", "EnableMicrophone", true, IniName);
+
 	video.rotation =  GetPrivateProfileInt(env,"Video","WindowRotate", 0, IniName);
 	video.rotation_userset =  GetPrivateProfileInt(env,"Video","WindowRotateSet", video.rotation, IniName);
 	video.layout_old = video.layout = GetPrivateProfileInt(env,"Video", "LCDsLayout", 0, IniName);
 	video.swap = GetPrivateProfileInt(env,"Video", "LCDsSwap", 0, IniName);
+
 	CommonSettings.hud.FpsDisplay = GetPrivateProfileBool(env,"Display","DisplayFps", false, IniName);
 	CommonSettings.hud.FrameCounterDisplay = GetPrivateProfileBool(env,"Display","FrameCounter", false, IniName);
 	CommonSettings.hud.ShowInputDisplay = GetPrivateProfileBool(env,"Display","DisplayInput", false, IniName);
@@ -631,17 +606,23 @@ void loadSettings(JNIEnv* env)
 	CommonSettings.hud.ShowLagFrameCounter = GetPrivateProfileBool(env,"Display","DisplayLagCounter", false, IniName);
 	CommonSettings.hud.ShowMicrophone = GetPrivateProfileBool(env,"Display","DisplayMicrophone", false, IniName);
 	CommonSettings.hud.ShowRTC = GetPrivateProfileBool(env,"Display","DisplayRTC", false, IniName);
-	CommonSettings.micMode = (TCommonSettings::MicMode)GetPrivateProfileInt(env,"MicSettings", "MicMode", (int)TCommonSettings::InternalNoise, IniName);
 	video.screengap = GetPrivateProfileInt(env,"Display", "ScreenGap", 0, IniName);
 	CommonSettings.showGpu.main = GetPrivateProfileInt(env,"Display", "MainGpu", 1, IniName) != 0;
 	CommonSettings.showGpu.sub = GetPrivateProfileInt(env,"Display", "SubGpu", 1, IniName) != 0;
-	CommonSettings.spu_advanced = GetPrivateProfileBool(env,"Sound", "SpuAdvanced", false, IniName);
-	CommonSettings.advanced_timing = GetPrivateProfileBool(env,"Emulation", "AdvancedTiming", false, IniName);
-	CommonSettings.GFX3D_Zelda_Shadow_Depth_Hack = GetPrivateProfileInt(env,"3D", "ZeldaShadowDepthHack", 0, IniName);
-	CommonSettings.wifi.mode = GetPrivateProfileInt(env,"Wifi", "Mode", 0, IniName);
-	CommonSettings.wifi.infraBridgeAdapter = GetPrivateProfileInt(env,"Wifi", "BridgeAdapter", 0, IniName);
 	frameskiprate = GetPrivateProfileInt(env,"Display", "FrameSkip", 1, IniName);
+
+	CommonSettings.micMode = (TCommonSettings::MicMode)GetPrivateProfileInt(env,"MicSettings", "MicMode", (int)TCommonSettings::InternalNoise, IniName);
+
+	CommonSettings.spu_advanced = GetPrivateProfileBool(env,"Sound", "SpuAdvanced", false, IniName);
 	CommonSettings.spuInterpolationMode = (SPUInterpolationMode)GetPrivateProfileInt(env, "Sound","SPUInterpolation", 1, IniName);
+	snd_synchmode = GetPrivateProfileInt(env, "Sound","SynchMode",0,IniName);
+	snd_synchmethod = GetPrivateProfileInt(env, "Sound","SynchMethod",0,IniName);
+
+	CommonSettings.advanced_timing = GetPrivateProfileBool(env,"Emulation", "AdvancedTiming", false, IniName);
+	CommonSettings.CpuMode = GetPrivateProfileInt(env, "Emulation","CpuMode", 1, IniName);
+	CommonSettings.jit_max_block_size = GetPrivateProfileInt(env, "Emulation", "JitSize", 10, IniName);
+	
+	CommonSettings.GFX3D_Zelda_Shadow_Depth_Hack = GetPrivateProfileInt(env,"3D", "ZeldaShadowDepthHack", 0, IniName);
 	CommonSettings.GFX3D_HighResolutionInterpolateColor = GetPrivateProfileBool(env, "3D", "HighResolutionInterpolateColor", 0, IniName);
 	CommonSettings.GFX3D_EdgeMark = GetPrivateProfileBool(env, "3D", "EnableEdgeMark", 0, IniName);
 	CommonSettings.GFX3D_Fog = GetPrivateProfileBool(env, "3D", "EnableFog", 1, IniName);
@@ -649,7 +630,9 @@ void loadSettings(JNIEnv* env)
 	CommonSettings.GFX3D_LineHack = GetPrivateProfileBool(env, "3D", "EnableLineHack", 0, IniName);
 	useMmapForRomLoading = GetPrivateProfileBool(env, "General", "UseMmap", true, IniName);
 	fw_config.language = GetPrivateProfileInt(env, "Firmware","Language", 1, IniName);
-	enableMicrophone = GetPrivateProfileBool(env, "General", "EnableMicrophone", true, IniName);
+
+	CommonSettings.wifi.mode = GetPrivateProfileInt(env,"Wifi", "Mode", 0, IniName);
+	CommonSettings.wifi.infraBridgeAdapter = GetPrivateProfileInt(env,"Wifi", "BridgeAdapter", 0, IniName);
 }
 
 void JNI_NOARGS(reloadFirmware)
@@ -663,23 +646,6 @@ void JNI_NOARGS(loadSettings)
 }
 
 
-#ifdef HAVE_NEON
-void enable_runfast()
-{
-	static const unsigned int x = 0x04086060;
-	static const unsigned int y = 0x03000000;
-	int r;
-	asm volatile (
-		"fmrx	%0, fpscr			\n\t"	//r0 = FPSCR
-		"and	%0, %0, %1			\n\t"	//r0 = r0 & 0x04086060
-		"orr	%0, %0, %2			\n\t"	//r0 = r0 | 0x03000000
-		"fmxr	fpscr, %0			\n\t"	//FPSCR = r0
-		: "=r"(r)
-		: "r"(x), "r"(y)
-	);
-}
-#endif
-
 void JNI(init, jobject _inst)
 {
 #ifdef HAVE_NEON
@@ -687,10 +653,9 @@ void JNI(init, jobject _inst)
 	enable_runfast();
 #endif
 	INFO("");
-	for(std::vector<Logger*>::iterator it = Logger::channels.begin() ; it != Logger::channels.end() ; ++it)
-		(*it)->setCallback(logCallback);
 
-	extern bool windows_opengl_init();
+	Logger::setCallbackAll(logCallback);
+
 	oglrender_init = android_opengl_init;
 	InitDecoder();
 	
@@ -709,6 +674,7 @@ void JNI(init, jobject _inst)
 	
 	INFO("Init NDS");
 	
+	int slot1_device_type = NDS_SLOT1_RETAIL;
 	switch (slot1_device_type)
 	{
 		case NDS_SLOT1_NONE:
@@ -756,21 +722,21 @@ void JNI(init, jobject _inst)
 	
 	NDS_Init();
 	
-	osd->singleScreen = true;
-	cur3DCore = GetPrivateProfileInt(env, "3D", "Renderer", 1, IniName);
-	NDS_3D_ChangeCore(cur3DCore); //OpenGL
+	cur3DCore = GetPrivateProfileInt(env, "3D", "Renderer", 2, IniName);
+	NDS_3D_ChangeCore(cur3DCore);
 	
 	LOG("Init sound core\n");
 	sndcoretype = GetPrivateProfileInt(env, "Sound","SoundCore2", SNDCORE_OPENSL, IniName);
 	sndbuffersize = GetPrivateProfileInt(env, "Sound","SoundBufferSize2", DESMUME_SAMPLE_RATE*8/60, IniName);
 	SPU_ChangeSoundCore(sndcoretype, sndbuffersize);
+	SPU_SetSynchMode(snd_synchmode,snd_synchmethod);
 	
 	static const char* nickname = "emozilla";
 	fw_config.nickname_len = strlen(nickname);
 	for(int i = 0 ; i < fw_config.nickname_len ; ++i)
 		fw_config.nickname[i] = nickname[i];
 		
-	static const char* message = "ds4droid makes you happy!";
+	static const char* message = "desmume makes you happy!";
 	fw_config.message_len = strlen(message);
 	for(int i = 0 ; i < fw_config.message_len ; ++i)
 		fw_config.message[i] = message[i];
@@ -787,6 +753,11 @@ void JNI(init, jobject _inst)
 	mainLoopData.lastticks = GetTickCount();
 }
 
+void JNI(changeCpuMode, int type)
+{
+	armcpu_setjitmode(type);
+}
+
 void JNI(change3D, int type)
 {
 	NDS_3D_ChangeCore(cur3DCore = type);
@@ -795,6 +766,16 @@ void JNI(change3D, int type)
 void JNI(changeSound, int type)
 {
 	SPU_ChangeSoundCore(sndcoretype = type, sndbuffersize);
+}
+
+void JNI(changeSoundSynchMode, int synchmode)
+{
+	SPU_SetSynchMode(snd_synchmode = synchmode,snd_synchmethod);
+}
+
+void JNI(changeSoundSynchMethod, int synchmethod)
+{
+	SPU_SetSynchMode(snd_synchmode,snd_synchmethod = synchmethod);
 }
 
 jboolean JNI(loadRom, jstring path)
@@ -830,9 +811,9 @@ void JNI_NOARGS(touchScreenRelease)
 	NDS_releaseTouch();
 }
 
-void JNI(setButtons, int l, int r, int up, int down, int left, int right, int a, int b, int x, int y, int start, int select)
+void JNI(setButtons, int l, int r, int up, int down, int left, int right, int a, int b, int x, int y, int start, int select, int lid)
 {
-	NDS_setPad(right, left, down, up, select, start, b, a, y, x, l, r, false, false);
+	NDS_setPad(right, left, down, up, select, start, b, a, y, x, l, r, false, !lid);
 }
 
 jint JNI_NOARGS(getNumberOfCheats)
@@ -919,6 +900,11 @@ void JNI_NOARGS(closeRom)
 	execute = false;
 	Hud.resetTransient();
 	NDS_Reset();
+}
+
+void JNI_NOARGS(exit)
+{
+	exit(0);
 }
 
 } //end extern "C"

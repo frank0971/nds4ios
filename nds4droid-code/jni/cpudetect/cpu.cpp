@@ -47,4 +47,9 @@ jint JNI_NOARGS(getCPUType)
     }
 }
 
+jint JNI_NOARGS(getCPUFamily)
+{
+	return (int)android_getCpuFamily();
+}
+
 }

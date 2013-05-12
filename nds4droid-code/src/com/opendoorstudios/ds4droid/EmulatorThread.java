@@ -24,7 +24,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 class EmulatorThread extends Thread {
 	
@@ -38,13 +37,15 @@ class EmulatorThread extends Thread {
 	}
 	
 	boolean soundPaused = true;
-	
+	boolean frameFinished = false;
 	long lastDraw = 0;
 	final AtomicBoolean finished = new AtomicBoolean(false);
 	final AtomicBoolean paused = new AtomicBoolean(false);
 	String pendingRomLoad = null;
 	Integer pending3DChange = null;
 	Integer pendingSoundChange = null;
+	Integer pendingCPUChange = null;
+	Integer pendingSoundSyncModeChange = null;
 	
 	public void loadRom(String path) {
 		pendingRomLoad = path;
@@ -59,6 +60,14 @@ class EmulatorThread extends Thread {
 	
 	public void changeSound(int set) {
 		pendingSoundChange = set;
+	}
+	
+	public void changeCPUMode(int set) {
+		pendingCPUChange = set;
+	}
+	
+	public void changeSoundSyncMode(int set) {
+		pendingSoundSyncModeChange = set;
 	}
 	
 	public void setCancel(boolean set) {
@@ -89,35 +98,36 @@ class EmulatorThread extends Thread {
 	
 	@Override
 	public void run() {
-		
-		while(!finished.get()) {
+		if(!DeSmuME.inited) {
+			DeSmuME.context = activity;
+			DeSmuME.load();
 			
-			if(!DeSmuME.inited) {
-				DeSmuME.context = activity;
-				DeSmuME.load();
-				
-				final String defaultWorkingDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/nds4droid";
-				final String path = PreferenceManager.getDefaultSharedPreferences(activity).getString(Settings.DESMUME_PATH, defaultWorkingDir);
-				final File workingDir = new File(path);
-				final File tempDir = new File(path + "/Temp");
-				tempDir.mkdir();
-				DeSmuME.setWorkingDir(workingDir.getAbsolutePath(), tempDir.getAbsolutePath() + "/");
-				workingDir.mkdir();
-				new File(path + "/States").mkdir();
-				new File(path + "/Battery").mkdir();
-				new File(path + "/Cheats").mkdir();
-				
-				//clear any previously extracted ROMs
-				
-				final File[] cacheFiles = tempDir.listFiles();
+			final String defaultWorkingDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/nds4droid";
+			final String path = PreferenceManager.getDefaultSharedPreferences(activity).getString(Settings.DESMUME_PATH, defaultWorkingDir);
+			final File workingDir = new File(path);
+			final File tempDir = new File(path + "/Temp");
+			tempDir.mkdir();
+			DeSmuME.setWorkingDir(workingDir.getAbsolutePath(), tempDir.getAbsolutePath() + "/");
+			workingDir.mkdir();
+			new File(path + "/States").mkdir();
+			new File(path + "/Battery").mkdir();
+			new File(path + "/Cheats").mkdir();
+			
+			//clear any previously extracted ROMs
+			
+			final File[] cacheFiles = tempDir.listFiles();
+			if(cacheFiles != null) {
 				for(File cacheFile : cacheFiles) {
 					if(cacheFile.getAbsolutePath().toLowerCase().endsWith(".nds"))
 						cacheFile.delete();
 				}
-				
-				DeSmuME.init();
-				DeSmuME.inited = true;
 			}
+			
+			DeSmuME.init();
+			DeSmuME.inited = true;
+		}
+		
+		while(!finished.get()) {
 			if(pendingRomLoad != null) {
 				activity.msgHandler.sendEmptyMessage(MainActivity.LOADING_START);
 				if(DeSmuME.romLoaded)
@@ -126,10 +136,12 @@ class EmulatorThread extends Thread {
 					activity.msgHandler.sendEmptyMessage(MainActivity.LOADING_END);
 					activity.msgHandler.sendEmptyMessage(MainActivity.ROM_ERROR);
 					DeSmuME.romLoaded = false;
+					DeSmuME.loadedRom = null;
 				}
 				else {
 					activity.msgHandler.sendEmptyMessage(MainActivity.LOADING_END);
 					DeSmuME.romLoaded = true;
+					DeSmuME.loadedRom = pendingRomLoad;
 					setPause(false);
 				}
 				pendingRomLoad = null;
@@ -142,6 +154,14 @@ class EmulatorThread extends Thread {
 				DeSmuME.changeSound(pendingSoundChange.intValue());
 				pendingSoundChange = null;
 			}
+			if(pendingCPUChange != null) {
+				DeSmuME.changeCpuMode(pendingCPUChange.intValue());
+				pendingCPUChange = null;
+			}
+			if(pendingSoundSyncModeChange != null) {
+				DeSmuME.changeSoundSynchMode(pendingSoundSyncModeChange.intValue());
+				pendingSoundSyncModeChange = null;
+			}
 			
 			if(!paused.get()) {
 				
@@ -151,18 +171,11 @@ class EmulatorThread extends Thread {
 					soundPaused = false;
 				}
 				
-				long frameStartTime = System.currentTimeMillis();
 				inFrameLock.lock();
 				DeSmuME.runCore();
 				inFrameLock.unlock();
-				fps = DeSmuME.runOther();
-				
-				
-				//Log.i(MainActivity.TAG, String.format("Frame: %d FPS", fps));
+				frameFinished = true;
 
-				activity.msgHandler.sendEmptyMessage(MainActivity.DRAW_SCREEN);
-		
-				
 			} 
 			else {
 				//hacky, but keeps thread alive so we don't lose contexts

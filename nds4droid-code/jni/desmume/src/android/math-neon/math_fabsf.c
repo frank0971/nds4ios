@@ -35,21 +35,20 @@ float fabsf_c(float x)
 
 float fabsf_neon_hfp(float x)
 {
-/*#ifdef __MATH_NEON
+#ifdef __MATH_NEON
 	asm volatile (
 	"fabss	 		s0, s0					\n\t"	//s0 = fabs(s0)
 	);
-#endif*/
-    return fabs(x);
+#endif
 }
 
 float fabsf_neon_sfp(float x)
 {
-/*#ifdef __MATH_NEON
+#ifdef __MATH_NEON
 	asm volatile (
 	"bic	 		r0, r0, #0x80000000		\n\t"	//r0 = r0 & ~(1 << 31)
-	);*/
-//#else
+	);
+#else
 	return fabsf_c(x);
-//#endif
+#endif
 }

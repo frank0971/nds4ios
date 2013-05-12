@@ -150,11 +150,6 @@ void mmu_log_debug_ARM7(u32 adr, const char *fmt, ...)
 //#define LOG_DMA2
 //#define LOG_DIV
 
-#define DUP2(x)  x, x
-#define DUP4(x)  x, x, x, x
-#define DUP8(x)  x, x, x, x,  x, x, x, x
-#define DUP16(x) x, x, x, x,  x, x, x, x,  x, x, x, x,  x, x, x, x
-
 MMU_struct MMU;
 MMU_struct_new MMU_new;
 MMU_struct_timing MMU_timing;
@@ -316,16 +311,85 @@ static const TVramBankInfo vram_bank_info[VRAM_BANKS] = {
 //in order to play nicely with the MMU address and mask tables
 #define LCDC_HACKY_LOCATION 0x06000000
 
+#define ARM7_HACKY_IWRAM_LOCATION 0x03800000
+#define ARM7_HACKY_SIWRAM_LOCATION 0x03000000
+
 //maps an ARM9 BG/OBJ or LCDC address into an LCDC address, and informs the caller of whether it isn't mapped
 //TODO - in cases where this does some mapping work, we could bypass the logic at the end of the _read* and _write* routines
 //this is a good optimization to consider
+//NOTE - this whole approach is probably fundamentally wrong.
+//according to dasShiny research, its possible to map multiple banks to the same addresses. something more sophisticated would be needed.
+//however, it hasnt proven necessary yet for any known test case.
 template<int PROCNUM> 
 static FORCEINLINE u32 MMU_LCDmap(u32 addr, bool& unmapped, bool& restricted)
 {
 	unmapped = false;
 	restricted = false; //this will track whether 8bit writes are allowed
 
-	//in case the address is entirely outside of the interesting ranges
+	//handle SIWRAM and non-shared IWRAM in here too, since it is quite similar to vram.
+	//in fact it is probably implemented with the same pieces of hardware.
+	//its sort of like arm7 non-shared IWRAM is lowest priority, and then SIWRAM goes on top.
+	//however, we implement it differently than vram in emulator for historical reasons.
+	//instead of keeping a page map like we do vram, we just have a list of all possible page maps (there are only 4 each for arm9 and arm7)
+	if(addr >= 0x03000000 && addr < 0x04000000)
+	{
+		//blocks 0,1,2,3 is arm7 non-shared IWRAM and blocks 4,5 is SIWRAM, and block 8 is un-mapped zeroes
+		int iwram_block_16k;
+		int iwram_offset = addr & 0x3FFF;
+		addr &= 0x00FFFFFF;
+		if(PROCNUM == ARMCPU_ARM7)
+		{
+			static const int arm7_siwram_blocks[2][4][4] =
+			{
+				{
+					{0,1,2,3}, //WRAMCNT = 0 -> map to IWRAM
+					{4,4,4,4}, //WRAMCNT = 1 -> map to SIWRAM block 0
+					{5,5,5,5}, //WRAMCNT = 2 -> map to SIWRAM block 1
+					{4,5,4,5}, //WRAMCNT = 3 -> map to SIWRAM blocks 0,1
+				},
+					 //high region; always maps to non-shared IWRAM
+				{
+					{0,1,2,3}, {0,1,2,3}, {0,1,2,3}, {0,1,2,3}
+				}
+			};
+			int region = (addr >> 23)&1;
+			int block = (addr >> 14)&3;
+			assert(region<2);
+			assert(block<4);
+			iwram_block_16k = arm7_siwram_blocks[region][MMU.WRAMCNT][block];
+		} //PROCNUM == ARMCPU_ARM7
+		else
+		{
+			//PROCNUM == ARMCPU_ARM9
+			static const int arm9_siwram_blocks[4][4] =
+			{
+				{4,5,4,5}, //WRAMCNT = 0 -> map to SIWRAM blocks 0,1
+				{5,5,5,5}, //WRAMCNT = 1 -> map to SIWRAM block 1
+				{4,4,4,4}, //WRAMCNT = 2 -> map to SIWRAM block 0
+				{8,8,8,8}, //WRAMCNT = 3 -> unmapped
+			};
+			int block = (addr >> 14)&3;
+			assert(block<4);
+			iwram_block_16k = arm9_siwram_blocks[MMU.WRAMCNT][block];
+		}
+
+		switch(iwram_block_16k>>2)
+		{
+		case 0: //arm7 non-shared IWRAM
+			return ARM7_HACKY_IWRAM_LOCATION + (iwram_block_16k<<14) + iwram_offset;
+		case 1: //SIWRAM
+			return ARM7_HACKY_SIWRAM_LOCATION + ((iwram_block_16k&3)<<14) + iwram_offset;
+		case 2: //zeroes
+		CASE2:
+			unmapped = true;
+			return 0;
+		default:
+			assert(false); //how did this happen?
+			goto CASE2;
+		}
+	}
+
+	//in case the address is entirely outside of the interesting VRAM ranges
 	if(addr < 0x06000000) return addr;
 	if(addr >= 0x07000000) return addr;
 
@@ -348,6 +412,7 @@ static FORCEINLINE u32 MMU_LCDmap(u32 addr, bool& unmapped, bool& restricted)
 	restricted = true;
 
 	//handle LCD memory mirroring
+	//TODO - this is gross! this should be renovated if the vram mapping is ever done in a more sophisticated way taking into account dasShiny research
 	if(addr>=0x068A4000)
 		addr = 0x06800000 + 
 		//(addr%0xA4000); //yuck!! is this even how it mirrors? but we have to keep from overrunning the buffer somehow
@@ -718,9 +783,10 @@ void MMU_VRAM_unmap_all()
 
 static inline void MMU_VRAMmapControl(u8 block, u8 VRAMBankCnt)
 {
-	//dont handle wram mappings in here
-	if(block == 7) {
-		//wram
+	//handle WRAM, first of all
+	if(block == 7)
+	{
+		MMU.WRAMCNT = VRAMBankCnt & 3;
 		return;
 	}
 
@@ -737,6 +803,7 @@ static inline void MMU_VRAMmapControl(u8 block, u8 VRAMBankCnt)
 	T1WriteByte(MMU.MMU_MEM[ARMCPU_ARM9][0x40], 0x240 + block, VRAMBankCnt);
 
 	//refresh all bank settings
+	//zero XX-XX-200X (long before jun 2012)
 	//these are enumerated so that we can tune the order they get applied
 	//in order to emulate prioritization rules for memory regions
 	//with multiple banks mapped.
@@ -749,10 +816,14 @@ static inline void MMU_VRAMmapControl(u8 block, u8 VRAMBankCnt)
 	MMU_VRAMmapRefreshBank(VRAM_BANK_G);
 	MMU_VRAMmapRefreshBank(VRAM_BANK_F);
 	MMU_VRAMmapRefreshBank(VRAM_BANK_E);
-	MMU_VRAMmapRefreshBank(VRAM_BANK_D);
-	MMU_VRAMmapRefreshBank(VRAM_BANK_C);
-	MMU_VRAMmapRefreshBank(VRAM_BANK_B);
+	//zero 21-jun-2012
+	//tomwi's streaming music demo sets A and D to ABG (the A is an accident).
+	//in this case, D should get priority. 
+	//this is somewhat risky. will it break other things?
 	MMU_VRAMmapRefreshBank(VRAM_BANK_A);
+	MMU_VRAMmapRefreshBank(VRAM_BANK_B);
+	MMU_VRAMmapRefreshBank(VRAM_BANK_C);
+	MMU_VRAMmapRefreshBank(VRAM_BANK_D);
 
 	//printf(vramConfiguration.describe().c_str());
 	//printf("vram remapped at vcount=%d\n",nds.VCount);
@@ -928,6 +999,8 @@ void MMU_Reset()
 
 	MMU.SPI_CNT = 0;
 	MMU.AUX_SPI_CNT = 0;
+
+	MMU.WRAMCNT = 0;
 
 	// Enable the sound speakers
 	T1WriteWord(MMU.ARM7_REG, 0x304, 0x0001);
@@ -1288,7 +1361,7 @@ void FASTCALL MMU_writeToGCControl(u32 val)
 						
 	// Launch DMA if start flag was set to "DS Cart"
 	//printf("triggering card dma\n");
-	triggerDma(EDMAMode_Card);
+	triggerDma<EDMAMode_Card>();
 }
 
 
@@ -1729,15 +1802,6 @@ void MMU_struct_new::write_dma(const int proc, const int size, const u32 _adr, c
 	const u32 chan = adr/12;
 	const u32 regnum = (adr - chan*12)>>2;
 
-	if(proc==0&&chan==0)
-	{
-		int zzz=9;
-	}
-
-	if(proc==1) {
-		int zzz=9;
-	}
-
 	MMU_new.dma[proc][chan].regs[regnum]->write(size,adr,val);
 }
 	
@@ -1752,13 +1816,6 @@ u32 MMU_struct_new::read_dma(const int proc, const int size, const u32 _adr)
 	const u32 temp = MMU_new.dma[proc][chan].regs[regnum]->read(size,adr);
 	//printf("%08lld --  read_dma: %d %d %08X = %08X\n",nds_timer,proc,size,_adr,temp);
 
-
-
-	if(temp == 0xAF00 && size == 16)
-	{
-		int zzz=9;
-	}
- 
 	return temp;
 }
 
@@ -1817,10 +1874,6 @@ void DmaController::savestate(EMUFILE *f)
 
 void DmaController::write32(const u32 val)
 {
-	if(this->chan==0 && this->procnum==0)
-	{
-		int zzz=9;
-	}
 	if(running)
 	{
 		//desp triggers this a lot. figure out whats going on
@@ -1828,9 +1881,6 @@ void DmaController::write32(const u32 val)
 	}
 	//printf("dma %d,%d WRITE %08X\n",procnum,chan,val);
 	wordcount = val&0x1FFFFF;
-	if(wordcount==0x9FbFC || wordcount == 0x1FFFFC || wordcount == 0x1EFFFC || wordcount == 0x1FFFFF) {
-		int zzz=9;
-	}
 	u8 wasRepeatMode = repeatMode;
 	u8 wasEnable = enable;
 	u32 valhi = val>>16;
@@ -1842,11 +1892,6 @@ void DmaController::write32(const u32 val)
 	if(procnum==ARMCPU_ARM7) _startmode &= 6;
 	irq = BIT14(valhi);
 	enable = BIT15(valhi);
-
-	if(val==0x84400076 && saddr ==0x023BCEC4)
-	{
-		int zzz=9;
-	}
 
 	//if(irq) printf("!!!!!!!!!!!!IRQ!!!!!!!!!!!!!\n");
 
@@ -1864,14 +1909,6 @@ void DmaController::write32(const u32 val)
 	}
 
 	//printf("dma %d,%d set to startmode %d with wordcount set to: %08X\n",procnum,chan,_startmode,wordcount);
-if(_startmode==0 && wordcount==1) {
-	int zzz=9;
-}
-	if(enable)
-	{
-		int zzz=9;
-	}
-
 	if (enable && procnum==1 && (!(chan&1)) && _startmode==6)
 		printf("!!!---!!! WIFI DMA: %08X TO %08X, %i WORDS !!!---!!!\n", saddr, daddr, wordcount);
 
@@ -1955,12 +1992,6 @@ void DmaController::exec()
 		if(triggered)
 		{
 			//if(procnum==0) printf("vc=%03d %08lld trig type %d dma#%d w/words %d at src:%08X dst:%08X gxf:%d",nds.VCount,nds_timer,startmode,chan,wordcount,saddr,daddr,gxFIFO.size);
-			if(saddr ==0x023BCCEC && wordcount==118) {
-				int zzz=9;
-			}
-			if(startmode==0 && daddr == 0x4000400) {
-				int zzz=9;
-			}
 			running = TRUE;
 			paused = FALSE;
 			if(procnum == ARMCPU_ARM9) doCopy<ARMCPU_ARM9>();
@@ -1977,7 +2008,7 @@ void DmaController::doCopy()
 {
 	//generate a copy count depending on various copy mode's behavior
 	u32 todo = wordcount;
-	if(todo == 0) todo = 0x200000; //according to gbatek.. //TODO - this should not work this way for arm7 according to gbatek
+	if(PROCNUM == ARMCPU_ARM9) if(todo == 0) todo = 0x200000; //according to gbatek.. we've verified this behaviour on the arm7
 	if(startmode == EDMAMode_MemDisplay) 
 	{
 		todo = 128; //this is a hack. maybe an alright one though. it should be 4 words at a time. this is a whole scanline
@@ -2048,7 +2079,7 @@ void DmaController::doCopy()
 		}
 	}
 
-	//printf("dma of size %d took %d cycles\n",todo*sz,time_elapsed);
+	//printf("ARM%c dma of size %d from 0x%08X to 0x%08X took %d cycles\n",PROCNUM==0?'9':'7',todo*sz,saddr,daddr,time_elapsed);
 
 	//reschedule an event for the end of this dma, and figure out how much it cost us
 	doSchedule();
@@ -2072,16 +2103,25 @@ void DmaController::doCopy()
 		wordcount -= todo;
 }
 
-void triggerDma(EDMAMode mode)
+#define tryTriggerInl(m) 	DmaController& mmu = m; \
+							if((mmu.startmode==mode) && mmu.enable  && (!mmu.running || mmu.paused)) { mmu.triggered = mmu.dmaCheck = TRUE; mmu.nextEvent = nds_timer; NDS_RescheduleDMA(); }
+
+template<EDMAMode mode> void triggerDma()
 {
 	MACRODO2(0, {
 		const int i=X;
 		MACRODO4(0, {
 			const int j=X;
-			MMU_new.dma[i][j].tryTrigger(mode);
+			tryTriggerInl(MMU_new.dma[i][j]);
 		});
 	});
 }
+
+template void triggerDma<EDMAMode_VBlank>();
+template void triggerDma<EDMAMode_HBlank>();
+template void triggerDma<EDMAMode_HStart>();
+template void triggerDma<EDMAMode_MemDisplay>();
+template void triggerDma<EDMAMode_GXFifo>();
 
 void DmaController::tryTrigger(EDMAMode mode)
 {
@@ -2133,9 +2173,6 @@ u32 DmaController::read32()
 	ret |= dar<<21;
 	ret |= wordcount;
 	//printf("dma %d,%d READ  %08X\n",procnum,chan,ret);
-	if(ret == 0xAF000001) {
-		int zzz=9;
-	}
 	return ret;
 }
 
@@ -2173,7 +2210,10 @@ void FASTCALL _MMU_ARM9_write08(u32 adr, u8 val)
 
 	if(adr < 0x02000000)
 	{
-		T1WriteByte(MMU.ARM9_ITCM, adr&0x7FFF, val);
+#ifdef HAVE_JIT
+		JITLUT_HANDLE_KNOWNBANK(adr, ARM9_ITCM, 0x7FFF, 0) = 0;
+#endif
+		T1WriteByte(MMU.ARM9_ITCM, adr & 0x7FFF, val);
 		return;
 	}
 
@@ -2217,9 +2257,9 @@ void FASTCALL _MMU_ARM9_write08(u32 adr, u8 val)
 			
 #if 1
 			case REG_DIVCNT: printf("ERROR 8bit DIVCNT WRITE\n"); return;
-			case REG_DIVCNT+1: printf("ERROR 8bit DIVCNT1 WRITE\n"); return;
-			case REG_DIVCNT+2: printf("ERROR 8bit DIVCNT2 WRITE\n"); return;
-			case REG_DIVCNT+3: printf("ERROR 8bit DIVCNT3 WRITE\n"); return;
+			case REG_DIVCNT+1: printf("ERROR 8bit DIVCNT+1 WRITE\n"); return;
+			case REG_DIVCNT+2: printf("ERROR 8bit DIVCNT+2 WRITE\n"); return;
+			case REG_DIVCNT+3: printf("ERROR 8bit DIVCNT+3 WRITE\n"); return;
 #endif
 
 			//fog table: only write bottom 7 bits
@@ -2373,12 +2413,7 @@ void FASTCALL _MMU_ARM9_write08(u32 adr, u8 val)
 				MMU.AUX_SPI_CNT &= ~0x80; //remove busy flag
 				return;
 
-			case REG_WRAMCNT:	
-				/* Update WRAMSTAT at the ARM7 side */
-				T1WriteByte(MMU.MMU_MEM[ARMCPU_ARM7][0x40], 0x241, val);
-				break;
-
-            case REG_POWCNT1: writereg_POWCNT1(8,adr,val); break;
+			case REG_POWCNT1: writereg_POWCNT1(8,adr,val); break;
 			
 			case REG_DISPA_DISP3DCNT: writereg_DISP3DCNT(8,adr,val); return;
 			case REG_DISPA_DISP3DCNT+1: writereg_DISP3DCNT(8,adr,val); return;
@@ -2400,10 +2435,12 @@ void FASTCALL _MMU_ARM9_write08(u32 adr, u8 val)
 			case REG_VRAMCNTE:
 			case REG_VRAMCNTF:
 			case REG_VRAMCNTG:
+			case REG_WRAMCNT:
 			case REG_VRAMCNTH:
 			case REG_VRAMCNTI:
 					MMU_VRAMmapControl(adr-REG_VRAMCNTA, val);
 				break;
+
 			case REG_DISPA_DISPMMEMFIFO:
 			{
 				DISP_FIFOsend(val);
@@ -2434,7 +2471,12 @@ void FASTCALL _MMU_ARM9_write08(u32 adr, u8 val)
 	adr = MMU_LCDmap<ARMCPU_ARM9>(adr, unmapped, restricted);
 	if(unmapped) return;
 	if(restricted) return; //block 8bit vram writes
-	
+
+#ifdef HAVE_JIT
+	if (JITLUT_MAPPED(adr, ARMCPU_ARM9))
+		JITLUT_HANDLE_PREMASKED(adr, ARMCPU_ARM9, 0) = 0;
+#endif
+
 	// Removed the &0xFF as they are implicit with the adr&0x0FFFFFFF [shash]
 	MMU.MMU_MEM[ARMCPU_ARM9][adr>>20][adr&MMU.MMU_MASK[ARMCPU_ARM9][adr>>20]]=val;
 }
@@ -2448,7 +2490,10 @@ void FASTCALL _MMU_ARM9_write16(u32 adr, u16 val)
 
 	if (adr < 0x02000000)
 	{
-		T1WriteWord(MMU.ARM9_ITCM, adr&0x7FFF, val);
+#ifdef HAVE_JIT
+		JITLUT_HANDLE_KNOWNBANK(adr, ARM9_ITCM, 0x7FFF, 0) = 0;
+#endif
+		T1WriteWord(MMU.ARM9_ITCM, adr & 0x7FFF, val);
 		return;
 	}
 
@@ -2474,9 +2519,6 @@ void FASTCALL _MMU_ARM9_write16(u32 adr, u16 val)
 			if ((adr >= 0x04000320) && (adr<=0x040003FF)) return;
 
 		if(MMU_new.is_dma(adr)) { 
-			if(val==0x02e9) {
-				int zzz=9;
-			}
 			MMU_new.write_dma(ARMCPU_ARM9,16,adr,val); 
 			return;
 		}
@@ -2773,14 +2815,7 @@ void FASTCALL _MMU_ARM9_write16(u32 adr, u16 val)
 			case REG_VRAMCNTA:
 			case REG_VRAMCNTC:
 			case REG_VRAMCNTE:
-				MMU_VRAMmapControl(adr-REG_VRAMCNTA, val & 0xFF);
-				MMU_VRAMmapControl(adr-REG_VRAMCNTA+1, val >> 8);
-				break;
 			case REG_VRAMCNTG:
-				MMU_VRAMmapControl(adr-REG_VRAMCNTA, val & 0xFF);
-				/* Update WRAMSTAT at the ARM7 side */
-				T1WriteByte(MMU.MMU_MEM[ARMCPU_ARM7][0x40], 0x241, val >> 8);
-				break;
 			case REG_VRAMCNTH:
 				MMU_VRAMmapControl(adr-REG_VRAMCNTA, val & 0xFF);
 				MMU_VRAMmapControl(adr-REG_VRAMCNTA+1, val >> 8);
@@ -2893,6 +2928,11 @@ void FASTCALL _MMU_ARM9_write16(u32 adr, u16 val)
 	adr = MMU_LCDmap<ARMCPU_ARM9>(adr, unmapped, restricted);
 	if(unmapped) return;
 
+#ifdef HAVE_JIT
+	if (JITLUT_MAPPED(adr, ARMCPU_ARM9))
+		JITLUT_HANDLE_PREMASKED(adr, ARMCPU_ARM9, 0) = 0;
+#endif
+
 	// Removed the &0xFF as they are implicit with the adr&0x0FFFFFFF [shash]
 	T1WriteWord(MMU.MMU_MEM[ARMCPU_ARM9][adr>>20], adr&MMU.MMU_MASK[ARMCPU_ARM9][adr>>20], val);
 } 
@@ -2906,7 +2946,11 @@ void FASTCALL _MMU_ARM9_write32(u32 adr, u32 val)
 
 	if(adr<0x02000000)
 	{
-		T1WriteLong(MMU.ARM9_ITCM, adr&0x7FFF, val);
+#ifdef HAVE_JIT
+		JITLUT_HANDLE_KNOWNBANK(adr, ARM9_ITCM, 0x7FFF, 0) = 0;
+		JITLUT_HANDLE_KNOWNBANK(adr, ARM9_ITCM, 0x7FFF, 1) = 0;
+#endif
+		T1WriteLong(MMU.ARM9_ITCM, adr & 0x7FFF, val);
 		return ;
 	}
 
@@ -2917,11 +2961,6 @@ void FASTCALL _MMU_ARM9_write32(u32 adr, u32 val)
 		{} //prohibited
 		else addon.write32(ARMCPU_ARM9, adr, val);
 		return;
-	}
-
-	if((adr&0x0F000000)==0x05000000)
-	{
-		int zzz=9;
 	}
 
 #if 0
@@ -2997,9 +3036,19 @@ void FASTCALL _MMU_ARM9_write32(u32 adr, u32 val)
 			case 0x40005A:
 			case 0x40005B:
 			case 0x40005C:		// Individual Commands
+#ifdef USE_EXOPHASEJIT
 				if (gxFIFO.size > 254)
+				{
 					nds.freezeBus |= 1;
 
+					extern u32 is_exophasejit;
+					if (is_exophasejit)
+						NDS_ARM9.R[31]=2;
+				}
+#else
+				if (gxFIFO.size > 254)
+					nds.freezeBus |= 1;
+#endif
 				((u32 *)(MMU.MMU_MEM[ARMCPU_ARM9][0x40]))[(adr & 0xFFF) >> 2] = val;
 				gfx3d_sendCommand(adr, val);
 				return;
@@ -3192,17 +3241,11 @@ void FASTCALL _MMU_ARM9_write32(u32 adr, u32 val)
 				return;
 
 			case REG_VRAMCNTA:
-				MMU_VRAMmapControl(adr-REG_VRAMCNTA, val & 0xFF);
-				MMU_VRAMmapControl(adr-REG_VRAMCNTA+1, (val >> 8) & 0xFF);
-				MMU_VRAMmapControl(adr-REG_VRAMCNTA+2, (val >> 16) & 0xFF);
-				MMU_VRAMmapControl(adr-REG_VRAMCNTA+3, (val >> 24) & 0xFF);
-				break;
 			case REG_VRAMCNTE:
 				MMU_VRAMmapControl(adr-REG_VRAMCNTA, val & 0xFF);
 				MMU_VRAMmapControl(adr-REG_VRAMCNTA+1, (val >> 8) & 0xFF);
 				MMU_VRAMmapControl(adr-REG_VRAMCNTA+2, (val >> 16) & 0xFF);
-				/* Update WRAMSTAT at the ARM7 side */
-				T1WriteByte(MMU.MMU_MEM[ARMCPU_ARM7][0x40], 0x241, (val >> 24) & 0xFF);
+				MMU_VRAMmapControl(adr-REG_VRAMCNTA+3, (val >> 24) & 0xFF);
 				break;
 			case REG_VRAMCNTH:
 				MMU_VRAMmapControl(adr-REG_VRAMCNTA, val & 0xFF);
@@ -3329,6 +3372,14 @@ void FASTCALL _MMU_ARM9_write32(u32 adr, u32 val)
 	adr = MMU_LCDmap<ARMCPU_ARM9>(adr, unmapped, restricted);
 	if(unmapped) return;
 
+#ifdef HAVE_JIT
+	if (JITLUT_MAPPED(adr, ARMCPU_ARM9))
+	{
+		JITLUT_HANDLE_PREMASKED(adr, ARMCPU_ARM9, 0) = 0;
+		JITLUT_HANDLE_PREMASKED(adr, ARMCPU_ARM9, 1) = 0;
+	}
+#endif
+
 	// Removed the &0xFF as they are implicit with the adr&0x0FFFFFFF [shash]
 	T1WriteLong(MMU.MMU_MEM[ARMCPU_ARM9][adr>>20], adr&MMU.MMU_MASK[ARMCPU_ARM9][adr>>20], val);
 }
@@ -3362,30 +3413,30 @@ u8 FASTCALL _MMU_ARM9_read08(u32 adr)
 			case REG_IF+2: return (MMU.gen_IF<ARMCPU_ARM9>()>>16);
 			case REG_IF+3: return (MMU.gen_IF<ARMCPU_ARM9>()>>24);
 
+			case REG_WRAMCNT:
+				return MMU.WRAMCNT;
+
 			case REG_DISPA_DISPSTAT:
 				break;
 			case REG_DISPA_DISPSTAT+1:
 				break;
 			case REG_DISPx_VCOUNT: return nds.VCount & 0xFF;
 			case REG_DISPx_VCOUNT+1: return (nds.VCount>>8) & 0xFF;
-#if 0
-			case REG_SQRTCNT: printf("ERROR 8bit SQRTCNT READ\n"); return 0;
-			case REG_SQRTCNT+1: printf("ERROR 8bit SQRTCNT1 READ\n"); return 0;//(MMU_new.sqrt.read16() & 0xFF00)>>8;
-#else
+
 			case REG_SQRTCNT: return (MMU_new.sqrt.read16() & 0xFF);
 			case REG_SQRTCNT+1: return ((MMU_new.sqrt.read16()>>8) & 0xFF);
-#endif
-			case REG_SQRTCNT+2: printf("ERROR 8bit SQRTCNT2 READ\n"); return 0;
-			case REG_SQRTCNT+3: printf("ERROR 8bit SQRTCNT3 READ\n"); return 0;
-#if 1
-			case REG_DIVCNT: printf("ERROR 8bit DIVCNT READ\n"); return 0;
-			case REG_DIVCNT+1: printf("ERROR 8bit DIVCNT1 READ\n"); return 0;
-#else
+				
+			//sqrtcnt isnt big enough for these to exist. but they'd probably return 0 so its ok
+			case REG_SQRTCNT+2: printf("ERROR 8bit SQRTCNT+2 READ\n"); return 0;
+			case REG_SQRTCNT+3: printf("ERROR 8bit SQRTCNT+3 READ\n"); return 0;
+
+			//Nostalgia's options menu requires that these work
 			case REG_DIVCNT: return (MMU_new.div.read16() & 0xFF);
 			case REG_DIVCNT+1: return ((MMU_new.div.read16()>>8) & 0xFF);
-#endif
-			case REG_DIVCNT+2: printf("ERROR 8bit DIVCNT2 READ\n"); return 0;
-			case REG_DIVCNT+3: printf("ERROR 8bit DIVCNT3 READ\n"); return 0;
+
+			//divcnt isnt big enough for these to exist. but they'd probably return 0 so its ok
+			case REG_DIVCNT+2: printf("ERROR 8bit DIVCNT+2 READ\n"); return 0;
+			case REG_DIVCNT+3: printf("ERROR 8bit DIVCNT+3 READ\n"); return 0;
 
 			//fog table: write only
 			case eng_3D_FOG_TABLE+0x00: case eng_3D_FOG_TABLE+0x01: case eng_3D_FOG_TABLE+0x02: case eng_3D_FOG_TABLE+0x03: 
@@ -3454,7 +3505,13 @@ u16 FASTCALL _MMU_ARM9_read16(u32 adr)
 				break;
 
 			case REG_SQRTCNT: return MMU_new.sqrt.read16();
+			//sqrtcnt isnt big enough for this to exist. but it'd probably return 0 so its ok
+			case REG_SQRTCNT+2: printf("ERROR 16bit SQRTCNT+2 READ\n"); return 0;
+
 			case REG_DIVCNT: return MMU_new.div.read16();
+			//divcnt isnt big enough for this to exist. but it'd probably return 0 so its ok
+			case REG_DIVCNT+2: printf("ERROR 16bit DIVCNT+2 READ\n"); return 0;
+
 			case eng_3D_GXSTAT: return MMU_new.gxstat.read(16,adr);
 
 			case REG_DISPA_VCOUNT:
@@ -3478,6 +3535,10 @@ u16 FASTCALL _MMU_ARM9_read16(u32 adr)
 			// ============================================= 3D end
 			case REG_IME :
 				return (u16)MMU.reg_IME[ARMCPU_ARM9];
+
+			//WRAMCNT is readable but VRAMCNT is not, so just return WRAM's value
+			case REG_VRAMCNTG:
+				return MMU.WRAMCNT << 8;
 				
 			case REG_IE :
 				return (u16)MMU.reg_IE[ARMCPU_ARM9];
@@ -3561,12 +3622,18 @@ u32 FASTCALL _MMU_ARM9_read32(u32 adr)
 			case REG_DISPA_DISPSTAT:
 				break;
 
-			case REG_DISPx_VCOUNT: return nds.VCount;
+			case REG_DISPx_VCOUNT:
+				return nds.VCount;
 
+			//WRAMCNT is readable but VRAMCNT is not, so just return WRAM's value
+			case REG_VRAMCNTE:
+				return MMU.WRAMCNT << 24;
+
+			//despite these being 16bit regs,
 			//Dolphin Island Underwater Adventures uses this amidst seemingly reasonable divs so we're going to emulate it.
+			//well, it's pretty reasonable to read them as 32bits though, isnt it?
 			case REG_DIVCNT: return MMU_new.div.read16();
-			//I guess we'll do this also
-			case REG_SQRTCNT: return MMU_new.sqrt.read16();
+			case REG_SQRTCNT: return MMU_new.sqrt.read16(); //I guess we'll do this also
 
 			//fog table: write only
 			case eng_3D_FOG_TABLE+0x00: case eng_3D_FOG_TABLE+0x04: case eng_3D_FOG_TABLE+0x08: case eng_3D_FOG_TABLE+0x0C:
@@ -3671,7 +3738,7 @@ void FASTCALL _MMU_ARM7_write08(u32 adr, u8 val)
 
 	mmu_log_debug_ARM7(adr, "(write08) 0x%02X", val);
 
-	if (adr < 0x4000) return;	// PU BIOS
+	if (adr < 0x02000000) return; //can't write to bios or entire area below main memory
 
 	if ( (adr >= 0x08000000) && (adr < 0x0A010000) )
 	{
@@ -3708,6 +3775,16 @@ void FASTCALL _MMU_ARM7_write08(u32 adr, u8 val)
 			case REG_IF+3: REG_IF_WriteByte<ARMCPU_ARM7>(3,val); break;
 
 			case REG_POSTFLG:
+				//The NDS7 register can be written to only from code executed in BIOS.
+#ifdef USE_EXOPHASEJIT
+				extern u32 is_exophasejit;
+				if (!is_exophasejit)
+				{
+					if (NDS_ARM7.instruct_adr > 0x3FFF) return;
+				}
+#else
+				if (NDS_ARM7.instruct_adr > 0x3FFF) return;
+#endif
 				// hack for patched firmwares
 				if (val == 1)
 				{
@@ -3751,6 +3828,11 @@ void FASTCALL _MMU_ARM7_write08(u32 adr, u8 val)
 	bool unmapped, restricted;
 	adr = MMU_LCDmap<ARMCPU_ARM7>(adr,unmapped, restricted);
 	if(unmapped) return;
+
+#ifdef HAVE_JIT
+	if (JITLUT_MAPPED(adr, ARMCPU_ARM7))
+		JITLUT_HANDLE_PREMASKED(adr, ARMCPU_ARM7, 0) = 0;
+#endif
 	
 	// Removed the &0xFF as they are implicit with the adr&0x0FFFFFFF [shash]
 	MMU.MMU_MEM[ARMCPU_ARM7][adr>>20][adr&MMU.MMU_MASK[ARMCPU_ARM7][adr>>20]]=val;
@@ -3799,7 +3881,7 @@ void FASTCALL _MMU_ARM7_write16(u32 adr, u16 val)
 
 	mmu_log_debug_ARM7(adr, "(write16) 0x%04X", val);
 
-	if (adr < 0x4000) return;	// PU BIOS
+	if (adr < 0x02000000) return; //can't write to bios or entire area below main memory
 	
 	if ( (adr >= 0x08000000) && (adr < 0x0A010000) )
 	{
@@ -4029,8 +4111,11 @@ void FASTCALL _MMU_ARM7_write16(u32 adr, u16 val)
 										if(nds.adc_jitterctr == 25)
 										{
 											nds.adc_jitterctr = 0;
-											nds.adc_touchY ^= 16;
-											nds.adc_touchX ^= 16;
+											if (nds.stylusJitter)
+											{
+												nds.adc_touchY ^= 16;
+												nds.adc_touchX ^= 16;
+											}
 										}
 										if(MMU.SPI_CNT&(1<<11))
 										{
@@ -4187,6 +4272,11 @@ void FASTCALL _MMU_ARM7_write16(u32 adr, u16 val)
 	adr = MMU_LCDmap<ARMCPU_ARM7>(adr,unmapped, restricted);
 	if(unmapped) return;
 
+#ifdef HAVE_JIT
+	if (JITLUT_MAPPED(adr, ARMCPU_ARM7))
+		JITLUT_HANDLE_PREMASKED(adr, ARMCPU_ARM7, 0) = 0;
+#endif
+
 	// Removed the &0xFF as they are implicit with the adr&0x0FFFFFFF [shash]
 	T1WriteWord(MMU.MMU_MEM[ARMCPU_ARM7][adr>>20], adr&MMU.MMU_MASK[ARMCPU_ARM7][adr>>20], val);
 } 
@@ -4197,7 +4287,7 @@ void FASTCALL _MMU_ARM7_write32(u32 adr, u32 val)
 
 	mmu_log_debug_ARM7(adr, "(write32) 0x%08X", val);
 
-	if (adr < 0x4000) return;	// PU BIOS
+	if (adr < 0x02000000) return; //can't write to bios or entire area below main memory
 
 	if ( (adr >= 0x08000000) && (adr < 0x0A010000) )
 	{
@@ -4216,11 +4306,11 @@ void FASTCALL _MMU_ARM7_write32(u32 adr, u32 val)
 		return;
 	}
 
-    if ((adr>=0x04000400)&&(adr<0x04000520))
-    {
-        SPU_WriteLong(adr, val);
-        return;
-    }
+	if ((adr>=0x04000400)&&(adr<0x04000520))
+	{
+		SPU_WriteLong(adr, val);
+		return;
+	}
 
 	if((adr>>24)==4)
 	{
@@ -4284,6 +4374,14 @@ void FASTCALL _MMU_ARM7_write32(u32 adr, u32 val)
 	adr = MMU_LCDmap<ARMCPU_ARM7>(adr,unmapped, restricted);
 	if(unmapped) return;
 
+#ifdef HAVE_JIT
+	if (JITLUT_MAPPED(adr, ARMCPU_ARM7))
+	{
+		JITLUT_HANDLE_PREMASKED(adr, ARMCPU_ARM7, 0) = 0;
+		JITLUT_HANDLE_PREMASKED(adr, ARMCPU_ARM7, 1) = 0;
+	}
+#endif
+
 	// Removed the &0xFF as they are implicit with the adr&0x0FFFFFFF [shash]
 	T1WriteLong(MMU.MMU_MEM[ARMCPU_ARM7][adr>>20], adr&MMU.MMU_MASK[ARMCPU_ARM7][adr>>20], val);
 }
@@ -4302,8 +4400,22 @@ u8 FASTCALL _MMU_ARM7_read08(u32 adr)
 		
 		//How accurate is this? our R[15] may not be exactly what the hardware uses (may use something less by up to 0x08)
 		//This may be inaccurate at the very edge cases.
-		if (NDS_ARM7.R[15] > 0x3FFF)
+#ifdef USE_EXOPHASEJIT
+		extern u32 is_exophasejit;
+		if (is_exophasejit)
+		{
+			if(NDS_ARM7.CPSR.bits.mode != IRQ)
+				return 0xFF;
+		}
+		else
+		{
+			if (NDS_ARM7.instruct_adr > 0x3FFF)
+				return 0xFF;
+		}
+#else
+		if (NDS_ARM7.instruct_adr > 0x3FFF)
 			return 0xFF;
+#endif
 	}
 
 	// wifi mac access 
@@ -4323,10 +4435,10 @@ u8 FASTCALL _MMU_ARM7_read08(u32 adr)
 		else return addon.read08(ARMCPU_ARM7,adr);
 	}
 
-    if ((adr>=0x04000400)&&(adr<0x04000520))
-    {
-        return SPU_ReadByte(adr);
-    }
+	if ((adr>=0x04000400)&&(adr<0x04000520))
+	{
+		return SPU_ReadByte(adr);
+	}
 
 	if (adr == REG_RTC) return (u8)rtcRead();
 
@@ -4345,6 +4457,8 @@ u8 FASTCALL _MMU_ARM7_read08(u32 adr)
 
 			case REG_DISPx_VCOUNT: return nds.VCount&0xFF;
 			case REG_DISPx_VCOUNT+1: return (nds.VCount>>8)&0xFF;
+
+			case REG_WRAMSTAT: return MMU.WRAMCNT;
 		}
 
 		return MMU.MMU_MEM[ARMCPU_ARM7][adr>>20][adr&MMU.MMU_MASK[ARMCPU_ARM7][adr>>20]];
@@ -4354,7 +4468,7 @@ u8 FASTCALL _MMU_ARM7_read08(u32 adr)
 	adr = MMU_LCDmap<ARMCPU_ARM7>(adr,unmapped, restricted);
 	if(unmapped) return 0;
 
-    return MMU.MMU_MEM[ARMCPU_ARM7][adr>>20][adr&MMU.MMU_MASK[ARMCPU_ARM7][adr>>20]];
+	return MMU.MMU_MEM[ARMCPU_ARM7][adr>>20][adr&MMU.MMU_MASK[ARMCPU_ARM7][adr>>20]];
 }
 //================================================= MMU ARM7 read 16
 u16 FASTCALL _MMU_ARM7_read16(u32 adr)
@@ -4367,8 +4481,22 @@ u16 FASTCALL _MMU_ARM7_read16(u32 adr)
 	{
 		//u32 prot = T1ReadLong_guaranteedAligned(MMU.MMU_MEM[ARMCPU_ARM7][0x40], 0x04000308 & MMU.MMU_MASK[ARMCPU_ARM7][0x40]);
 		//if (prot) INFO("MMU7 read 16 at 0x%08X (PC 0x%08X) BIOSPROT address 0x%08X\n", adr, NDS_ARM7.R[15], prot);
-		if (NDS_ARM7.R[15] > 0x3FFF)
+#ifdef USE_EXOPHASEJIT
+		extern u32 is_exophasejit;
+		if (is_exophasejit)
+		{
+			if(NDS_ARM7.CPSR.bits.mode != IRQ)
+				return 0xFFFF;
+		}
+		else
+		{
+			if (NDS_ARM7.instruct_adr > 0x3FFF)
+				return 0xFFFF;
+		}
+#else
+		if (NDS_ARM7.instruct_adr > 0x3FFF)
 			return 0xFFFF;
+#endif
 	}
 
 	//wifi mac access
@@ -4421,6 +4549,11 @@ u16 FASTCALL _MMU_ARM7_read16(u32 adr)
 			case REG_TM3CNTL :
 				return read_timer(ARMCPU_ARM7,(adr&0xF)>>2);
 
+			case REG_VRAMSTAT:
+				//make sure WRAMSTAT is stashed and then fallthrough to return the value from memory. i know, gross.
+				T1WriteByte(MMU.MMU_MEM[ARMCPU_ARM7][0x40], 0x241, MMU.WRAMCNT);
+				break;
+
 			case REG_AUXSPICNT:
 				return MMU.AUX_SPI_CNT;
 
@@ -4462,8 +4595,22 @@ u32 FASTCALL _MMU_ARM7_read32(u32 adr)
 	{
 		//u32 prot = T1ReadLong_guaranteedAligned(MMU.MMU_MEM[ARMCPU_ARM7][0x40], 0x04000308 & MMU.MMU_MASK[ARMCPU_ARM7][0x40]);
 		//if (prot) INFO("MMU7 read 32 at 0x%08X (PC 0x%08X) BIOSPROT address 0x%08X\n", adr, NDS_ARM7.R[15], prot);
-		if (NDS_ARM7.R[15] > 0x3FFF)
+#ifdef USE_EXOPHASEJIT
+		extern u32 is_exophasejit;
+		if (is_exophasejit)
+		{
+			if(NDS_ARM7.CPSR.bits.mode != IRQ)
+				return 0xFFFFFFFF;
+		}
+		else
+		{
+			if (NDS_ARM7.instruct_adr > 0x3FFF)
+				return 0xFFFFFFFF;
+		}
+#else
+		if (NDS_ARM7.instruct_adr > 0x3FFF)
 			return 0xFFFFFFFF;
+#endif
 	}
 
 	//wifi mac access
@@ -4516,7 +4663,12 @@ u32 FASTCALL _MMU_ARM7_read32(u32 adr)
 			case REG_GCDATAIN:
 				return MMU_readFromGC<ARMCPU_ARM7>();
 
+			case REG_VRAMSTAT:
+				//make sure WRAMSTAT is stashed and then fallthrough return the value from memory. i know, gross.
+				T1WriteByte(MMU.MMU_MEM[ARMCPU_ARM7][0x40], 0x241, MMU.WRAMCNT);
+				break;
 		}
+
 		return T1ReadLong_guaranteedAligned(MMU.MMU_MEM[ARMCPU_ARM7][adr>>20], adr & MMU.MMU_MASK[ARMCPU_ARM7][adr>>20]);
 	}
 

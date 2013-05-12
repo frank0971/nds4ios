@@ -10,85 +10,85 @@
 		<item>Cancella</item>
 		<!--item>Cut</item-->
 		<!--item>Copy</item-->
-		<item>Invia a...</item>
+		<item>Invia A...</item>
 	</string-array>
-	<string name="rom_error">C\'è stato un errore caricando la rom :(</string>
+	<string name="rom_error">C\'è stato un errore nel caricamento della ROM :(</string>
 	<string name="OK">OK</string>
 	<string name="location">Posizione</string>
-     <string name="cant_read_folder">La cartella non può essere letta</string>
+    <string name="cant_read_folder">La cartella non può essere aperta!</string>
     <string name="nnew">Nuovo</string>
-    <string name="select">Seleziona</string>
-    <string name="file_name">Nome del file:</string>
+    <string name="select">Selezione</string>
+    <string name="file_name">Nome file:</string>
     <string name="cancel">Annulla</string>
     <string name="create">Salva</string>
-    <string name="no_data">Niente dati</string>
+    <string name="no_data">Nessun Dato</string>
     <color name="gray">#ffff0000</color>
     <string name="err">Errore</string>
     <string name="Load">Carica</string>
     <string name="QuickSave">Salvataggio veloce</string>
-    <string name="QuickRestore">Ripristino veloce</string>
+    <string name="QuickRestore">Caricamento veloce</string>
     <string name="SaveState">Salva Stato</string>
-    <string name="RestoreState">Ripristina Stato</string>
+    <string name="RestoreState">Carica Stato</string>
     <string name="Settings">Impostazioni</string>
     
     <!-- Release 2 -->
-    <string name="touchnotify">Per cambiare tra modalità touch e modalità keypad, tocca il tasto "touch" alla cima</string>
+	<string name="touchnotify">Per passare dalla modalità touch alla modalità keypad, premi il bottone "touch" in alto</string>
     <string name="frameskip">Salta fotogrammi</string>
-    <string name="frameskipdesc">Quanti fotogrammi saltare mentre si emula. Aiuta a far corrispondere l\'emulazione lenta al tempo reale.</string>
+	<string name="frameskipdesc">Quanti fotogrammi bisogna saltare durante l\'emulazione. Aiuta a far corrispondere l\'emulazione lenta al tempo reale.</string>
     <string name="vsync">VSync</string>
-    <string name="vsyncdesc">Disegna solamente allo scherzo tra i fotogrammi. Può rallentare l\'emulazione ma disabilitare può causare problem grafici.</string>
+	<string name="vsyncdesc">Disegna sullo schermo solamente alla frequenza di aggiornamento dello schermo. Può rallentare l\'emulazione, ma disabilitarlo può causare difetti grafici</string>
     <string name="fps">Mostra FPS</string>
-    <string name="fpsdesc">Mostra gli FPS sullo schermo.</string>
-    <string name="showtouchmsg">Mostra messaggio touch</string>
-    <string name="showtouchmsgdesc">Mostra un messaggio all\'utente spiegando il cambio di modalità tra touch/keypad.</string>
+    <string name="fpsdesc">Mostra gli FPS(fotogrammi al secondo) sullo schermo.</string>
+    <string name="showtouchmsg">Mostra il messaggio del touchscreen</string>
+	<string name="showtouchmsgdesc">Mostra all\'utente un messaggio che spiega come cambiare tra modalità touch e keypad.</string>
     
     <!-- Release 3 -->
     <string name="loading">Caricamento</string>    
     
     <!-- Release 4 -->
     <string name="filter">Filtro dello schermo</string>
-    <string name="filterdesc">Il filtro da usare quando si aumenta dalla risoluzione del Nintendo DS alla risoluzione del tuo schermo. I filtri con una qualità piú alta potrebbero peggiorare la performance.</string>
-    
+    <string name="filterdesc">Filtro da usare quando si aumenta la risoluzione da quella del Nintendo DS a quella del tuo schermo. Filtri di qualità maggiore possono peggiorare le prestazioni.</string>
+	
     <!-- Release 5 -->
-    <string name="threedrenderer">Renderer 3D</string>
-    <string name="threedrendererdesc">Quale motore di rendering 3D usare.</string>
+    <string name="threedrenderer">3D Renderer</string>
+    <string name="threedrendererdesc">Quale motore usare per il rendering 3D.</string>
     <string-array name ="threed_options">
         <item>Nessuno</item>
         <item>OpenGL</item>
         <item>Software</item>
     </string-array>
-    <string name="sound">Abilita suono</string>
-    <string name="sounddesc">Abilita l\'elaborazione ed il playback del suono. Disabilitare può aumentare la performance.</string>
-    <string name="showsoundmsg">Mostra messaggio audio</string>
-    <string name="showsoundmsgdesc">Mostra una domanda all\'utente chiedendo se vogliono abilitare il suono.</string>
-    <string name="soundmsg">Vorresti abilitare il suono? Questo può causare una perdita di performance da 3 a 5 FPS.</string>
+    <string name="sound">Abilita i suoni</string>
+	<string name="sounddesc">Abilita l\'elaborazione e la riproduzione dell\'audio. Disabilitarla può migliorare le prestazioni.</string>
+    <string name="showsoundmsg">Mostra il messaggio dei suoni</string>
+	<string name="showsoundmsgdesc">Mostra all\'utente una domanda che chiede se vuole abilitare i suoni.</string>
+	<string name="soundmsg">Vuoi abilitare l\'audio? Farlo può causare una perdita di prestazioni di 3-5 FPS.</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
     
     <!-- Release 8 -->
     <string name="Display">Display</string>
     <string name="Controls">Controlli</string>
-    <string name="EditLayout">Modifica layout controlli</string>
-    <string name="EditLayoutDesc">Modifica dove i controlli touch soon piazzati sully schermo.</string>
-    <string name="UseTouchPort">Tasti touch in modalità verticale</string>
-    <string name="UseTouchPortDesc">Usa i tasti touch sullo schermo in modalità verticale.</string>
-    <string name="UseTouchLand">Tasti touch in modalità orizzontale</string>
-    <string name="UseTouchLandDesc">Usa i tasti touch in modalità orizzontale.</string>
+    <string name="EditLayout">Modifica il layout dei controlli</string>
+    <string name="EditLayoutDesc">Modifica la posizione dei tasti sullo schermo.</string>
+    <string name="UseTouchPort">Tasti touch portrait</string>
+    <string name="UseTouchPortDesc">Usa i tasti touch sullo schermo in modalità portrait.</string>
+    <string name="UseTouchLand">Tasti touch landscape</string>
+    <string name="UseTouchLandDesc">Usa i tasti touch sullo schermo in modalità landscape.</string>
     <string name="ResetLayout">Resetta il layout dei controlli</string>
-    <string name="ResetLayoutDesc">Resetta il layout dei tasti touch nel loro default.</string>
-    <string name="Sound">Suono</string>
-    <string name="LCDSwap">Inverti gli LCD</string>
-    <string name="LCDSwapDesc">Abilita per invertire la posizione degli LCD principale e touch.</string>
-    <string name="ButtonTrans">Transparenza tasti</string>
-    <string name="ButtonTransDesc">Quanto transparenti i tasti touch sullo schermo devono essere</string>
-    <string name="Haptic">Feedback Aptico</string>
-    <string name="HapticDesc">Abilita feedback aptico su tocco tasti se supportato dal dispositivo.</string>
-    <string name="KeymapDialogDesc">Premi un tasto per associare questo tasto</string>
-    <string name="KeymapValuePreface">Attualmente impostato su</string>
-    <string name="EditKeymap">Modifica associazioni tasti</string>
-    <string name="EditKeymapDesc">Modifica associazioni da tasti hardware a tasti DS.</string>
+    <string name="ResetLayoutDesc">Resetta il layout dei tasti alle impostazioni originali.</string>
+    <string name="Sound">Suoni</string>
+    <string name="LCDSwap">Scambia LCD</string>
+	<string name="LCDSwapDesc">Seleziona per scambiare lo schermo principale con quello touch. </string>
+    <string name="ButtonTrans">Trasparenza dei tasti</string>
+    <string name="ButtonTransDesc">Quanto devono essere trasparenti i tasti sullo schermo.</string>
+    <string name="Haptic">Feedback aptico</string>
+    <string name="HapticDesc">Abilita il feedback aptico alla pressione dei tasti se supportato dal dispositivo.</string>
+	<string name="KeymapDialogDesc">Premi un tasto touch da assegnare a questo tasto.</string>
+	<string name="KeymapValuePreface">Attualmente assegnato a</string>
+    <string name="EditKeymap">Modifica le assegnazioni dei tasti</string>
+    <string name="EditKeymapDesc">Modifica gli assegnamenti dei tasti touch a quelli fisici.</string>	
     <string name="Up">Su</string>
-    <string name="Down">Giu</string>
+    <string name="Down">Giù</string>
     <string name="Left">Sinistra</string>
     <string name="Right">Destra</string>
     <string name="A">A</string>
@@ -99,97 +99,67 @@
     <string name="Start">Select</string>
     <string name="L">L</string>
     <string name="R">R</string>
-    <string name="Touch">Tocco</string>
+    <string name="Touch">Touch</string>
     
     <!-- Release 10 -->
-    <string name="DontRotateLCDs">Non ruotare lcd</string>
-    <string name="DontRotateLCDsDesc">In modalità orizzontale, non ruotare gli LCD del gioco. Usalo per i giochi che soon progettati per giocarci con il DS tenuto lateralmente.</string>
-    <string name="Language">Linguaggio</string>
-    <string name="LanguageDesc">Il linguaggio del sistema. Le ROM multilingual usano questa impostazione. I cambiamenti verranno impostati sul prossimo caricamento di ROM.</string>
+    <string name="DontRotateLCDs">Non ruotare gli LCD</string>
+    <string name="DontRotateLCDsDesc">In modalità landscape, non ruota gli schermi. Da usare per giochi pensati per essere giocati tenendo il DS di lato.</string>
+    <string name="Language">Lingua</string>
+    <string name="LanguageDesc">La lingua del sistema. Le ROM multilingua usano questa impostazione. Il cambiamento verrà applicato al prossimo caricamento della ROM.</string>
     <string name="Gameplay">Gameplay</string>
     
     <!-- Release 11 -->
-    <string name="AddCheat">Aggiungi un nuovo trucco Action Replay</string>
-    <string name="Cheats">Trucchi</string>
+    <string name="AddCheat">Aggiunge un nuovo codice Action Replay</string>
+    <string name="Cheats">Codici</string>
     <string name="Exit">Esci</string>
     <string name="Edit">Modifica</string>
     <string name="Delete">Cancella</string>
     <string name="Description">Descrizione</string>
     <string name="Code">Codice</string>
     
-    <!-- Do not translate -->
-    <string-array name="filternames">
-        <item>Normal</item>
-		<item>HQ2x</item>
-		<item>2XSaI</item>
-		<item>Super2XSaI</item>
-		<item>SuperEagle</item>
-		<item>Scanline</item>
-		<item>Bilinear</item>
-		<item>Nearest 2X</item>
-		<item>HQ2xS</item>
-		<item>LQ2x</item>
-		<item>LQ2xS</item>
-        <item>EPX</item>
-        <item>Nearest+ 1.5X</item>
-        <item>Nearest 1.5X</item>
-        <item>EPX+</item>
-        <item>EPX 1.5X</item>
-        <item>EPX+ 1.5X</item>
-        <item>HQ4x</item>
-    </string-array>
-        <string-array name="zerothroughnine">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
-    <string-array name="zerothroughseventeen">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-    </string-array>
-   	<string-array name="zerothroughtwo">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="languages">
-        <item>日本語</item>
-        <item>English</item>
-        <item>Français</item>
-        <item>Deutsch</item>
-        <item>Italiano</item>
-        <item>Español</item>
-    </string-array>
-    <string-array name="zerothroughfive">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </string-array>
+    <!-- Release 12 -->
+    <string name="EnableMicrophone">Abilita il microfono</string>
+    <string name="EnableMicrophoneDesc">Usa il microfono del tuo dispositivo come microfono del ds.</string>
+    <string name="AlwaysTouch">Permetti sempre il touch</string>
+	<string name="AlwaysTouchDesc">Mantieni sempre attivo il touchscreen del DS, anche quando non in modalità touch. Per giochi che richiedono l\'uso di tasti e touchscreen insieme.</string>
     
+    <!-- Release 16 -->
+    <string name="MaintainAspectRatio">Mantieni aspect ratio</string>
+    <string name="MaintainAspectRatioDesc">Mantiene l\'aspect ratio del DS; non modifica l\'immagine per riempire lo schermo.</string>
+	<string name="MainScreenOnly">Solo schermo principale</string>
+	<string name="MainScreenOnlyDesc">Mostra solo lo schermo principale, il touchscreen viene nascosto.</string>
+	<string name="LidOpen">Coperchio aperto</string>
+    
+	<!-- Release 18 -->
+	<string name="SelectScreens">Seleziona gli schermi</string>
+	<string name="SelectScreensDesc">Scegli gli schermi del DS che verranno mostrati.</string>
+	<string-array name="screen_options">
+	    <item>Entrambi</item>
+	    <item>Principale</item>
+	    <item>Touch</item>
+	</string-array>
+	
+	<!-- Release 20 -->
+	<string name="Options">Opzioni</string>
+	
+	<!-- Release 22 -->
+	<string name="ExecutionEngine">Motore di esecuzione</string>
+	<string name="ExecutionEngineDesc">Il motore usato per emulare i processori ARM del DS.</string>
+	
+	<!-- Release 28 -->
+	<string name="SoundSyncMode">Sincronizza l\'audio</string>
+    <string name="SoundSyncModeDesc">Sincronizzazione dell\'audio del gioco. Dual sync/async è solitamente okay ed è più veloce, ma Sync è a volte necessario per video o voci.</string>
+	
+	<!-- Release 29 -->
+	<string name="JitSize">dimensione del blocco JIT</string>
+	<string name="JitSizeDesc">Per i motori di esecuzione threaded interpreter/tinycc JIT, indica quanto grande deve essere ogni blocco JIT. 1 è il più accurato, mentre 100 è il più veloce</string>
+	<string name="about1">nds4droid è un emulatore per Nintendo DS gratuito e open source.</string>
+	<string name="about2">nds4droid è il risultato di incalcolabili ore di lavoro da parte di dozzine di collaboratori. Il nucleo di nds4droid è DeSmuME.</string>
+	<string name="about3">Jeffrey Quesnelle è lo sviluppatore principale di nds4droid. nds4droid è un prodotto di Sterling Heights, Michigan, Stati Uniti d\'America.</string>
+	<string name="about4">Un ringraziamento speciale a gechdcb per il suo contributo al threaded interpreter e al tinycc JIT.</string>
+	<string name="about5">sito di nds4droid: http://nds4droid.com\nsito di DeSmuME: http://desmume.org</string>
+	<string name="about">Informazioni su...</string>
+
+    <!-- Do not translate -->
+  
 </resources>

@@ -1,7 +1,7 @@
 /*
 	Copyright (C) 2006 yopyop
 	Copyright (C) 2008 shash
-	Copyright (C) 2008-2012 DeSmuME team
+	Copyright (C) 2008-2013 DeSmuME team
 
 	This file is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include "debug.h"
 #include "MMU.h"
 #include "NDSSystem.h"
-#include "thumb_instructions.h"
 #include "MMU_timing.h"
 #include <assert.h>
 
@@ -634,7 +633,7 @@ TEMPLATE static  u32 FASTCALL OP_MUL_REG(const u32 i)
 	//In earlier versions of the architecture, the value of the C flag was UNPREDICTABLE
 	//after a MUL instruction.
 	
-	if (!cpu->LDTBit)	// ARM4T 1S + mI, m = 3
+	if (PROCNUM == 1)	// ARM4T 1S + mI, m = 3
 		return 4;
 
 	MUL_Mxx_END_THUMB(1);
@@ -786,7 +785,7 @@ TEMPLATE static  u32 FASTCALL OP_STR_SPREL(const u32 i)
 	u32 adr = cpu->R[13] + ((i&0xFF)<<2);
 	WRITE32(cpu->mem_if->data, adr, cpu->R[REG_NUM(i, 8)]);
 			
-	return MMU_aluMemAccessCycles<PROCNUM,16,MMU_AD_WRITE>(2, adr);
+	return MMU_aluMemAccessCycles<PROCNUM,32,MMU_AD_WRITE>(2, adr);
 }
 
 TEMPLATE static  u32 FASTCALL OP_LDR_SPREL(const u32 i)
@@ -906,7 +905,7 @@ TEMPLATE static  u32 FASTCALL OP_POP_PC(const u32 i)
 
 	v = READ32(cpu->mem_if->data, adr);
 	c += MMU_memAccessCycles<PROCNUM,32,MMU_AD_READ>(adr);
-	if(cpu->LDTBit)
+	if(PROCNUM==0)
 		cpu->CPSR.bits.T = BIT0(v);
 
 	cpu->R[15] = v & 0xFFFFFFFE;
@@ -990,8 +989,16 @@ TEMPLATE static  u32 FASTCALL OP_LDMIA_THUMB(const u32 i)
 
 TEMPLATE static  u32 FASTCALL OP_BKPT_THUMB(const u32 i)
 {
-	// TODO
-	printf("THUMB%c: Unimplemented opcode BKPT\n", PROCNUM?'7':'9');
+	printf("THUMB%c: OP_BKPT triggered\n", PROCNUM?'7':'9');
+	Status_Reg tmp = cpu->CPSR;
+	armcpu_switchMode(cpu, ABT);				// enter abt mode
+	cpu->R[14] = cpu->instruct_adr + 4;
+	cpu->SPSR = tmp;							// save old CPSR as new SPSR
+	cpu->CPSR.bits.T = 0;						// handle as ARM32 code
+	cpu->CPSR.bits.I = 1;
+	cpu->changeCPSR();
+	cpu->R[15] = cpu->intVector + 0x0C;
+	cpu->next_instruction = cpu->R[15];
 	return 1;
 }
 
@@ -1044,8 +1051,8 @@ TEMPLATE static  u32 FASTCALL OP_SWI_THUMB(const u32 i)
 //-----------------------------------------------------------------------------
 //   Branch
 //-----------------------------------------------------------------------------
-
 #define SIGNEEXT_IMM11(i)	(((i)&0x7FF) | (BIT10(i) * 0xFFFFF800))
+#define SIGNEXTEND_11(i) (((s32)i<<21)>>21)
 
 TEMPLATE static  u32 FASTCALL OP_B_COND(const u32 i)
 {
@@ -1084,7 +1091,7 @@ TEMPLATE static  u32 FASTCALL OP_BLX(const u32 i)
 
 TEMPLATE static  u32 FASTCALL OP_BL_10(const u32 i)
 {
-	cpu->R[14] = cpu->R[15] + (SIGNEEXT_IMM11(i)<<12);
+	cpu->R[14] = cpu->R[15] + (SIGNEXTEND_11(i)<<12);
 	return 1;
 }
 
@@ -1139,9 +1146,7 @@ TEMPLATE static  u32 FASTCALL OP_BX_THUMB(const u32 i)
 TEMPLATE static  u32 FASTCALL OP_BLX_THUMB(const u32 i)
 {
 	u32 Rm = cpu->R[REG_POS(i, 3)];
-	
 	cpu->CPSR.bits.T = BIT0(Rm);
-	//cpu->R[15] = (Rm & (0xFFFFFFFC|(1<<cpu->CPSR.bits.T)));
 	cpu->R[15] = Rm & 0xFFFFFFFE;
 	cpu->R[14] = cpu->next_instruction | 1;
 	cpu->next_instruction = cpu->R[15];
@@ -1153,17 +1158,15 @@ TEMPLATE static  u32 FASTCALL OP_BLX_THUMB(const u32 i)
 //   The End
 //-----------------------------------------------------------------------------
 
+const OpFunc thumb_instructions_set[2][1024] = {{
 #define TABDECL(x) x<0>
-const ThumbOpFunc thumb_instructions_set_0[1024] = {
 #include "thumb_tabdef.inc"
-};
 #undef TABDECL
-
+},{
 #define TABDECL(x) x<1>
-const ThumbOpFunc thumb_instructions_set_1[1024] = {
 #include "thumb_tabdef.inc"
-};
 #undef TABDECL
+}};
 
 #define TABDECL(x) #x
 const char* thumb_instruction_names[1024] = {

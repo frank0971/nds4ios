@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2009-2012 DeSmuME team
+	Copyright (C) 2009-2013 DeSmuME team
 
 	This file is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -46,6 +46,10 @@
 #include "NDSSystem.h"
 #include "utils/task.h"
 
+#ifdef ANDROID
+#include <android/log.h>
+#endif
+
 //#undef FORCEINLINE
 //#define FORCEINLINE
 //#undef INLINE
@@ -67,7 +71,7 @@ static u8 decal_table[32][64][64];
 static u8 index_lookup_table[65];
 static u8 index_start_table[8];
 
-
+static bool softRastHasNewData = false;
 
 ////optimized float floor useful in limited cases
 ////from http://www.stereopsis.com/FPU.html#convert
@@ -200,6 +204,11 @@ struct edge_fx_fl {
 		float curr, step, stepExtra;
 		FORCEINLINE void doStep() { curr += step; }
 		FORCEINLINE void doStepExtra() { curr += stepExtra; }
+		FORCEINLINE void initialize(float value) {
+			curr = value;
+			step = 0;
+			stepExtra = 0;
+		}
 		FORCEINLINE void initialize(float top, float bottom, float dx, float dy, long XStep, float XPrestep, float YPrestep) {
 			dx = 0;
 			dy *= (bottom-top);
@@ -265,8 +274,18 @@ FORCEINLINE edge_fx_fl::edge_fx_fl(int Top, int Bottom, VERT** verts, bool& fail
 	}
 	else
 	{
-		memset(this, 0, sizeof(*this));
-		this->verts = verts;
+		// even if Width == 0 && Height == 0, give some info for pixel poly
+		// example: Castlevania Portrait of Ruin, warp stone
+		XStep = 1;
+		Numerator = 0;
+		Denominator = 1;
+		ErrorTerm = 0;
+		invw.initialize(1/verts[Top]->w);
+		u.initialize(verts[Top]->u);
+		v.initialize(verts[Top]->v);
+		z.initialize(verts[Top]->z);
+		for(int i=0;i<3;i++)
+			color[i].initialize(verts[Top]->fcolor[i]);
 	}
 }
 
@@ -568,17 +587,17 @@ public:
 		{
 			//not sure about this
 			//this value was chosen to make the skybox, castle window decals, and water level render correctly in SM64
-			depth = u32floor(4096*w);
+			depth = 4096*w;
 		}
 		else
 		{
-			depth = u32floor(z*0x7FFF);
+			depth = z*0x7FFF;
 			depth <<= 9;
 		}
 
 		if(polyAttr.decalMode)
 		{
-			if ( CommonSettings.GFX3D_Zelda_Shadow_Depth_Hack > 0)
+			/*if ( CommonSettings.GFX3D_Zelda_Shadow_Depth_Hack > 0)
 			{
 				if(depth<destFragment.depth - CommonSettings.GFX3D_Zelda_Shadow_Depth_Hack
 					|| depth>destFragment.depth + CommonSettings.GFX3D_Zelda_Shadow_Depth_Hack) 
@@ -587,7 +606,7 @@ public:
 				}
 
 			}
-			else
+			else*/
 			{
 				if(depth != destFragment.depth)
 				{
@@ -1045,7 +1064,7 @@ public:
 
 			polyAttr.backfacing = engine->polyBackfacing[i];
 
-			shape_engine<SLI>(type,!polyAttr.backfacing, gfx3d_IsLinePoly(poly));
+			shape_engine<SLI>(type,!polyAttr.backfacing, (poly->vtxFormat & 4) && CommonSettings.GFX3D_LineHack);
 		}
 	}
 
@@ -1054,10 +1073,11 @@ public:
 
 static SoftRasterizerEngine mainSoftRasterizer;
 
-static Task rasterizerUnitTask[4];
-static RasterizerUnit<true> rasterizerUnit[4];
+#define _MAX_CORES 16
+static Task rasterizerUnitTask[_MAX_CORES];
+static RasterizerUnit<true> rasterizerUnit[_MAX_CORES];
 static RasterizerUnit<false> _HACK_viewer_rasterizerUnit;
-static int rasterizerCores;
+static unsigned int rasterizerCores = 0;
 static bool rasterizerUnitTasksInited = false;
 
 static void* execRasterizerUnit(void* arg)
@@ -1069,6 +1089,12 @@ static void* execRasterizerUnit(void* arg)
 
 static char SoftRastInit(void)
 {
+	char result = Default3D_Init();
+	if (result == 0)
+	{
+		return result;
+	}
+	
 	if(!rasterizerUnitTasksInited)
 	{
 		rasterizerUnitTasksInited = true;
@@ -1076,35 +1102,25 @@ static char SoftRastInit(void)
 		_HACK_viewer_rasterizerUnit.SLI_MASK = 1;
 		_HACK_viewer_rasterizerUnit.SLI_VALUE = 0;
 
-		if(CommonSettings.num_cores>=4)
+		rasterizerCores = CommonSettings.num_cores;
+		if (rasterizerCores > _MAX_CORES) 
+			rasterizerCores = _MAX_CORES;
+		if(CommonSettings.num_cores <= 1)
 		{
-			rasterizerCores = 4;
-			rasterizerUnit[0].SLI_MASK = 3;
-			rasterizerUnit[1].SLI_MASK = 3;
-			rasterizerUnit[2].SLI_MASK = 3;
-			rasterizerUnit[3].SLI_MASK = 3;
-			rasterizerUnit[0].SLI_VALUE = 0;
-			rasterizerUnit[1].SLI_VALUE = 1;
-			rasterizerUnit[2].SLI_VALUE = 2;
-			rasterizerUnit[3].SLI_VALUE = 3;
-			rasterizerUnitTask[0].start(false);
-			rasterizerUnitTask[1].start(false);
-			rasterizerUnitTask[2].start(false);
-			rasterizerUnitTask[3].start(false);
-		} else if(CommonSettings.num_cores>1)
-		{
-			rasterizerCores = 2;
-			rasterizerUnit[0].SLI_MASK = 1;
-			rasterizerUnit[1].SLI_MASK = 1;
-			rasterizerUnit[0].SLI_VALUE = 0;
-			rasterizerUnit[1].SLI_VALUE = 1;
-			rasterizerUnitTask[0].start(false);
-			rasterizerUnitTask[1].start(false);
-		} else {
 			rasterizerCores = 1;
 			rasterizerUnit[0].SLI_MASK = 0;
 			rasterizerUnit[0].SLI_VALUE = 0;
 		}
+		else
+		{
+			for (u8 i = 0; i < rasterizerCores; i++)
+			{
+				rasterizerUnit[i].SLI_MASK = (rasterizerCores - 1);
+				rasterizerUnit[i].SLI_VALUE = i;
+				rasterizerUnitTask[i].start(false);
+			}
+		}
+
 	}
 
 	static bool tables_generated = false;
@@ -1143,19 +1159,41 @@ static char SoftRastInit(void)
 	return 1;
 }
 
-static void SoftRastReset() {
-	TexCache_Reset();
+static void SoftRastReset()
+{
+	if (rasterizerCores > 1)
+	{
+		for(unsigned int i = 0; i < rasterizerCores; i++)
+		{
+			rasterizerUnitTask[i].finish();
+		}
+	}
+	
+	softRastHasNewData = false;
+	
+	Default3D_Reset();
 }
 
 static void SoftRastClose()
 {
-	for(int i=0;i<4;i++)
-		rasterizerUnitTask[i].shutdown();
+	if (rasterizerCores > 1)
+	{
+		for(unsigned int i = 0; i < rasterizerCores; i++)
+		{
+			rasterizerUnitTask[i].finish();
+			rasterizerUnitTask[i].shutdown();
+		}
+	}
+	
 	rasterizerUnitTasksInited = false;
+	softRastHasNewData = false;
+	
+	Default3D_Close();
 }
 
-static void SoftRastVramReconfigureSignal() {
-	TexCache_Invalidate();
+static void SoftRastVramReconfigureSignal()
+{
+	Default3D_VramReconfigureSignal();
 }
 
 static void SoftRastConvertFramebuffer()
@@ -1184,7 +1222,7 @@ void SoftRasterizerEngine::initFramebuffer(const int width, const int height, co
 	clearFragment.isTranslucentPoly = 0;
 	clearFragment.fogged = BIT15(gfx3d.renderState.clearColor);
 	for(int i=0;i<todo;i++)
-		screen[i] = clearFragment;
+		memcpy(&screen[i], &clearFragment, sizeof(Fragment));
 
 	if(clearImage)
 	{
@@ -1217,10 +1255,9 @@ void SoftRasterizerEngine::initFramebuffer(const int width, const int height, co
 				
 				//this is tested quite well in the sonic chronicles main map mode
 				//where depth values are used for trees etc you can walk behind
-				u32 depth = clearDepth[adr];
+				u16 depth = clearDepth[adr];
 				dst->fogged = BIT15(depth);
-				//TODO - might consider a lookup table for this
-				dst->depth = gfx3d_extendDepth_15_to_24(depth&0x7FFF);
+				dst->depth = DS_DEPTH15TO24(depth);
 
 				dstColor++;
 				dst++;
@@ -1229,7 +1266,7 @@ void SoftRasterizerEngine::initFramebuffer(const int width, const int height, co
 	}
 	else 
 		for(int i=0;i<todo;i++)
-			screenColor[i] = clearFragmentColor;
+			memcpy(&screenColor[i], &clearFragmentColor, sizeof(FragmentColor));
 }
 
 void SoftRasterizerEngine::updateToonTable()
@@ -1237,7 +1274,7 @@ void SoftRasterizerEngine::updateToonTable()
 	//convert the toon colors
 	for(int i=0;i<32;i++) {
 		#ifdef WORDS_BIGENDIAN
-			u32 u32temp = RGB15TO32_NOALPHA(gfx3d.renderState.u16ToonTable[i]);
+			const u32 u32temp = RGB15TO32_NOALPHA(gfx3d.renderState.u16ToonTable[i]);
 			toonTable[i].r = (u32temp >> 2) & 0x3F;
 			toonTable[i].g = (u32temp >> 10) & 0x3F;
 			toonTable[i].b = (u32temp >> 18) & 0x3F;
@@ -1320,7 +1357,7 @@ void SoftRasterizerEngine::framebufferProcess()
 	// - the edges are completely sharp/opaque on the very brief title screen intro,
 	// - the level-start intro gets a pseudo-antialiasing effect around the silhouette,
 	// - the character edges in-level are clearly transparent, and also show well through shield powerups.
-	if(gfx3d.renderState.enableEdgeMarking && CommonSettings.GFX3D_EdgeMark)
+	if(gfx3d.renderState.enableEdgeMarking)
 	{ 
 		//TODO - need to test and find out whether these get grabbed at flush time, or at render time
 		//we can do this by rendering a 3d frame and then freezing the system, but only changing the edge mark colors
@@ -1393,7 +1430,7 @@ void SoftRasterizerEngine::framebufferProcess()
 		}
 	}
 
-	if(gfx3d.renderState.enableFog && CommonSettings.GFX3D_Fog)
+	if(gfx3d.renderState.enableFog)
 	{
 		u32 r = GFX3D_5TO6((gfx3d.renderState.fogColor)&0x1F);
 		u32 g = GFX3D_5TO6((gfx3d.renderState.fogColor>>5)&0x1F);
@@ -1596,6 +1633,15 @@ void _HACK_Viewer_ExecUnit(SoftRasterizerEngine* engine)
 
 static void SoftRastRender()
 {
+	// Force threads to finish before rendering with new data
+	if (rasterizerCores > 1)
+	{
+		for(unsigned int i = 0; i < rasterizerCores; i++)
+		{
+			rasterizerUnitTask[i].finish();
+		}
+	}
+	
 	mainSoftRasterizer.polylist = gfx3d.polylist;
 	mainSoftRasterizer.vertlist = gfx3d.vertlist;
 	mainSoftRasterizer.indexlist = &gfx3d.indexlist;
@@ -1605,7 +1651,7 @@ static void SoftRastRender()
 	mainSoftRasterizer.height = 192;
 
 	//setup fog variables (but only if fog is enabled)
-	if(gfx3d.renderState.enableFog && CommonSettings.GFX3D_Fog)
+	if(gfx3d.renderState.enableFog)
 		mainSoftRasterizer.updateFogTable();
 	
 	mainSoftRasterizer.initFramebuffer(256,192,gfx3d.renderState.enableClearImage?true:false);
@@ -1617,24 +1663,44 @@ static void SoftRastRender()
 	mainSoftRasterizer.performCoordAdjustment(true);
 	mainSoftRasterizer.setupTextures(true);
 
-
-	if(rasterizerCores==1)
+	softRastHasNewData = true;
+	
+	if (rasterizerCores > 1)
 	{
-		rasterizerUnit[0].mainLoop<false>(&mainSoftRasterizer);
+		for(unsigned int i = 0; i < rasterizerCores; i++)
+		{
+			rasterizerUnitTask[i].execute(&execRasterizerUnit, (void *)i);
+		}
 	}
 	else
 	{
-		for(int i=0;i<rasterizerCores;i++) rasterizerUnitTask[i].execute(execRasterizerUnit,(void*)i);
-		for(int i=0;i<rasterizerCores;i++) rasterizerUnitTask[i].finish();
+		rasterizerUnit[0].mainLoop<false>(&mainSoftRasterizer);
 	}
+}
 
+static void SoftRastRenderFinish()
+{
+	if (!softRastHasNewData)
+	{
+		return;
+	}
+	
+	if (rasterizerCores > 1)
+	{
+		for(unsigned int i = 0; i < rasterizerCores; i++)
+		{
+			rasterizerUnitTask[i].finish();
+		}
+	}
+	
 	TexCache_EvictFrame();
-
-
+	
 	mainSoftRasterizer.framebufferProcess();
-
+	
 	//	printf("rendered %d of %d polys after backface culling\n",gfx3d.polylist->count-culled,gfx3d.polylist->count);
 	SoftRastConvertFramebuffer();
+	
+	softRastHasNewData = false;
 }
 
 GPU3DInterface gpu3DRasterize = {
@@ -1643,6 +1709,7 @@ GPU3DInterface gpu3DRasterize = {
 	SoftRastReset,
 	SoftRastClose,
 	SoftRastRender,
-	SoftRastVramReconfigureSignal,
+	SoftRastRenderFinish,
+	SoftRastVramReconfigureSignal
 };
 

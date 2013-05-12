@@ -190,7 +190,7 @@ return: 	d 4x4 matrix
 expression: d = m * v
 */
 void		matvec4_c(float m[16], float v[4], float d[4]);
-void		matvec4_neon(const float* a, const float* b, float* output);
+void		matvec4_neon(float m[16], float v[4], float d[4]);
 
 /* 
 function:	sinf

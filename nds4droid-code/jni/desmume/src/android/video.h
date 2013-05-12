@@ -15,11 +15,7 @@
 	along with the this software.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __VIDEO_H__
-#define __VIDEO_H__
-
-#include "../filter/filter.h"
-#include "../types.h"
+#include "filter/filter.h"
 
 class VideoInfo
 {
@@ -37,7 +33,7 @@ public:
 
 	int currentfilter;
 
-	u8* srcBuffer;
+	CACHE_ALIGN u8* srcBuffer;
 	CACHE_ALIGN u32 buffer[16*256*192*2];
 	CACHE_ALIGN u32 filteredbuffer[16*256*192*2];
 
@@ -253,6 +249,3 @@ public:
 		return screengap * height / 384;
 	}
 };
-
-#endif
-

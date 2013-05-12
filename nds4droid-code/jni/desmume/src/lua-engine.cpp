@@ -1856,7 +1856,7 @@ DEFINE_LUA_FUNCTION(memory_readbyterange, "address,length")
 	{
 		if(IsHardwareAddressValid(a))
 		{
-			unsigned char value = (unsigned char)(_MMU_read08<ARMCPU_ARM9>(address) & 0xFF);
+			unsigned char value = (unsigned char)(_MMU_read08<ARMCPU_ARM9>(a) & 0xFF);
 			lua_pushinteger(L, value);
 			lua_rawseti(L, -2, n);
 		}
@@ -3267,7 +3267,7 @@ DEFINE_LUA_FUNCTION(gui_gdscreenshot, "[whichScreen='both']")
 	{
 		for(int x = curGuiData.xMin; x < curGuiData.xMax; x++)
 		{
-			*ptr++ = 255 - Src[4*x+3];
+			*ptr++ = 0 /* (255 - Src[4*x+3]) / 2 */; // alpha (0-127, 0=opaque, 127=transparent)
 			*ptr++ = Src[4*x+2];
 			*ptr++ = Src[4*x+1];
 			*ptr++ = Src[4*x+0];
@@ -4421,7 +4421,8 @@ static int gui_osdtext(lua_State *L)
 	return 0;
 }
 
-static int stylus_read(lua_State *L){
+DEFINE_LUA_FUNCTION(stylus_read, "")
+{
 	
 	lua_newtable(L);
 
@@ -4434,7 +4435,8 @@ static int stylus_read(lua_State *L){
 
 	return 1;
 }
-static int stylus_peek(lua_State *L){
+DEFINE_LUA_FUNCTION(stylus_peek, "")
+{
 	
 	lua_newtable(L);
 
@@ -4452,7 +4454,7 @@ static int toTouchValue(int pixCoord, int maximum)
 	pixCoord = std::min(std::max(pixCoord, 0), maximum-1);
 	return (pixCoord << 4) & 0x0FF0;
 }
-static int stylus_write(lua_State *L)
+DEFINE_LUA_FUNCTION(stylus_write, "table")
 {
 	if(movieMode == MOVIEMODE_PLAY) // don't allow tampering with a playing movie's input
 		return 0; // (although it might be useful sometimes...)

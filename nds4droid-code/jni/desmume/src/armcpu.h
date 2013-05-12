@@ -23,6 +23,8 @@
 #include "bits.h"
 #include "MMU.h"
 #include "common.h"
+#include "instructions.h"
+#include "cp15.h"
 
 #define CODE(i)     (((i)>>25)&0x7)
 #define OPCODE(i)   (((i)>>21)&0xF)
@@ -39,40 +41,40 @@
 
 #define INSTRUCTION_INDEX(i) ((((i)>>16)&0xFF0)|(((i)>>4)&0xF))
 
-inline u32 ROR(u32 i, u32 j)   { return ((((u32)(i))>>(j)) | (((u32)(i))<<(32-(j)))); }
+FORCEINLINE u32 ROR(u32 i, u32 j)   { return ((((u32)(i))>>(j)) | (((u32)(i))<<(32-(j)))); }
 
 template<typename T>
-inline T UNSIGNED_OVERFLOW(T a,T b,T c) { return BIT31(((a)&(b)) | (((a)|(b))&(~c))); }
+FORCEINLINE T UNSIGNED_OVERFLOW(T a,T b,T c) { return BIT31(((a)&(b)) | (((a)|(b))&(~c))); }
 
 template<typename T>
-inline T UNSIGNED_UNDERFLOW(T a,T b,T c) { return BIT31(((~a)&(b)) | (((~a)|(b))&(c))); }
+FORCEINLINE T UNSIGNED_UNDERFLOW(T a,T b,T c) { return BIT31(((~a)&(b)) | (((~a)|(b))&(c))); }
 
 template<typename T>
-inline T SIGNED_OVERFLOW(T a,T b,T c) { return BIT31(((a)&(b)&(~c)) | ((~a)&(~(b))&(c))); }
+FORCEINLINE T SIGNED_OVERFLOW(T a,T b,T c) { return BIT31(((a)&(b)&(~c)) | ((~a)&(~(b))&(c))); }
 
 template<typename T>
-inline T SIGNED_UNDERFLOW(T a,T b,T c) { return BIT31(((a)&(~(b))&(~c)) | ((~a)&(b)&(c))); }
+FORCEINLINE T SIGNED_UNDERFLOW(T a,T b,T c) { return BIT31(((a)&(~(b))&(~c)) | ((~a)&(b)&(c))); }
 
 // ============================= CPRS flags funcs
-inline bool CarryFrom(s32 left, s32 right)
+FORCEINLINE bool CarryFrom(s32 left, s32 right)
 {
   u32 res  = (0xFFFFFFFFU - (u32)left);
 
   return ((u32)right > res);
 }
 
-inline bool BorrowFrom(s32 left, s32 right)
+FORCEINLINE bool BorrowFrom(s32 left, s32 right)
 {
   return ((u32)right > (u32)left);
 }
 
-inline bool OverflowFromADD(s32 alu_out, s32 left, s32 right)
+FORCEINLINE bool OverflowFromADD(s32 alu_out, s32 left, s32 right)
 {
     return ((left >= 0 && right >= 0) || (left < 0 && right < 0))
 			&& ((left < 0 && alu_out >= 0) || (left >= 0 && alu_out < 0));
 }
 
-inline bool OverflowFromSUB(s32 alu_out, s32 left, s32 right)
+FORCEINLINE bool OverflowFromSUB(s32 alu_out, s32 left, s32 right)
 {
     return ((left < 0 && right >= 0) || (left >= 0 && right < 0))
 			&& ((left < 0 && alu_out >= 0) || (left >= 0 && alu_out < 0));
@@ -95,7 +97,56 @@ inline bool OverflowFromSUB(s32 alu_out, s32 left, s32 right)
 //#define LE	0xD
 //#define AL	0xE
 
-extern const unsigned char arm_cond_table[16*16];
+static const u8 arm_cond_table[16*16] = {
+    // N=0, Z=0, C=0, V=0
+    0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,	// 0x00
+    0x00,0xFF,0xFF,0x00,0xFF,0x00,0xFF,0x20,	// 0x00
+    // N=0, Z=0, C=0, V=1
+    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x00,	// 0x10
+    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
+    // N=0, Z=0, C=1, V=0
+    0x00,0xFF,0xFF,0x00,0x00,0xFF,0x00,0xFF,	// 0x20
+    0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x20,
+    // N=0, Z=0, C=1, V=1
+    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x00,	// 0x30
+    0xFF,0x00,0x00,0xFF,0x00,0xFF,0xFF,0x20,
+    // N=0, Z=1, C=0, V=0
+    0xFF,0x00,0x00,0xFF,0x00,0xFF,0x00,0xFF,	// 0x40
+    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x20,
+    // N=0, Z=1, C=0, V=1
+    0xFF,0x00,0x00,0xFF,0x00,0xFF,0xFF,0x00,	// 0x50
+    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
+    // N=0, Z=1, C=1, V=0
+    0xFF,0x00,0xFF,0x00,0x00,0xFF,0x00,0xFF,	// 0x60
+    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x20,
+    // N=0, Z=1, C=1, V=1
+    0xFF,0x00,0xFF,0x00,0x00,0xFF,0xFF,0x00,	// 0x70
+    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
+    // N=1, Z=0, C=0, V=0
+    0x00,0xFF,0x00,0xFF,0xFF,0x00,0x00,0xFF,	// 0x80
+    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
+    // N=1, Z=0, C=0, V=1
+    0x00,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0x00,	// 0x90
+    0x00,0xFF,0xFF,0x00,0xFF,0x00,0xFF,0x20,
+    // N=1, Z=0, C=1, V=0
+    0x00,0xFF,0xFF,0x00,0xFF,0x00,0x00,0xFF,	// 0xA0
+    0xFF,0x00,0x00,0xFF,0x00,0xFF,0xFF,0x20,
+    // N=1, Z=0, C=1, V=1
+    0x00,0xFF,0xFF,0x00,0xFF,0x00,0xFF,0x00,	// 0xB0
+    0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x20,
+    // N=1, Z=1, C=0, V=0
+    0xFF,0x00,0x00,0xFF,0xFF,0x00,0x00,0xFF,	// 0xC0
+    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
+    // N=1, Z=1, C=0, V=1
+    0xFF,0x00,0x00,0xFF,0xFF,0x00,0xFF,0x00,	// 0xD0
+    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x20,
+    // N=1, Z=1, C=1, V=0
+    0xFF,0x00,0xFF,0x00,0xFF,0x00,0x00,0xFF,	// 0xE0
+    0x00,0xFF,0x00,0xFF,0x00,0xFF,0xFF,0x20,
+    // N=1, Z=1, C=1, V=1
+    0xFF,0x00,0xFF,0x00,0xFF,0x00,0xFF,0x00,	// 0xF0
+    0x00,0xFF,0xFF,0x00,0x00,0xFF,0xFF,0x20
+};
 
 #define TEST_COND(cond, inst, CPSR)   ((arm_cond_table[((CPSR.val >> 24) & 0xf0)|(cond)]) & (1 << (inst)))
 
@@ -187,10 +238,17 @@ struct armcpu_t
 	u32 instruct_adr; //8
 	u32 next_instruction; //12
 
-	u32 R[16]; //16
+#ifdef USE_EXOPHASEJIT
+	u32* R;
+	u32 reg[16]; //16
 	Status_Reg CPSR;  //80
+	u32 dynarec_reg[16];
 	Status_Reg SPSR;
-
+#else
+	CACHE_ALIGN u32 R[16]; //16
+	CACHE_ALIGN Status_Reg CPSR;  //80
+	Status_Reg SPSR;
+#endif
 	void changeCPSR();
 
 	u32 R13_usr, R14_usr;
@@ -200,8 +258,6 @@ struct armcpu_t
 	u32 R13_irq, R14_irq;
 	u32 R8_fiq, R9_fiq, R10_fiq, R11_fiq, R12_fiq, R13_fiq, R14_fiq;
 	Status_Reg SPSR_svc, SPSR_abt, SPSR_und, SPSR_irq, SPSR_fiq;
-
-	armcp_t *coproc[16];
 
 	u32 intVector;
 	u8 LDTBit;  //1 : ARMv5 style 0 : non ARMv5 (earlier)
@@ -213,8 +269,12 @@ struct armcpu_t
 
 	u32 (* *swi_tab)();
 
-  // flag indicating if the processor is stalled (for debugging)
-  int stalled;
+	// flag indicating if the processor is stalled (for debugging)
+	int stalled;
+
+#if defined(_M_X64) || defined(__x86_64__)
+	u8 cond_table[16*16];
+#endif
 
 #ifdef GDB_STUB
   /** there is a pending irq for the cpu */
@@ -244,9 +304,7 @@ int armcpu_new( armcpu_t *armcpu, u32 id);
 #endif
 void armcpu_init(armcpu_t *armcpu, u32 adr);
 u32 armcpu_switchMode(armcpu_t *armcpu, u8 mode);
-
-
-template<int PROCNUM> u32 armcpu_exec() HOT;
+void armcpu_changeCPSR(armcpu_t *armcpu);
 
 BOOL armcpu_irqException(armcpu_t *armcpu);
 BOOL armcpu_flagIrq( armcpu_t *armcpu);
@@ -254,9 +312,14 @@ void armcpu_exception(armcpu_t *cpu, u32 number);
 u32 TRAPUNDEF(armcpu_t* cpu);
 u32 armcpu_Wait4IRQ(armcpu_t *cpu);
 
-extern armcpu_t NDS_ARM7;
-extern armcpu_t NDS_ARM9;
+extern CACHE_ALIGN armcpu_t NDS_ARM7;
+extern CACHE_ALIGN armcpu_t NDS_ARM9;
 
+
+template<int PROCNUM, int cpuMode> u32 armcpu_exec();
+
+void armcpu_setjitmode(int jitmode);
+void armcpu_sync();
 
 static INLINE void setIF(int PROCNUM, u32 flag)
 {

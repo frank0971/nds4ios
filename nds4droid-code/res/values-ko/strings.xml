@@ -65,63 +65,92 @@
     <string name="yes">예</string>
     <string name="no">아니오</string>
     
+	<!-- Release 8 -->
+    <string name="Display">디스플레이</string>
+    <string name="Controls">컨트롤</string>
+    <string name="EditLayout">컨트롤 레이아웃 변경</string>
+    <string name="EditLayoutDesc">터치 컨트롤을 화면 어디에 배치할지 설정합니다.</string>
+    <string name="UseTouchPort">수직 터치버튼</string>
+    <string name="UseTouchPortDesc">화면위에 터치스크린을 수직으로 배치합니다.</string>
+    <string name="UseTouchLand">수평 터치버튼</string>
+    <string name="UseTouchLandDesc">화면위에 터치스크린을 수평으로 배치합니다.</string>
+    <string name="ResetLayout">터치 컨트롤 레이아웃 리셋</string>
+    <string name="ResetLayoutDesc">터치 컨트롤의 레이아웃을 기본상태로 초기화합니다.</string>
+    <string name="Sound">사운드</string>
+    <string name="LCDSwap">LCD 바꾸기</string>
+    <string name="LCDSwapDesc">메인 또는 터치 LCD의 위치를 바꿔줍니다.</string>
+    <string name="ButtonTrans">버튼 투명도</string>
+    <string name="ButtonTransDesc">버튼의 투명도를 설정합니다</string>
+    <string name="Haptic">햅틱 피드백</string>
+    <string name="HapticDesc">사용자 기기가 햅틱피드백을 지원할 경우 버튼을누를때 햅틱피드백 효과를냅니다.</string>
+    <string name="KeymapDialogDesc">본버튼에 매핑할 키를 설정합니다</string>
+    <string name="KeymapValuePreface">현재 매핑된 키</string>
+    <string name="EditKeymap">키매핑 변경</string>
+    <string name="EditKeymapDesc">하드웨어 키와 DS 버튼을 매핑합니다.</string>
+    <string name="Up">위</string>
+    <string name="Down">아래</string>
+    <string name="Left">왼쪽</string>
+    <string name="Right">오른쪽</string>
+    <string name="A">A</string>
+    <string name="B">B</string>
+    <string name="X">X</string>
+    <string name="Y">Y</string>
+    <string name="Select">start</string>
+    <string name="Start">Select</string>
+    <string name="L">L</string>
+    <string name="R">R</string>
+    <string name="Touch">터치</string>
+    
+    <!-- Release 10 -->
+    <string name="DontRotateLCDs">LCD회전 끄기</string>
+    <string name="DontRotateLCDsDesc">수평모드일때 게임 LCD 회전을 끕니다. 수평화면으로 즐기실 DS게임의 경우사용해주십시오.</string>
+    <string name="Language">언어</string>
+    <string name="LanguageDesc">시스템 언어를 설정합니다. 다중언어 ROM의경우 설정가능합니다. 다음번 ROM 로딩시 적용됩니다</string>
+    <string name="Gameplay">게임플레이</string>
+    
+    <!-- Release 11 -->
+    <string name="AddCheat">액션 리플레이 치트를 추가합니다</string>
+    <string name="Cheats">치트</string>
+    <string name="Exit">나가기</string>
+    <string name="Edit">변경</string>
+    <string name="Delete">삭제</string>
+    <string name="Description">설명</string>
+    <string name="Code">코드</string>
+    
+    <!-- Release 12 -->
+    <string name="EnableMicrophone">마이크 사용하기</string>
+    <string name="EnableMicrophoneDesc">사용자 기기의 마이크를 DS 마이크로 지정합니다.</string>
+    <string name="AlwaysTouch">터치이벤트 항상 처리하기</string>
+    <string name="AlwaysTouchDesc">터치모드가 아닌상태에서도 항상 DS터치스크린을 처리합니다. 컨트롤러와 터치스크린을 동시에 사용하는 게임을하실때 필요합니다.</string>
+    
+    <!-- Release 16 -->
+    <string name="MaintainAspectRatio">화면비율 유지</string>
+    <string name="MaintainAspectRatioDesc">DS의 화면비율을 유지합니다; 전체화면으로 부풀리지 않습니다.</string>
+	<string name="MainScreenOnly">메인스크린만 사용</string>
+	<string name="MainScreenOnlyDesc">터치스크린은 숨기고 메인 게임 스크린만 표시합니다</string>
+	<string name="LidOpen">lid 열림</string>
+    
+	<!-- Release 18 -->
+	<string name="SelectScreens">스크린 선택</string>
+	<string name="SelectScreensDesc">어떤 DS스크린을 활성화할지 선택합니다.</string>
+	<string-array name="screen_options">
+	    <item>둘다</item>
+	    <item>메인스크린민</item>
+	    <item>터치스크린만</item>
+	</string-array>
+	
+	<!-- Release 20 -->
+	<string name="Options">옵션</string>
+	
+	<!-- Release 22 -->
+	<string name="ExecutionEngine">처리엔진</string>
+	<string name="ExecutionEngineDesc">DS의 ARM 프로세서를 에뮬레이트할 엔진을 선택합니다.</string>
+	
+	<!-- Release 28 -->
+	<string name="SoundSyncMode">사운드 동기화 모드</string>
+	<string name="SoundSyncModeDesc">게임사운드 동기화 모드를 선택합니다. 보통 dual sync/async를 사용하시는게 빠르지만 영화나 음성처리에 sync가 필요할 수 있습니다.</string>
+	
     <!-- Do not translate -->
-    <string-array name="filternames">
-        <item>Normal</item>
-		<item>HQ2x</item>
-		<item>2XSaI</item>
-		<item>Super2XSaI</item>
-		<item>SuperEagle</item>
-		<item>Scanline</item>
-		<item>Bilinear</item>
-		<item>Nearest 2X</item>
-		<item>HQ2xS</item>
-		<item>LQ2x</item>
-		<item>LQ2xS</item>
-        <item>EPX</item>
-        <item>Nearest+ 1.5X</item>
-        <item>Nearest 1.5X</item>
-        <item>EPX+</item>
-        <item>EPX 1.5X</item>
-        <item>EPX+ 1.5X</item>
-        <item>HQ4x</item>
-    </string-array>
-        <string-array name="zerothroughnine">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-    </string-array>
-    <string-array name="zerothroughseventeen">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-    </string-array>
-   	<string-array name="zerothroughtwo">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
+    
     
 </resources>

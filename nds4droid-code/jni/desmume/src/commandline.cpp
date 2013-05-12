@@ -28,7 +28,7 @@
 #include "NDSSystem.h"
 #include "utils/xstring.h"
 
-int scanline_filter_a = 2, scanline_filter_b = 4;
+int _scanline_filter_a = 0, _scanline_filter_b = 2, _scanline_filter_c = 2, _scanline_filter_d = 4;
 int _commandline_linux_nojoy = 0;
 
 CommandLine::CommandLine()
@@ -49,6 +49,8 @@ CommandLine::CommandLine()
 , _advanced_timing(-1)
 , _slot1(NULL)
 , _slot1_fat_dir(NULL)
+, _cpu_mode(-1)
+, _jit_size(-1)
 , _console_type(NULL)
 , depth_threshold(-1)
 , load_slot(-1)
@@ -88,14 +90,18 @@ void CommandLine::loadCommonOptions()
 		{ "bios-swi", 0, 0, G_OPTION_ARG_INT, &_bios_swi, "Uses SWI from the provided bios files", "BIOS_SWI"},
 		{ "spu-advanced", 0, 0, G_OPTION_ARG_INT, &_spu_advanced, "Uses advanced SPU capture functions", "SPU_ADVANCED"},
 		{ "num-cores", 0, 0, G_OPTION_ARG_INT, &_num_cores, "Override numcores detection and use this many", "NUM_CORES"},
-		{ "scanline-filter-a", 0, 0, G_OPTION_ARG_INT, &scanline_filter_a, "Intensity of fadeout for scanlines filter (edge) (default 2)", "SCANLINE_FILTER_A"},
-		{ "scanline-filter-b", 0, 0, G_OPTION_ARG_INT, &scanline_filter_b, "Intensity of fadeout for scanlines filter (corner) (default 4)", "SCANLINE_FILTER_B"},
+		{ "scanline-filter-a", 0, 0, G_OPTION_ARG_INT, &_scanline_filter_a, "Intensity of fadeout for scanlines filter (topleft) (default 0)", "SCANLINE_FILTER_A"},
+		{ "scanline-filter-b", 0, 0, G_OPTION_ARG_INT, &_scanline_filter_b, "Intensity of fadeout for scanlines filter (topright) (default 2)", "SCANLINE_FILTER_B"},
+		{ "scanline-filter-c", 0, 0, G_OPTION_ARG_INT, &_scanline_filter_c, "Intensity of fadeout for scanlines filter (bottomleft) (default 2)", "SCANLINE_FILTER_C"},
+		{ "scanline-filter-d", 0, 0, G_OPTION_ARG_INT, &_scanline_filter_d, "Intensity of fadeout for scanlines filter (bottomright) (default 4)", "SCANLINE_FILTER_D"},
 		{ "rigorous-timing", 0, 0, G_OPTION_ARG_INT, &_rigorous_timing, "Use some rigorous timings instead of unrealistically generous (default 0)", "RIGOROUS_TIMING"},
 		{ "advanced-timing", 0, 0, G_OPTION_ARG_INT, &_advanced_timing, "Use advanced BUS-level timing (default 1)", "ADVANCED_TIMING"},
 		{ "slot1", 0, 0, G_OPTION_ARG_STRING, &_slot1, "Device to load in slot 1 (default retail)", "SLOT1"},
 		{ "slot1-fat-dir", 0, 0, G_OPTION_ARG_STRING, &_slot1_fat_dir, "Directory to scan for slot 1", "SLOT1_DIR"},
 		{ "depth-threshold", 0, 0, G_OPTION_ARG_INT, &depth_threshold, "Depth comparison threshold (default 0)", "DEPTHTHRESHOLD"},
 		{ "console-type", 0, 0, G_OPTION_ARG_STRING, &_console_type, "Select console type: {fat,lite,ique,debug,dsi}", "CONSOLETYPE" },
+		{ "cpu-mode", 0, 0, G_OPTION_ARG_INT, &_cpu_mode, "ARM CPU emulation mode: 0 - interpreter, 1 - thread interpreter, 2 - dynarec (default 1)", NULL},
+		{ "jit-size", 0, 0, G_OPTION_ARG_INT, &_jit_size, "ARM JIT block size: 1..100 (1 - accuracy, 100 - faster) (default 100)", NULL},
 #ifndef _MSC_VER
 		{ "disable-sound", 0, 0, G_OPTION_ARG_NONE, &disable_sound, "Disables the sound emulation", NULL},
 		{ "disable-limiter", 0, 0, G_OPTION_ARG_NONE, &disable_limiter, "Disables the 60fps limiter", NULL},
@@ -136,6 +142,14 @@ bool CommandLine::parse(int argc,char **argv)
 	if(_num_cores != -1) CommonSettings.num_cores = _num_cores;
 	if(_rigorous_timing) CommonSettings.rigorous_timing = true;
 	if(_advanced_timing != -1) CommonSettings.advanced_timing = _advanced_timing==1;
+	if(_cpu_mode != -1) CommonSettings.CpuMode = _cpu_mode;
+	if(_jit_size != -1) 
+	{
+		if ((_jit_size < 1) || (_jit_size > 100)) 
+			CommonSettings.jit_max_block_size = 100;
+		else
+			CommonSettings.jit_max_block_size = _jit_size;
+	}
 	if(depth_threshold != -1)
 		CommonSettings.GFX3D_Zelda_Shadow_Depth_Hack = depth_threshold;
 
@@ -221,6 +235,12 @@ bool CommandLine::validate()
 		g_printerr("Invalid autodetect save method (0 - internal, 1 - from database)\n");
 	}
 
+	if (_cpu_mode < -1 || _cpu_mode > 2) {
+		g_printerr("Invalid cpu mode emulation (0 - interpreter, 1 - thread interpreter, 2 - dynarec)\n");
+	}
+	if (_jit_size < 1 || _jit_size > 100) {
+		g_printerr("Invalid jit block size [1..100]. set to 100\n");
+	}
 
 	return true;
 }
