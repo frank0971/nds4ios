@@ -13,6 +13,8 @@ http://nds4ios.angelxwind.net/
 Build Instructions
 ------------------------
 
+IMPORTANT: Make sure your working directory is devoid of spaces. Otherwise, bad things will happen.
+
 1.  Open Terminal and go to your working directory;
 
 2.  Do
@@ -53,4 +55,5 @@ Contributors
 ------------------------
 * [rock88](http://rock88dev.blogspot.com/)
 * [angelXwind](http://angelxwind.net/)
+* inb4ohnoes
 * WMS
