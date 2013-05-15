@@ -55,5 +55,6 @@ Contributors
 ------------------------
 * [rock88](http://rock88dev.blogspot.com/)
 * [angelXwind](http://angelxwind.net/)
-* inb4ohnoes
+* [inb4ohnoes](http://brian.weareflame.co/)
+* maczydeco
 * WMS
