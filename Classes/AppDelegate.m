@@ -9,17 +9,39 @@
 #import "AppDelegate.h"
 
 #import "RomsViewController.h"
+#import "SideViewController.h"
+#import "EmuViewController.h"
+
+#import "MMDrawerController.h"
+#import "MMDrawerVisualState.h"
 
 @implementation AppDelegate
 
++ (AppDelegate*)sharedInstance
+{
+    return [[UIApplication sharedApplication] delegate];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    UIViewController * leftSideDrawerViewController = [[SideViewController alloc] init];
+    
+    UIViewController * centerViewController = [[RomsViewController alloc] init];
+    
+    UINavigationController * navigationController = [[UINavigationController alloc] initWithRootViewController:centerViewController];
+    
+    MMDrawerController * drawerController = [[MMDrawerController alloc]
+                                             initWithCenterViewController:navigationController
+                                             leftDrawerViewController:leftSideDrawerViewController
+                                             rightDrawerViewController:nil];
+    [drawerController setMaximumLeftDrawerWidth:160.0];
+    [drawerController setDrawerVisualStateBlock:[MMDrawerVisualState parallaxVisualStateBlockWithParallaxFactor:3]];
+    [drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
+    [drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    RomsViewController* controller = [[RomsViewController alloc] init];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.window setRootViewController:drawerController];
     [self.window makeKeyAndVisible];
-    
     return YES;
 }
 
@@ -48,6 +70,23 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)initRomsVCWithRom:(NSString *)rom
+{
+    emuVC= [[EmuViewController alloc] initWithRom:rom];
+    [self.window.rootViewController presentViewController:emuVC animated:YES completion:nil];
+}
+
+- (void)bringBackEmuVC
+{
+    if (!emuVC)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Game Running!" message:@"There is currently no game running! Please select a game from the Rom List!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+    } else {
+        [self.window.rootViewController presentViewController:emuVC animated:YES completion:nil];   
+    }
 }
 
 @end

@@ -7,9 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EmuViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+{
+    EmuViewController *emuVC;
+}
 
 @property (strong, nonatomic) UIWindow *window;
+
++ (AppDelegate *)sharedInstance;
+
+- (void)initRomsVCWithRom:(NSString *)rom;
+- (void)bringBackEmuVC;
 
 @end

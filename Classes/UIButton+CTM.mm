@@ -19,11 +19,10 @@ static char UIB_BUTTIN_ID;
     NSArray* array = @[@"Right",@"Left",@"Down",@"Up",@"Select",@"Start",@"B",@"A",@"Y",@"X",@"L",@"R"];
     
     UIButton* button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    
     if (_buttonId != -1) {
         [button setTitle:array[_buttonId] forState:UIControlStateNormal];
     } else {
-        [button setTitle:@"Exit" forState:UIControlStateNormal];
+        [button setTitle:@"Close" forState:UIControlStateNormal];
     }
     
     if (_buttonId == -1  || _buttonId == BUTTON_START || _buttonId == BUTTON_SELECT) {

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CE2EE5EB173F661D00786468 /* nds4ios-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE2EE5EA173F661D00786468 /* nds4ios-Info.plist */; };
 		CE2EE5EE173F663B00786468 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE5EC173F663B00786468 /* main.m */; };
 		CE2EE5FD173F66E300786468 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE5F6173F66E300786468 /* AppDelegate.m */; };
 		CE2EE5FE173F66E300786468 /* emu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2EE5F7173F66E300786468 /* emu.cpp */; };
@@ -111,6 +110,14 @@
 		CEB43C42173FCA3F00055F91 /* GLProgram.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB43C41173FCA3F00055F91 /* GLProgram.m */; };
 		CEB43C45173FD25A00055F91 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB43C43173FD25900055F91 /* GLKit.framework */; };
 		CEB43C46173FD25A00055F91 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB43C44173FD25900055F91 /* OpenGLES.framework */; };
+		D38CBC971745CEC60074C554 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D38CBC901745CEC60074C554 /* MMDrawerBarButtonItem.m */; };
+		D38CBC981745CEC60074C554 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38CBC921745CEC60074C554 /* MMDrawerController.m */; };
+		D38CBC991745CEC60074C554 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = D38CBC941745CEC60074C554 /* MMDrawerVisualState.m */; };
+		D38CBC9A1745CEC60074C554 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38CBC961745CEC60074C554 /* UIViewController+MMDrawerController.m */; };
+		D38CBCAE1745CF9C0074C554 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38CBCA91745CF9C0074C554 /* SettingsViewController.m */; };
+		D38CBCAF1745CF9C0074C554 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38CBCAA1745CF9C0074C554 /* SettingsViewController.xib */; };
+		D38CBCB01745CF9C0074C554 /* SideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38CBCAC1745CF9C0074C554 /* SideViewController.m */; };
+		D38CBCB11745CF9C0074C554 /* SideViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D38CBCAD1745CF9C0074C554 /* SideViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -301,6 +308,20 @@
 		CEB43C43173FD25900055F91 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		CEB43C44173FD25900055F91 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		CEC742F916776248006D193E /* nds4ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nds4ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D38CBC8F1745CEC60074C554 /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
+		D38CBC901745CEC60074C554 /* MMDrawerBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerBarButtonItem.m; sourceTree = "<group>"; };
+		D38CBC911745CEC60074C554 /* MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerController.h; sourceTree = "<group>"; };
+		D38CBC921745CEC60074C554 /* MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerController.m; sourceTree = "<group>"; };
+		D38CBC931745CEC60074C554 /* MMDrawerVisualState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerVisualState.h; sourceTree = "<group>"; };
+		D38CBC941745CEC60074C554 /* MMDrawerVisualState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerVisualState.m; sourceTree = "<group>"; };
+		D38CBC951745CEC60074C554 /* UIViewController+MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MMDrawerController.h"; sourceTree = "<group>"; };
+		D38CBC961745CEC60074C554 /* UIViewController+MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MMDrawerController.m"; sourceTree = "<group>"; };
+		D38CBCA81745CF9C0074C554 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = Classes/SettingsViewController.h; sourceTree = "<group>"; };
+		D38CBCA91745CF9C0074C554 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = Classes/SettingsViewController.m; sourceTree = "<group>"; };
+		D38CBCAA1745CF9C0074C554 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = Classes/SettingsViewController.xib; sourceTree = "<group>"; };
+		D38CBCAB1745CF9C0074C554 /* SideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SideViewController.h; path = Classes/SideViewController.h; sourceTree = "<group>"; };
+		D38CBCAC1745CF9C0074C554 /* SideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SideViewController.m; path = Classes/SideViewController.m; sourceTree = "<group>"; };
+		D38CBCAD1745CF9C0074C554 /* SideViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SideViewController.xib; path = Classes/SideViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -341,6 +362,13 @@
 				CE2EE5FA173F66E300786468 /* EmuViewController.mm */,
 				CE34A135173F86E800C51EA1 /* UIButton+CTM.h */,
 				CE34A136173F86E800C51EA1 /* UIButton+CTM.mm */,
+				D38CBCA81745CF9C0074C554 /* SettingsViewController.h */,
+				D38CBCA91745CF9C0074C554 /* SettingsViewController.m */,
+				D38CBCAA1745CF9C0074C554 /* SettingsViewController.xib */,
+				D38CBCAB1745CF9C0074C554 /* SideViewController.h */,
+				D38CBCAC1745CF9C0074C554 /* SideViewController.m */,
+				D38CBCAD1745CF9C0074C554 /* SideViewController.xib */,
+				D38CBC8E1745CEC60074C554 /* MMDrawerController */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -613,6 +641,21 @@
 			path = nds4ios;
 			sourceTree = "<group>";
 		};
+		D38CBC8E1745CEC60074C554 /* MMDrawerController */ = {
+			isa = PBXGroup;
+			children = (
+				D38CBC8F1745CEC60074C554 /* MMDrawerBarButtonItem.h */,
+				D38CBC901745CEC60074C554 /* MMDrawerBarButtonItem.m */,
+				D38CBC911745CEC60074C554 /* MMDrawerController.h */,
+				D38CBC921745CEC60074C554 /* MMDrawerController.m */,
+				D38CBC931745CEC60074C554 /* MMDrawerVisualState.h */,
+				D38CBC941745CEC60074C554 /* MMDrawerVisualState.m */,
+				D38CBC951745CEC60074C554 /* UIViewController+MMDrawerController.h */,
+				D38CBC961745CEC60074C554 /* UIViewController+MMDrawerController.m */,
+			);
+			path = MMDrawerController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -639,7 +682,7 @@
 		CEC742F016776248006D193E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = Homebrew;
 			};
 			buildConfigurationList = CEC742F316776248006D193E /* Build configuration list for PBXProject "nds4ios" */;
@@ -664,7 +707,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE2EE5EB173F661D00786468 /* nds4ios-Info.plist in Resources */,
+				D38CBCAF1745CF9C0074C554 /* SettingsViewController.xib in Resources */,
+				D38CBCB11745CF9C0074C554 /* SideViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,6 +815,12 @@
 				CE34A134173F79F200C51EA1 /* throttle.cpp in Sources */,
 				CE34A137173F86E800C51EA1 /* UIButton+CTM.mm in Sources */,
 				CEB43C42173FCA3F00055F91 /* GLProgram.m in Sources */,
+				D38CBC971745CEC60074C554 /* MMDrawerBarButtonItem.m in Sources */,
+				D38CBC981745CEC60074C554 /* MMDrawerController.m in Sources */,
+				D38CBC991745CEC60074C554 /* MMDrawerVisualState.m in Sources */,
+				D38CBC9A1745CEC60074C554 /* UIViewController+MMDrawerController.m in Sources */,
+				D38CBCAE1745CF9C0074C554 /* SettingsViewController.m in Sources */,
+				D38CBCB01745CF9C0074C554 /* SideViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

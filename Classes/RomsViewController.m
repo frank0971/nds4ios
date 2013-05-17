@@ -6,8 +6,12 @@
 //  Copyright (c) 2012 Homebrew. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "RomsViewController.h"
 #import "EmuViewController.h"
+#import "MMDrawerController.h"
+#import "UIViewController+MMDrawerController.h"
+#import "MMDrawerBarButtonItem.h"
 
 #define DOCUMENTS_PATH() [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
@@ -41,9 +45,11 @@
     self.title = @"nds4ios";
     self.romsArray = [[NSMutableArray alloc] init];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                                           target:self
                                                                                           action:@selector(reloadRomList)];
+    MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(toggleSideMenu)];
+    self.navigationItem.leftBarButtonItem = leftDrawerButton;
     
     BOOL isDir;
     NSString* batteryDir = [NSString stringWithFormat:@"%@/Battery",DOCUMENTS_PATH()];
@@ -54,6 +60,8 @@
     }
     
     [self reloadRomList];
+    
+
 }
 
 - (void)viewDidUnload
@@ -71,13 +79,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    //[self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    //[self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
 - (void)reloadRomList
@@ -93,6 +101,11 @@
     }
     
     [self.tableView reloadData];
+}
+
+- (void)toggleSideMenu
+{
+    [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -121,8 +134,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString* rom = [self.romsArray objectAtIndex:indexPath.row];
-    EmuViewController* controller = [[EmuViewController alloc] initWithRom:rom];
-    [self.navigationController pushViewController:controller animated:YES];
+    [[AppDelegate sharedInstance] initRomsVCWithRom:rom];
 }
 
 @end

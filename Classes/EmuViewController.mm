@@ -91,9 +91,9 @@ const float textureVert[] =
 {
     self = [super init];
     if (self) {
-        initialize = NO;
-        
         self.documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+        
+        initialize = YES;
         self.rom = [NSString stringWithFormat:@"%@/%@",self.documentsPath,_rom];
     }
     return self;
@@ -102,6 +102,11 @@ const float textureVert[] =
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (initialize == YES)
+    {
+        EMU_closeRom();
+    }
     
     self.view.multipleTouchEnabled = YES;
     
@@ -113,17 +118,9 @@ const float textureVert[] =
     self.fpsLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
     [self.view addSubview:self.fpsLabel];
     
-    [self initGL];
     [self addButtons];
     
-    if (!initialize) {
-        initialize = YES;
-        EMU_setWorkingDir([self.documentsPath UTF8String]);
-        EMU_init();
-        EMU_loadRom([self.rom UTF8String]);
-        EMU_change3D(1);
-        EMU_changeSound(0);
-    }
+    [self initRom];
     
     [self performSelector:@selector(emuLoop) withObject:nil];
 }
@@ -135,13 +132,25 @@ const float textureVert[] =
 
 - (void)viewDidUnload
 {
-    [self shutdownGL];
+    //[self shutdownGL];
     [super viewDidUnload];
 }
 
 - (void)dealloc
 {
     [self viewDidUnload];
+}
+
+- (void)initRom
+{
+    initialize = YES;
+    EMU_setWorkingDir([self.documentsPath UTF8String]);
+    EMU_init();
+    EMU_loadRom([self.rom UTF8String]);
+    EMU_change3D(1);
+    EMU_changeSound(0);
+    
+    [self initGL];
 }
 
 - (void)initGL
@@ -317,8 +326,9 @@ const float textureVert[] =
 
 - (void)buttonExitDown:(id)sender
 {
-    EMU_closeRom();
-    [self.navigationController popViewControllerAnimated:YES];
+    //EMU_closeRom();
+    //[self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
