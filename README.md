@@ -41,7 +41,7 @@ To-do
 * Sound
 * Save states
 * Native iPad UI
-* Properly fix 768h scaling bug
+* Properly fix 768h scaling bug (in progress)
 * UI overhaul (in progress)
 * New file chooser (in progress)
 * Addition of L and R buttons
