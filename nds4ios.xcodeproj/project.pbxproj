@@ -354,20 +354,12 @@
 				CE2EE5F6173F66E300786468 /* AppDelegate.m */,
 				CE2EE5F7173F66E300786468 /* emu.cpp */,
 				CE2EE5F8173F66E300786468 /* emu.h */,
-				CE2EE5FB173F66E300786468 /* RomsViewController.h */,
-				CE2EE5FC173F66E300786468 /* RomsViewController.m */,
-				CEB43C40173FCA3F00055F91 /* GLProgram.h */,
-				CEB43C41173FCA3F00055F91 /* GLProgram.m */,
-				CE2EE5F9173F66E300786468 /* EmuViewController.h */,
-				CE2EE5FA173F66E300786468 /* EmuViewController.mm */,
-				CE34A135173F86E800C51EA1 /* UIButton+CTM.h */,
-				CE34A136173F86E800C51EA1 /* UIButton+CTM.mm */,
-				D38CBCA81745CF9C0074C554 /* SettingsViewController.h */,
-				D38CBCA91745CF9C0074C554 /* SettingsViewController.m */,
-				D38CBCAA1745CF9C0074C554 /* SettingsViewController.xib */,
-				D38CBCAB1745CF9C0074C554 /* SideViewController.h */,
-				D38CBCAC1745CF9C0074C554 /* SideViewController.m */,
-				D38CBCAD1745CF9C0074C554 /* SideViewController.xib */,
+				D338B30117470D4000932C39 /* Roms List */,
+				D338B30217470D4A00932C39 /* GL */,
+				D338B30017470D3A00932C39 /* Emu */,
+				D338B2FF17470D3100932C39 /* UIButton+CTM */,
+				D338B2FE17470D2800932C39 /* Settings */,
+				D338B2FD17470D1B00932C39 /* Side Drawer */,
 				D38CBC8E1745CEC60074C554 /* MMDrawerController */,
 			);
 			name = Classes;
@@ -639,6 +631,62 @@
 			);
 			name = "Supporting Files";
 			path = nds4ios;
+			sourceTree = "<group>";
+		};
+		D338B2FD17470D1B00932C39 /* Side Drawer */ = {
+			isa = PBXGroup;
+			children = (
+				D38CBCAB1745CF9C0074C554 /* SideViewController.h */,
+				D38CBCAC1745CF9C0074C554 /* SideViewController.m */,
+				D38CBCAD1745CF9C0074C554 /* SideViewController.xib */,
+			);
+			name = "Side Drawer";
+			sourceTree = "<group>";
+		};
+		D338B2FE17470D2800932C39 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D38CBCA81745CF9C0074C554 /* SettingsViewController.h */,
+				D38CBCA91745CF9C0074C554 /* SettingsViewController.m */,
+				D38CBCAA1745CF9C0074C554 /* SettingsViewController.xib */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		D338B2FF17470D3100932C39 /* UIButton+CTM */ = {
+			isa = PBXGroup;
+			children = (
+				CE34A135173F86E800C51EA1 /* UIButton+CTM.h */,
+				CE34A136173F86E800C51EA1 /* UIButton+CTM.mm */,
+			);
+			name = "UIButton+CTM";
+			sourceTree = "<group>";
+		};
+		D338B30017470D3A00932C39 /* Emu */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE5F9173F66E300786468 /* EmuViewController.h */,
+				CE2EE5FA173F66E300786468 /* EmuViewController.mm */,
+			);
+			name = Emu;
+			sourceTree = "<group>";
+		};
+		D338B30117470D4000932C39 /* Roms List */ = {
+			isa = PBXGroup;
+			children = (
+				CE2EE5FB173F66E300786468 /* RomsViewController.h */,
+				CE2EE5FC173F66E300786468 /* RomsViewController.m */,
+			);
+			name = "Roms List";
+			sourceTree = "<group>";
+		};
+		D338B30217470D4A00932C39 /* GL */ = {
+			isa = PBXGroup;
+			children = (
+				CEB43C40173FCA3F00055F91 /* GLProgram.h */,
+				CEB43C41173FCA3F00055F91 /* GLProgram.m */,
+			);
+			name = GL;
 			sourceTree = "<group>";
 		};
 		D38CBC8E1745CEC60074C554 /* MMDrawerController */ = {

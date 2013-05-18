@@ -80,13 +80,24 @@
 
 - (void)bringBackEmuVC
 {
-    if (!emuVC)
+    if (!emuVC || !_hasGame)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Game Running!" message:@"There is currently no game running! Please select a game from the Rom List!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [alert show];
     } else {
         [self.window.rootViewController presentViewController:emuVC animated:YES completion:nil];   
     }
+}
+
+- (void)killVC:(UIViewController *)controller
+{
+    controller = nil;
+    _hasGame = NO;
+}
+
+- (BOOL *)hideControls
+{
+    return YES;
 }
 
 @end

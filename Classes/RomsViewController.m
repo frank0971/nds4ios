@@ -135,6 +135,7 @@
 {
     NSString* rom = [self.romsArray objectAtIndex:indexPath.row];
     [[AppDelegate sharedInstance] initRomsVCWithRom:rom];
+    [AppDelegate sharedInstance].hasGame = YES;
 }
 
 @end

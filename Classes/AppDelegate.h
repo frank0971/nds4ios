@@ -16,9 +16,13 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
+@property (nonatomic) BOOL *hasGame;
+
 + (AppDelegate *)sharedInstance;
 
 - (void)initRomsVCWithRom:(NSString *)rom;
 - (void)bringBackEmuVC;
+- (void)killVC:(UIViewController *)controller;
 
+- (BOOL *)hideControls;
 @end

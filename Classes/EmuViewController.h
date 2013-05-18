@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EmuViewController : UIViewController
+@interface EmuViewController : UIViewController <UIActionSheetDelegate>
 
 - (id)initWithRom:(NSString*)rom;
 

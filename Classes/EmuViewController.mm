@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Homebrew. All rights reserved.
 //
 
+#import "AppDelegate.h"
+
 #import "EmuViewController.h"
 #import "UIButton+CTM.h"
 #import "GLProgram.h"
@@ -97,6 +99,12 @@ const float textureVert[] =
         self.rom = [NSString stringWithFormat:@"%@/%@",self.documentsPath,_rom];
     }
     return self;
+}
+
+- (void)killCurrentGame
+{
+    EMU_closeRom();
+    [self shutdownGL];
 }
 
 - (void)viewDidLoad
@@ -276,6 +284,12 @@ const float textureVert[] =
     [buttonExit addTarget:self action:@selector(buttonExitDown:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:buttonExit];
     
+    UIButton *buttonLT = [UIButton buttonWithId:BUTTON_L atCenter:CGPointMake(20, 70)];
+    [self.view addSubview:buttonLT];
+    
+    UIButton *buttonRT = [UIButton buttonWithId:BUTTON_R atCenter:CGPointMake(self.view.frame.size.width - 20, 70)];
+    [self.view addSubview:buttonRT];
+    
     UIButton* buttonShift = [UIButton buttonWithId:(BUTTON_ID)-1 atCenter:CGPointMake(290, 20)];
     [buttonShift addTarget:self action:@selector(shiftButtons:) forControlEvents:UIControlEventTouchUpInside];
     [buttonShift setTitle:@"Shift Pad" forState:UIControlStateNormal];
@@ -283,7 +297,7 @@ const float textureVert[] =
     
     self.buttonsArray = @[buttonUp,buttonDown,buttonLeft,buttonRight,
                           buttonX,buttonY,buttonA,buttonB,
-                          buttonSelect,buttonStart];
+                          buttonSelect,buttonStart, buttonRT, buttonLT];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -326,12 +340,26 @@ const float textureVert[] =
 
 - (void)buttonExitDown:(id)sender
 {
-    //EMU_closeRom();
-    //[self.navigationController popViewControllerAnimated:YES];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Background or Kill?\nBackgrounding keeps the current game alive for later, whereas killing it will completely close it." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Kill" otherButtonTitles:@"Background", nil];
+    [sheet showInView:self.view];
 }
 
-
+#pragma mark UIActionSheet delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        [self killCurrentGame];
+        [self dismissViewControllerAnimated:YES completion:^{
+            NSLog(@"killed");
+            [[AppDelegate sharedInstance] killVC:self];
+        }];
+    } else if (buttonIndex == 1) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            NSLog(@"backgrounded");
+        }];
+    }
+}
 @end
 
 
