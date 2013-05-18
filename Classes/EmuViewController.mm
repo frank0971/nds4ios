@@ -166,7 +166,7 @@ const float textureVert[] =
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     [EAGLContext setCurrentContext:self.context];
     
-    self.glkView = [[GLKView alloc] initWithFrame:self.view.bounds context:self.context];
+    self.glkView = [[GLKView alloc] initWithFrame:self.view.bounds context:self.context];//self.view.bounds
     self.glkView.delegate = self;
     [self.view insertSubview:self.glkView atIndex:0];
     
@@ -350,15 +350,14 @@ const float textureVert[] =
     if (buttonIndex == 0)
     {
         [self killCurrentGame];
-        [self dismissViewControllerAnimated:YES completion:^{
-            NSLog(@"killed");
-            [[AppDelegate sharedInstance] killVC:self];
-        }];
+        [[AppDelegate sharedInstance] killVC:self];
+        NSLog(@"killed");
+        [self dismissViewControllerAnimated:YES completion:nil];
     } else if (buttonIndex == 1) {
-        [self dismissViewControllerAnimated:YES completion:^{
-            NSLog(@"backgrounded");
-        }];
+        NSLog(@"backgrounded");
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
+    
 }
 @end
 
