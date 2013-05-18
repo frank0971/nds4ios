@@ -44,7 +44,7 @@ To-do
 * Properly fix 768h scaling bug (in progress)
 * UI overhaul (in progress)
 * New file chooser (in progress)
-* Addition of L and R buttons
+* Addition of L and R buttons(Done!)
 * Option to hide the onscreen controls entirely (in progress)
 * Correct button positions (in progress)
 * New gesture based D-Pad (not current button based) (in progress)
@@ -58,4 +58,4 @@ Contributors
 * [angelXwind](http://angelxwind.net/)
 * [inb4ohnoes](http://brian.weareflame.co/)
 * maczydeco
-* WMS
+* [W.MS](http://github.com/peter82315/)
