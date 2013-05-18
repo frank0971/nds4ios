@@ -41,12 +41,13 @@ To-do
 * Sound
 * Save states
 * Native iPad UI
-* Properly fix 768h scaling bug
-* UI overhaul
-* New file chooser (hopefully)
+* Properly fix 768h scaling bug (in progress)
+* UI overhaul (in progress)
+* New file chooser (in progress)
 * Addition of L and R buttons
-* Option to hide the onscreen controls entirely
-* Correct button positions
+* Option to hide the onscreen controls entirely (in progress)
+* Correct button positions (in progress)
+* New gesture based D-Pad (not current button based) (in progress)
 * Use of cmake to generate Xcode project
 * Examine reports of input lag
 * Much more.
