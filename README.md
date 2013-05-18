@@ -26,7 +26,7 @@ IMPORTANT: Make sure your working directory is devoid of spaces. Otherwise, bad 
 4.  then
     <code>git submodule update --init</code>
 
-5. Open "nds4ios.xcodeproj", connect your device, select it on Xcode and click the "Run" button (or Command + R). Don't build it for the iOS Simulator.
+5. Open "nds4ios.xcodeproj", connect your device, select it on Xcode and click the "Run" button (or Command + R). Don't build it for the iOS Simulator. IMPORTANT: Make sure you change your running scheme to Release first. Otherwise you will get errors on compile!
 
 6. Alternatively, run
     <code>xcodebuild -configuration Release</code>
