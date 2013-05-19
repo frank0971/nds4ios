@@ -262,16 +262,16 @@ const float textureVert[] =
     UIButton* buttonRight = [UIButton buttonWithId:BUTTON_RIGHT atCenter:CGPointMake(100, 172)];
     [self.view addSubview:buttonRight];
     
-    UIButton* buttonX = [UIButton buttonWithId:BUTTON_X atCenter:CGPointMake(219, 173)];
+    UIButton* buttonY = [UIButton buttonWithId:BUTTON_Y atCenter:CGPointMake(219, 173)];
     [self.view addSubview:buttonX];
     
-    UIButton* buttonY = [UIButton buttonWithId:BUTTON_Y atCenter:CGPointMake(259, 132)];
+    UIButton* buttonX = [UIButton buttonWithId:BUTTON_X atCenter:CGPointMake(259, 132)];
     [self.view addSubview:buttonY];
     
-    UIButton* buttonA = [UIButton buttonWithId:BUTTON_A atCenter:CGPointMake(259, 211)];
+    UIButton* buttonB = [UIButton buttonWithId:BUTTON_B atCenter:CGPointMake(259, 211)];
     [self.view addSubview:buttonA];
     
-    UIButton* buttonB = [UIButton buttonWithId:BUTTON_B atCenter:CGPointMake(299, 173)];
+    UIButton* buttonA = [UIButton buttonWithId:BUTTON_A atCenter:CGPointMake(299, 173)];
     [self.view addSubview:buttonB];
     
     UIButton* buttonSelect = [UIButton buttonWithId:BUTTON_SELECT atCenter:CGPointMake(132, 228)];
