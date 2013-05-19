@@ -262,17 +262,17 @@ const float textureVert[] =
     UIButton* buttonRight = [UIButton buttonWithId:BUTTON_RIGHT atCenter:CGPointMake(100, 172)];
     [self.view addSubview:buttonRight];
     
-    UIButton* buttonX = [UIButton buttonWithId:BUTTON_X atCenter:CGPointMake(219, 173)];
-    [self.view addSubview:buttonX];
-    
-    UIButton* buttonY = [UIButton buttonWithId:BUTTON_Y atCenter:CGPointMake(259, 132)];
+    UIButton* buttonY = [UIButton buttonWithId:BUTTON_Y atCenter:CGPointMake(219, 173)];
     [self.view addSubview:buttonY];
     
-    UIButton* buttonA = [UIButton buttonWithId:BUTTON_A atCenter:CGPointMake(259, 211)];
-    [self.view addSubview:buttonA];
+    UIButton* buttonX = [UIButton buttonWithId:BUTTON_X atCenter:CGPointMake(259, 132)];
+    [self.view addSubview:buttonX];
     
-    UIButton* buttonB = [UIButton buttonWithId:BUTTON_B atCenter:CGPointMake(299, 173)];
+    UIButton* buttonB = [UIButton buttonWithId:BUTTON_B atCenter:CGPointMake(259, 211)];
     [self.view addSubview:buttonB];
+    
+    UIButton* buttonA = [UIButton buttonWithId:BUTTON_A atCenter:CGPointMake(299, 173)];
+    [self.view addSubview:buttonA];
     
     UIButton* buttonSelect = [UIButton buttonWithId:BUTTON_SELECT atCenter:CGPointMake(132, 228)];
     [self.view addSubview:buttonSelect];
@@ -296,7 +296,7 @@ const float textureVert[] =
     [self.view addSubview:buttonShift];
     
     self.buttonsArray = @[buttonUp,buttonDown,buttonLeft,buttonRight,
-                          buttonX,buttonY,buttonA,buttonB,
+                          buttonY,buttonX,buttonB,buttonA,
                           buttonSelect,buttonStart, buttonRT, buttonLT];
 }
 
