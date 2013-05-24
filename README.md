@@ -67,4 +67,4 @@ Contributors
 * [angelXwind](http://angelxwind.net/)
 * [inb4ohnoes](http://brian.weareflame.co/)
 * maczydeco
-* [W.MS](http://github.com/peter82315/)
+* [W.MS](http://github.com/w-ms/)
